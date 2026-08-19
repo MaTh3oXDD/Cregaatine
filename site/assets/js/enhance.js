@@ -1,0 +1,195 @@
+(function () {
+  var header = document.getElementById("main-header");
+  var onScroll = function () {
+    if (!header) return;
+    header.classList.toggle("enh-scrolled", window.scrollY > 8);
+  };
+  document.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+
+  var setHeaderHeightVar = function () {
+    if (!header) return;
+    document.documentElement.style.setProperty("--enh-header-h", header.offsetHeight + "px");
+  };
+  setHeaderHeightVar();
+  window.addEventListener("resize", setHeaderHeightVar);
+  if ("ResizeObserver" in window && header) {
+    new ResizeObserver(setHeaderHeightVar).observe(header);
+  }
+
+  var prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // Smooth-scroll in-page anchors.
+  //
+  // The previous same-page test compared a.pathname to location.pathname.
+  // The nav links are written as "/#sklad" (pathname "/") while the page
+  // is actually served as "/index.html" (pathname "/index.html"), so the
+  // test never matched and every nav click fell through to a hard jump.
+  // The reliable test is simply: does an element with that id exist here?
+  //
+  // Scrolling also has to clear the sticky header, otherwise the target
+  // heading lands underneath it.
+  var headerEl = header;
+  var scrollToTarget = function (target) {
+    var headerH = headerEl ? headerEl.offsetHeight : 0;
+    var top = window.pageYOffset + target.getBoundingClientRect().top - headerH - 16;
+    window.scrollTo({
+      top: top < 0 ? 0 : top,
+      behavior: prefersReduced ? "auto" : "smooth"
+    });
+  };
+
+  document.querySelectorAll('a[href*="#"]').forEach(function (a) {
+    a.addEventListener("click", function (e) {
+      var hash = a.hash;
+      if (!hash || hash === "#") return;
+
+      var target;
+      try {
+        target = document.querySelector(hash);
+      } catch (err) {
+        return; // not a valid selector, let the browser deal with it
+      }
+      if (!target) return; // anchor lives on another page
+
+      e.preventDefault();
+      scrollToTarget(target);
+      if (history.replaceState) history.replaceState(null, "", hash);
+    });
+  });
+
+  // Landing on the page with a hash already in the URL (e.g. clicking
+  // "Skład" from the Nagrody subpage).
+  //
+  // The browser jumps to the anchor as soon as it parses the element,
+  // but images and the carousels above it are still resolving, so the
+  // content grows underneath and the anchor slides away — which reads
+  // as "it threw me to the top, then jumped to the section once
+  // everything loaded".
+  //
+  // Fix: hold the target and re-assert its position as the layout
+  // settles, instantly (never animated — animating this is the part
+  // that looks like a glitch), and stop as soon as it holds still.
+  if (location.hash && location.hash.length > 1) {
+    var initialTarget = null;
+    try {
+      initialTarget = document.querySelector(location.hash);
+    } catch (err) {
+      initialTarget = null;
+    }
+
+    if (initialTarget) {
+      var settleUntil = Date.now() + 3000;
+      var lastTop = -1;
+
+      var holdAnchor = function () {
+        var headerH = headerEl ? headerEl.offsetHeight : 0;
+        var top = window.pageYOffset + initialTarget.getBoundingClientRect().top - headerH - 16;
+        if (top < 0) top = 0;
+
+        // only correct when the target actually moved
+        if (Math.abs(top - lastTop) > 2) {
+          window.scrollTo(0, top);
+          lastTop = top;
+        }
+        if (Date.now() < settleUntil) requestAnimationFrame(holdAnchor);
+      };
+
+      // start immediately rather than waiting for the full load event
+      holdAnchor();
+      document.addEventListener("DOMContentLoaded", holdAnchor);
+      window.addEventListener("load", function () {
+        settleUntil = Date.now() + 400;
+        holdAnchor();
+      });
+    }
+  }
+
+  // Certificate rail: the arrows only exist when the rail overflows.
+  // On a wide screen all four badges fit, and a pair of dead arrows
+  // would be lying about there being more to see.
+  var certRail = document.querySelector(".cert-rail");
+  var certNav = document.querySelector(".cert-nav");
+  if (certRail && certNav) {
+    var certBtns = certNav.querySelectorAll("[data-cert-dir]");
+    var certStep = function () {
+      var card = certRail.querySelector(".et_pb_column");
+      var gap = parseFloat(getComputedStyle(certRail).columnGap) || 0;
+      return card ? card.getBoundingClientRect().width + gap : certRail.clientWidth * 0.8;
+    };
+
+    var syncCertNav = function () {
+      var overflow = certRail.scrollWidth - certRail.clientWidth;
+      certNav.hidden = overflow < 4;
+      if (certNav.hidden) return;
+      certBtns.forEach(function (btn) {
+        var dir = Number(btn.getAttribute("data-cert-dir"));
+        btn.disabled = dir < 0
+          ? certRail.scrollLeft < 4
+          : certRail.scrollLeft > overflow - 4;
+      });
+    };
+
+    certBtns.forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        certRail.scrollBy({
+          left: Number(btn.getAttribute("data-cert-dir")) * certStep(),
+          behavior: prefersReduced ? "auto" : "smooth"
+        });
+      });
+    });
+
+    certRail.addEventListener("scroll", syncCertNav, { passive: true });
+    window.addEventListener("resize", syncCertNav);
+    window.addEventListener("load", syncCertNav);
+    syncCertNav();
+  }
+
+  // The testimonial track autoplays now; reduced-motion users get it
+  // parked. The plugin has no setting for that, so stop the Swiper
+  // instance once it has booted.
+  if (prefersReduced) {
+    var parkAutoplay = function () {
+      document.querySelectorAll(".dica_divi_carousel .swiper-container").forEach(function (el) {
+        if (el.swiper && el.swiper.autoplay) el.swiper.autoplay.stop();
+      });
+    };
+    window.addEventListener("load", parkAutoplay);
+    setTimeout(parkAutoplay, 1200);
+  }
+
+  if (prefersReduced) return;
+
+  var targets = document.querySelectorAll(
+    "#main-content .et_pb_section, #main-content .et_pb_row, #main-content .et_pb_module"
+  );
+  var seen = new Set();
+  var candidates = [];
+  targets.forEach(function (el) {
+    if (el.closest(".dica_divi_carousel")) return;
+    if (el.closest(".et_pb_section_parallax")) return; /* transform here breaks Divi's fixed-position parallax and can trap scroll */
+    if (candidates.length && candidates[candidates.length - 1].contains(el)) return;
+    candidates.push(el);
+  });
+  candidates.slice(0, 400).forEach(function (el, i) {
+    el.classList.add("enh-reveal");
+    el.classList.add("enh-stagger-" + ((i % 5) + 1));
+  });
+
+  if (!("IntersectionObserver" in window)) {
+    candidates.forEach(function (el) { el.classList.add("enh-visible"); });
+    return;
+  }
+  var io = new IntersectionObserver(
+    function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("enh-visible");
+          io.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.1, rootMargin: "0px 0px -40px 0px" }
+  );
+  candidates.forEach(function (el) { io.observe(el); });
+})();

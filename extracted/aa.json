@@ -1,0 +1,58 @@
+{
+  "title": "Prof dr Sergej Ostojić - podcast (eng) - CreGAAtine - Naukowa rewolucja kreatyny",
+  "meta_description": "",
+  "sections": [
+    {
+      "videos": [
+        {
+          "src": "https://www.youtube.com/embed/Yb8ytVGDMCI",
+          "title": "Kreatin je suplement koji nam je svima potreban! — Dr Sergej Ostojić | Ivan Kosogor Podcast Ep.098"
+        }
+      ],
+      "index": 0,
+      "id": "cregaatine",
+      "classes": [
+        "et_pb_section",
+        "et_pb_section_0",
+        "et_pb_section_parallax",
+        "et_section_regular"
+      ],
+      "headings": [
+        "Prof dr Sergej Ostojić – podcast (eng)"
+      ],
+      "paragraphs": [],
+      "list_items": [],
+      "buttons": [
+        {
+          "text": "Przejdź do sklepu",
+          "href": "https://sklep.carno-med.pl/cregaatine-kreatyna-gaa"
+        }
+      ],
+      "images": [],
+      "text_preview": "Prof dr Sergej Ostojić – podcast (eng) Przejdź do sklepu"
+    }
+  ],
+  "post_title": "Prof dr Sergej Ostojić – podcast (eng)",
+  "post_date": "maj 5, 2021",
+  "post_body": {
+    "flow": [
+      {
+        "type": "h1",
+        "text": "Prof dr Sergej Ostojić – podcast (eng)"
+      },
+      {
+        "type": "video",
+        "src": "https://www.youtube.com/embed/Yb8ytVGDMCI",
+        "title": "Kreatin je suplement koji nam je svima potreban! — Dr Sergej Ostojić | Ivan Kosogor Podcast Ep.098"
+      }
+    ]
+  },
+  "cards": [
+    {
+      "title": "Prof dr Sergej Ostojić – podcast (eng)",
+      "href": "/author/marcincarno-med-pl/",
+      "excerpt": "utworzone przez marcin@carno-med.pl | maj 5, 2021 | Uncategorized | 0 komentarzy",
+      "image": "/wp-content/uploads/2021/05/podcast.jpg"
+    }
+  ]
+}

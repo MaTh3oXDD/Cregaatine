@@ -1,0 +1,4768 @@
+/* Light modernization layer — no colors, no fonts, no copy touched.
+   Purely: radius, shadow, motion, spacing polish, on top of the original Divi output. */
+
+/* --enh-header-h is measured live in enhance.js (header can wrap to a
+   taller row at some viewport widths) — the hero's top clearance reads
+   from this instead of a guessed fixed value, so it can never overlap
+   the floating nav no matter how tall the nav row gets. */
+:root { --enh-header-h: 96px; }
+
+/* NOTE: scroll-behavior:smooth on html was removed — in Chrome/Firefox it makes
+   mouse-wheel scrolling feel throttled (each wheel tick restarts a smooth-scroll
+   animation, fighting the next tick). Anchor-link smoothness is handled in JS
+   instead (enhance.js), scoped only to in-page nav clicks. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+}
+
+/* ---- Buttons: one shape language across the whole page. These were
+   fully-round 999px pills, which forced every long Polish label into a
+   lozenge and read as a template default. 10px matches the hero's
+   buttons and the card radii, so the page has a single radius system
+   instead of three. ---- */
+.et_pb_button,
+.dica_button {
+  border-radius: 10px !important;
+  transition: transform 0.22s cubic-bezier(.2,.8,.2,1), box-shadow 0.22s ease !important;
+  will-change: transform;
+}
+.et_pb_button:hover,
+.dica_button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 28px -12px rgba(0, 0, 0, 0.35);
+}
+.et_pb_button:active,
+.dica_button:active {
+  transform: translateY(-1px);
+}
+
+/* ---- Content photography: soften corners + gentle depth ---- */
+.et_pb_image img,
+.et_pb_main_blog_image img,
+.et_pb_post_content img,
+.entry-content img,
+.et_pb_gallery img,
+.et_pb_team_member_image img {
+  border-radius: 16px;
+  transition: transform 0.4s cubic-bezier(.2,.8,.2,1), box-shadow 0.4s ease;
+}
+.et_pb_image:hover img {
+  transform: scale(1.015);
+}
+
+/* ---- Cards / modules: soft elevation on hover ---- */
+.et_pb_blog_grid .et_pb_post,
+.et_pb_post,
+.dica-item {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.et_pb_blog_grid .et_pb_post:hover,
+article.et_pb_post:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 34px -18px rgba(0, 0, 0, 0.28);
+}
+
+/* ---- Sticky header: subtle shadow once page scrolls ---- */
+#main-header.enh-scrolled {
+  box-shadow: 0 6px 18px -10px rgba(0, 0, 0, 0.25);
+  transition: box-shadow 0.25s ease;
+}
+
+/* ---- Nav link underline sweep (uses the site's own yellow, no new color) ---- */
+#top-menu a {
+  position: relative;
+}
+#top-menu a::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 100%;
+  bottom: -4px;
+  height: 2px;
+  background: #f9df1c;
+  transition: right 0.25s ease;
+}
+#top-menu li:hover > a::after,
+#top-menu a:focus-visible::after {
+  right: 0;
+}
+
+/* ---- Accessible focus ring using brand yellow ---- */
+a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, .et_pb_button:focus-visible {
+  outline: 2px solid #f9df1c;
+  outline-offset: 2px;
+}
+
+/* ---- Partner logos: quiet by default, come alive on hover (opacity only) ---- */
+.et_pb_section .et_pb_gallery_image img,
+.et_pb_row_last_edited .et_pb_image img {
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+/* ---- Scroll reveal: progressive enhancement, safe if JS never runs ---- */
+.enh-reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.7s cubic-bezier(.2,.7,.2,1), transform 0.7s cubic-bezier(.2,.7,.2,1);
+}
+.enh-reveal.enh-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.enh-reveal.enh-stagger-1 { transition-delay: 0.06s; }
+.enh-reveal.enh-stagger-2 { transition-delay: 0.12s; }
+.enh-reveal.enh-stagger-3 { transition-delay: 0.18s; }
+.enh-reveal.enh-stagger-4 { transition-delay: 0.24s; }
+.enh-reveal.enh-stagger-5 { transition-delay: 0.30s; }
+
+/* ---- Hero heading: gentle load-in, no color/font change ---- */
+body.home .et_pb_section_0 h1,
+.et_pb_fullwidth_header_container h1 {
+  animation: enh-fade-up 0.8s cubic-bezier(.2,.7,.2,1) both;
+}
+body.home .et_pb_section_0 .et_pb_button,
+.et_pb_fullwidth_header_container .et_pb_button {
+  animation: enh-fade-up 0.8s cubic-bezier(.2,.7,.2,1) both;
+  animation-delay: 0.15s;
+}
+@keyframes enh-fade-up {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  body.home .et_pb_section_0 h1, .et_pb_fullwidth_header_container h1,
+  body.home .et_pb_section_0 .et_pb_button, .et_pb_fullwidth_header_container .et_pb_button {
+    animation: none;
+  }
+}
+
+/* ================================================================
+   Round two: deeper polish. Still zero hex changes, zero copy edits —
+   only elevation, rhythm, radius and readability refinements on the
+   existing palette/typeface.
+   ================================================================ */
+
+/* ---- Readability: a touch more breathing room in body copy ---- */
+.et_pb_text p,
+.entry-content p,
+#et_pb_contact_form_0 p {
+  line-height: 1.7;
+}
+
+/* ---- Testimonial carousel cards: give them a real card frame ---- */
+.dica_divi_carouselitem {
+  border-radius: 18px !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06), 0 20px 40px -24px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s cubic-bezier(.2,.8,.2,1), box-shadow 0.3s ease;
+}
+.dica_divi_carouselitem:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08), 0 28px 48px -22px rgba(0, 0, 0, 0.32);
+}
+.dica-item-image img {
+  border-radius: 999px;
+}
+
+/* ---- Product / order panel: lift it off the page as a real card ---- */
+.et_pb_section_5 .et_pb_row,
+#sklad .et_pb_row {
+  border-radius: 22px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05), 0 28px 60px -30px rgba(0, 0, 0, 0.32);
+}
+
+/* ---- Contact form: was solid brand-yellow fills on every field — a
+   wall of yellow rectangles with low-contrast placeholder text. Same
+   fix as everywhere else on the page: white surface, thin border,
+   yellow reserved for the focus glow instead of the resting state. ---- */
+.et_pb_contact input[type="text"],
+.et_pb_contact input[type="email"],
+.et_pb_contact input[type="tel"],
+.et_pb_contact textarea,
+#et_pb_contact_form_0 input,
+#et_pb_contact_form_0 textarea {
+  background-color: #ffffff !important;
+  border: 1.5px solid #e2e2e2 !important;
+  color: #282828 !important;
+  border-radius: 10px !important;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+.et_pb_contact input:focus,
+.et_pb_contact textarea:focus,
+#et_pb_contact_form_0 input:focus,
+#et_pb_contact_form_0 textarea:focus {
+  border-color: #f9df1c !important;
+  box-shadow: 0 0 0 3px rgba(249, 223, 28, 0.35);
+  outline: none;
+}
+.et_pb_contact ::placeholder,
+#et_pb_contact_form_0 ::placeholder {
+  color: rgba(40, 40, 40, 0.5);
+}
+
+/* ---- Quiet dividers between sections for rhythm, no new color ---- */
+.et_pb_section + .et_pb_section {
+  position: relative;
+}
+.et_pb_section + .et_pb_section::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 50%;
+  width: min(90%, 1100px);
+  height: 1px;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.06);
+}
+.section-dark + .et_pb_section::before,
+.et_pb_bg_layout_dark + .et_pb_section::before {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* ---- FIWE / award badge and blurbs: gentle card lift ---- */
+.et_pb_blurb_content {
+  transition: transform 0.25s ease;
+}
+.et_pb_blurb:hover .et_pb_blurb_content {
+  transform: translateY(-3px);
+}
+
+/* ---- Partner logos: consistent sizing rhythm + hover pop ---- */
+.et_pb_gallery_image img {
+  transition: transform 0.25s cubic-bezier(.2,.8,.2,1);
+}
+.et_pb_gallery_image:hover img {
+  transform: translateY(-2px) scale(1.04);
+}
+
+/* ---- Product / blog thumbnails: consistent radius across the board ---- */
+.et_pb_post .et_pb_image_container img,
+.et_pb_post .et_pb_main_blog_image img {
+  border-radius: 16px;
+}
+
+/* ---- Smoother scroll-reveal easing for a calmer, premium feel ---- */
+.enh-reveal {
+  transition-timing-function: cubic-bezier(.16,.84,.32,1);
+}
+
+/* ---- Safety net: never transform Divi's parallax sections — breaks their
+   fixed-position background trick and can lock page scroll ---- */
+.et_pb_section_parallax.enh-reveal,
+.et_pb_section_parallax .enh-reveal {
+  transform: none !important;
+  opacity: 1 !important;
+}
+
+/* ================================================================
+   Round three: premium pass. Same rule as always — zero hex changes,
+   zero copy edits, zero font-family swaps. Every colored effect below
+   is a tint/shade/opacity of the site's own yellow (#f9df1c), black or
+   white — nothing new enters the palette. The point is confidence:
+   sharper elevation, a genuine signature glow on the primary action,
+   tactile depth on dark sections, and tighter typographic control.
+   ================================================================ */
+
+/* ---- Brand selection + scrollbar, small details premium sites get right ---- */
+::selection { background: #f9df1c; color: #000000; }
+html { scrollbar-color: #f9df1c #0a0a0a; scrollbar-width: thin; }
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: #0a0a0a; }
+::-webkit-scrollbar-thumb { background: #f9df1c; border-radius: 999px; border: 2px solid #0a0a0a; }
+
+/* ---- Sticky header.
+
+   The transparent state only makes sense on the homepage, which opens
+   with a full-bleed dark hero photo behind the bar. Every other page
+   starts on white — and because this rule was unscoped, those pages
+   got a transparent header with white nav links on a white background,
+   i.e. an invisible menu. That was a real navigation failure, not a
+   cosmetic one.
+
+   So: transparent-over-hero is homepage-only. Everywhere else the bar
+   is solid from the first pixel with dark links. Both states share the
+   same frosted treatment once scrolled. ---- */
+#main-header {
+  transition: box-shadow 0.25s ease, background 0.25s ease;
+}
+
+/* Homepage: transparent over the hero, white links */
+body.home #main-header {
+  background: transparent !important;
+}
+
+/* Every other page: solid bar, dark links, from the top */
+body:not(.home) #main-header {
+  background: rgba(255, 255, 255, 0.94) !important;
+  backdrop-filter: saturate(160%) blur(14px);
+  -webkit-backdrop-filter: saturate(160%) blur(14px);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
+}
+body:not(.home) #top-menu > li > a,
+body:not(.home) #top-menu li.current-menu-ancestor > a,
+body:not(.home) #top-menu li.current-menu-item > a,
+body:not(.home) #top-menu li.current_page_item > a {
+  color: #282828 !important;
+}
+
+/* Scrolled state, both cases.
+   NOTE the body prefix: `body.home #main-header` scores (1 id, 1 class,
+   1 element) and so out-ranked a bare `#main-header.enh-scrolled`
+   (1 id, 1 class). The transparent homepage rule therefore kept winning
+   after scroll, leaving dark nav text on a see-through bar over the
+   black sections — an invisible menu. Matching the body prefix puts the
+   scrolled state back on top. */
+body #main-header.enh-scrolled {
+  background: rgba(255, 255, 255, 0.94) !important;
+  backdrop-filter: saturate(160%) blur(14px);
+  -webkit-backdrop-filter: saturate(160%) blur(14px);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06), 0 18px 30px -22px rgba(0, 0, 0, 0.35);
+}
+body #main-header.enh-scrolled #top-menu > li > a,
+body #main-header.enh-scrolled #top-menu li.current-menu-ancestor > a,
+body #main-header.enh-scrolled #top-menu li.current-menu-item > a,
+body #main-header.enh-scrolled #top-menu li.current_page_item > a {
+  color: #282828 !important;
+}
+
+/* ---- Search icon: the ETmodules icon font fails to load in this static
+   mirror (no live WP backend to actually search either), so it was
+   rendering as a stray literal "U" glyph. The control does nothing
+   useful here, so it's removed rather than faked. ---- */
+#et_top_search {
+  display: none !important;
+}
+
+/* ---- Primary CTAs: a real signature — brand-colored glow + light sweep on hover.
+   This is the one deliberate flourish; everything else stays quiet. ---- */
+.et_pb_button,
+.dica_button {
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 26px -14px rgba(249, 223, 28, 0.55);
+}
+.et_pb_button::before,
+.dica_button::before {
+  content: "";
+  position: absolute;
+  top: 0; left: -60%;
+  width: 40%; height: 100%;
+  background: linear-gradient(115deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+  transform: skewX(-18deg);
+  transition: left 0.65s cubic-bezier(.2,.8,.2,1);
+  pointer-events: none;
+}
+.et_pb_button:hover::before,
+.dica_button:hover::before {
+  left: 130%;
+}
+.et_pb_button:hover,
+.dica_button:hover {
+  transform: translateY(-3px) scale(1.015);
+  box-shadow: 0 18px 34px -14px rgba(249, 223, 28, 0.7), 0 14px 28px -12px rgba(0, 0, 0, 0.35);
+}
+
+/* ---- Typographic confidence: tighter, editorial headline rhythm (size scale system honored, no font swap) ---- */
+h1, h2, h3 {
+  letter-spacing: -0.01em;
+}
+h1 { line-height: 1.08; }
+h2 { line-height: 1.15; }
+
+/* ---- Dark / parallax sections: subtle film-grain for tactile depth, black only ---- */
+/* Scoped to .et_pb_section_parallax only (not the broader .et_pb_bg_layout_dark
+   utility class, which Divi reuses on small inline modules — touching position
+   there risks the same scroll-lock class of bug fixed earlier). Parallax
+   sections already carry position:relative from Divi's own CSS. */
+.et_pb_section_parallax::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+  z-index: 0;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ---- Elevated card language, applied consistently: icon blurbs read as considered objects ---- */
+.et_pb_blurb {
+  transition: transform 0.3s cubic-bezier(.2,.8,.2,1);
+}
+
+/* ---- Award badge / eyebrow-style short text: a touch of premium confidence ---- */
+.et_pb_section_2 .et_pb_text_inner > p:first-child strong,
+.et_pb_promo .et_pb_promo_description h2 {
+  letter-spacing: 0.02em;
+}
+
+/* ---- Hero CTA gets the load-in glow treatment matching its new signature look ---- */
+@keyframes enh-glow-in {
+  from { box-shadow: 0 0 0 0 rgba(249, 223, 28, 0); }
+  to { box-shadow: 0 10px 26px -14px rgba(249, 223, 28, 0.55); }
+}
+body.home .et_pb_section_0 .et_pb_button,
+.et_pb_fullwidth_header_container .et_pb_button {
+  animation: enh-fade-up 0.8s cubic-bezier(.2,.7,.2,1) both, enh-glow-in 1.2s ease-out 0.4s both;
+}
+
+/* ================================================================
+   Round four: rhythm, footer, lists, header logo — same rule as
+   every prior round: zero hex changes, zero font-family swaps,
+   zero copy edits. Fixing the details a premium build gets right.
+   ================================================================ */
+
+/* ---- Header logo: a quiet breathing-room cue on hover, matches nav underline language ---- */
+#logo {
+  transition: transform 0.25s cubic-bezier(.2,.8,.2,1);
+}
+#main-header:not(.enh-scrolled) #logo:hover {
+  transform: scale(1.03);
+}
+
+/* ---- Body copy lists: align to the paragraph rhythm already set above ---- */
+.et_pb_text ul,
+.et_pb_text ol,
+.entry-content ul,
+.entry-content ol {
+  line-height: 1.7;
+}
+.et_pb_text li,
+.entry-content li {
+  margin-bottom: 0.4em;
+}
+
+/* ---- Blockquotes in content: a real editorial marker instead of default indent ---- */
+.entry-content blockquote,
+.et_pb_text blockquote {
+  border-left: 3px solid #f9df1c;
+  padding-left: 1.1em;
+  margin-left: 0;
+}
+
+/* ---- Tables: hairline rules instead of Divi's default heavy borders ---- */
+.entry-content table,
+.et_pb_text table {
+  border-collapse: collapse;
+}
+.entry-content table td,
+.entry-content table th,
+.et_pb_text table td,
+.et_pb_text table th {
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+/* ---- Footer widgets: consistent link treatment, same underline-sweep language as top nav ---- */
+.footer-widget a {
+  transition: opacity 0.2s ease;
+}
+.footer-widget a:hover {
+  opacity: 0.75;
+}
+
+/* ---- Footer-bottom: quiet top hairline for separation from the widget area ---- */
+#footer-bottom {
+  position: relative;
+}
+#footer-bottom::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 50%;
+  width: min(90%, 1100px);
+  height: 1px;
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* ---- Social icons in footer/header: lift on hover instead of static ---- */
+.et-social-icons a,
+.et_pb_social_media_follow_link {
+  transition: transform 0.2s cubic-bezier(.2,.8,.2,1), opacity 0.2s ease;
+  display: inline-block;
+}
+.et-social-icons a:hover,
+.et_pb_social_media_follow_link:hover {
+  transform: translateY(-2px);
+}
+
+/* ================================================================
+   Round five: partner-logo section re-laid out. Divi hard-coded
+   this as 4 rows of 5 hand-placed columns, so the last row strands
+   a single lonely logo. Flattening the rows into one real grid
+   gives an even, gallery-wall rhythm instead — same 16 logos, same
+   colors, just properly arranged. No hex or font touched.
+   ---------------------------------------------------------------- */
+/* Flex-wrap rather than grid here: the 16 logos live inside four
+   separate Divi row wrappers that get flattened with display:contents,
+   and grid auto-placement leaves holes in that arrangement. Flex wrap
+   packs them continuously into an even wall regardless of how the
+   original markup grouped them. */
+body.home .et_pb_section_10{
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2.5rem 2rem;
+}
+body.home .et_pb_section_10 > .et_pb_row:has(.et_pb_column_1_5){
+  display: contents;
+}
+body.home .et_pb_section_10 > .et_pb_row:not(:has(.et_pb_column_1_5)){
+  flex: 0 0 100%;
+}
+body.home .et_pb_section_10 .et_pb_column_1_5{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  flex: 0 0 calc(25% - 1.5rem);
+  width: auto !important;
+  max-width: calc(25% - 1.5rem) !important;
+  margin: 0 !important;
+}
+/* Divi laid this out as 4 rows x 5 hand-placed columns for 16 logos, so
+   4 of the 20 slots are empty. Once the rows are flattened into one grid
+   those empties still claim cells and punch holes in the wall. */
+body.home .et_pb_section_10 .et_pb_column_1_5:not(:has(img)){
+  display: none;
+}
+body.home .et_pb_section_10 .et_pb_image{
+  width: 100% !important;
+  max-width: 100% !important;
+  text-align: center !important;
+}
+body.home .et_pb_section_10 .et_pb_image img{
+  /* The 16 supplied logo files range from 62px to 124px tall at their
+     natural size, so an untouched grid reads as scattered junk. Boxing
+     every logo into one fixed optical height with object-fit:contain is
+     what makes a logo wall look commissioned rather than pasted. */
+  width: auto;
+  max-width: 100%;
+  height: 52px;
+  object-fit: contain;
+  margin: 0 auto;
+  filter: grayscale(1) opacity(0.55);
+  transition: filter 0.25s ease, transform 0.25s cubic-bezier(.2,.8,.2,1);
+}
+body.home .et_pb_section_10 .et_pb_image:hover img{
+  filter: grayscale(0) opacity(1);
+  transform: translateY(-2px) scale(1.05);
+}
+
+/* ================================================================
+   Round six: stat-strip icons + hero signature shape.
+   Zero hex changes, zero font changes — icons get a shared box so
+   the row reads level instead of five random image sizes, and the
+   hero gets one deliberate accent: an irregular yellow triangle
+   (echoing the brand's own logo mark) sitting behind the headline.
+   ================================================================ */
+
+/* ---- Stat strip: uniform icon box + gentle float + hover lift ---- */
+body.home .et_pb_row_5col .et_pb_column{
+  transition: transform 0.3s cubic-bezier(.2,.8,.2,1);
+}
+body.home .et_pb_row_5col .et_pb_column:hover{
+  transform: translateY(-5px);
+}
+body.home .et_pb_row_5col img{
+  display: block;
+  height: 108px;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  margin: 0 auto 1.1rem;
+  animation: enh-icon-float 3.6s ease-in-out infinite;
+}
+body.home .et_pb_row_5col .et_pb_column_0 img{ animation-delay: 0s; }
+body.home .et_pb_row_5col .et_pb_column_1 img{ animation-delay: 0.3s; }
+body.home .et_pb_row_5col .et_pb_column_2 img{ animation-delay: 0.6s; }
+body.home .et_pb_row_5col .et_pb_column_3 img{ animation-delay: 0.9s; }
+body.home .et_pb_row_5col .et_pb_column_4 img{ animation-delay: 1.2s; }
+@keyframes enh-icon-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-7px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  body.home .et_pb_row_5col img{ animation: none; }
+}
+
+/* ================================================================
+   Hero — full rebuild. Two jobs, two zones instead of one column of
+   stacked, competing elements: the photo carries the claim (copy,
+   left-aligned, editorial), and a single angular yellow panel carries
+   the one number this whole brand is built on — 8,5× — the same
+   figure already stated three other places on this page, just given
+   its own stage here instead of being buried in a paragraph. That
+   panel is the signature: one clean-edged shape (not full-bleed, not
+   jagged), echoing the logo's own triangular cut. Everything else on
+   the photo side stays quiet: eyebrow, headline, two CTAs, done.
+   ================================================================ */
+body.home .et_pb_section_0{
+  background-color: #000000 !important;
+  /* The source photo is only 1400px wide; on wide monitors `cover`
+     alone left the flat black section colour showing at the edges.
+     Anchoring the crop to the centre keeps the frame filled. */
+  background-size: cover !important;
+  background-position: center center !important;
+  background-repeat: no-repeat !important;
+}
+.et_pb_fullwidth_header_0 {
+  position: relative;
+  padding: 0 !important;
+}
+/* An even scrim, not a directional one. The previous version ramped to
+   72% black on the left, which on wide screens read as a grey slab
+   pasted over the photo with a visible seam where it faded out. A flat
+   veil with a little extra weight at the bottom keeps the headline and
+   CTAs legible without banding. */
+.et_pb_fullwidth_header_0::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to bottom, rgba(0,0,0,0.10) 0%, rgba(0,0,0,0.30) 100%),
+    rgba(0, 0, 0, 0.32);
+  pointer-events: none;
+}
+.et_pb_fullwidth_header_0 .et_pb_fullwidth_header_container {
+  width: 100% !important;
+  max-width: none !important;
+}
+.et_pb_fullwidth_header_0 .header-content-container,
+.award-hero .header-content-container {
+  display: block !important;
+  width: 100%;
+}
+.et_pb_fullwidth_header_0 .header-content,
+.award-hero .header-content {
+  position: relative;
+  z-index: 1;
+  display: grid !important;
+  grid-template-columns: 1.2fr 0.8fr;
+  align-items: center;
+  gap: clamp(2rem, 5vw, 5rem);
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: calc(var(--enh-header-h) + 2.5rem) clamp(1.75rem, 4vw, 3.5rem) clamp(3.5rem, 7vw, 5.5rem);
+  text-align: left;
+}
+
+/* ---- Copy column ---- */
+.hero-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+}
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #f9df1c;
+  margin-bottom: 1.1rem;
+}
+.hero-eyebrow::before {
+  content: "";
+  width: 22px;
+  height: 2px;
+  background: #f9df1c;
+}
+.et_pb_fullwidth_header_0 h1,
+.award-hero h1.entry-title {
+  margin: 0 !important;
+  color: #ffffff !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.85), 0 4px 16px rgba(0, 0, 0, 0.45) !important;
+  font-weight: 800;
+  font-size: clamp(2.4rem, 5vw, 4rem);
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  text-align: left;
+  max-width: 22ch;
+}
+.et_pb_fullwidth_header_0 .et_pb_header_content_wrapper {
+  display: none;
+}
+.hero-ctas {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2.5rem;
+}
+.et_pb_fullwidth_header_0 .et_pb_button_one,
+body #page-container .et_pb_section .et_pb_fullwidth_header_0 .et_pb_button_one.et_pb_button {
+  font-size: 1rem !important;
+  padding: 1.05rem 2.2rem !important;
+  background: #f9df1c !important;
+  border-color: #f9df1c !important;
+  color: #282828 !important;
+  border-radius: 10px !important;
+  margin: 0 !important;
+}
+.et_pb_fullwidth_header_0 .et_pb_button_two,
+body #page-container .et_pb_section .et_pb_fullwidth_header_0 .et_pb_button_two.et_pb_button {
+  display: inline-block;
+  margin: 0 !important;
+  white-space: nowrap;
+  background: transparent !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.75) !important;
+  box-shadow: none !important;
+  color: #ffffff !important;
+  font-size: 0.95rem !important;
+  font-weight: 700 !important;
+  line-height: 1.2;
+  padding: 1.03rem 1.6rem !important;
+  border-radius: 10px !important;
+  text-decoration: none;
+}
+.et_pb_fullwidth_header_0 .et_pb_button_two:hover {
+  background: #ffffff !important;
+  color: #282828 !important;
+  border-color: #ffffff !important;
+  transform: none !important;
+}
+.et_pb_fullwidth_header_0 .et_pb_button_two::before {
+  display: none !important;
+}
+
+/* ---- Signature: the stat panel ---- */
+.hero-stat {
+  position: relative;
+  justify-self: end;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: min(100%, 320px);
+  aspect-ratio: 1 / 1;
+  background: #f9df1c;
+  clip-path: polygon(14% 0%, 100% 0%, 100% 86%, 86% 100%, 0% 100%, 0% 14%);
+  filter: drop-shadow(0 24px 40px rgba(0, 0, 0, 0.55));
+}
+.hero-stat-num {
+  font-size: clamp(3rem, 6vw, 4.5rem);
+  font-weight: 800;
+  line-height: 1;
+  color: #282828;
+  letter-spacing: -0.02em;
+}
+.hero-stat-label {
+  margin-top: 0.6rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #282828;
+  max-width: 12ch;
+}
+
+@media (max-width: 900px) {
+  .et_pb_fullwidth_header_0 .header-content,
+.award-hero .header-content {
+    grid-template-columns: 1fr;
+    padding-top: calc(var(--enh-header-h) + 2rem);
+  }
+  .hero-stat {
+    justify-self: center;
+    width: min(70%, 260px);
+    margin-top: 1rem;
+  }
+  .hero-copy,
+  .et_pb_fullwidth_header_0 h1,
+.award-hero h1.entry-title {
+    text-align: center;
+    align-items: center;
+    max-width: none;
+  }
+  .hero-eyebrow {
+    align-self: center;
+  }
+  .hero-ctas {
+    justify-content: center;
+  }
+}
+
+/* ---- "SKLEP" nav pill: was a dark box with a yellow keyline, the only
+   bordered item in an otherwise plain-text nav — read as a stray inline
+   style. Matches the site's actual button language now (solid yellow,
+   dark text, no border), so it reads as a deliberate secondary CTA. ---- */
+#top-menu a.shop,
+.ds-custom-link-menu > a {
+  background: #282828 !important;
+  border: 1.5px solid #f9df1c !important;
+  color: #f9df1c !important;
+  font-weight: 800;
+  padding: 0.45rem 0.9rem !important;
+  line-height: 1.2 !important;
+  font-size: 0.82rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+#main-header.enh-scrolled .ds-custom-link-menu > a {
+  background: #282828 !important;
+  color: #f9df1c !important;
+}
+
+/* ---- Hero-to-body transition: the hard cut from the black/yellow hero
+   into a flat white section read as two unrelated templates stitched
+   together. The rule needs to read against BOTH the yellow and the
+   dark stat tiles above it (the row alternates), so it carries its own
+   dark hairlines on either side rather than relying on one flat color
+   for contrast against a background it can't control. ---- */
+body.home .et_pb_section_1 + .et_pb_section{
+  border-top: 4px solid #f9df1c;
+  box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4), 0 -5px 0 rgba(0, 0, 0, 0.4);
+}
+@media (max-width: 980px) {
+  body.home .et_pb_section_10 .et_pb_column_1_5{
+    flex: 0 0 calc(33.333% - 1.4rem);
+    max-width: calc(33.333% - 1.4rem) !important;
+  }
+}
+@media (max-width: 767px) {
+  body.home .et_pb_section_10 .et_pb_column_1_5{
+    flex: 0 0 calc(50% - 1rem);
+    max-width: calc(50% - 1rem) !important;
+  }
+}
+
+/* ================================================================
+   Round seven: the premium pass. Three findings drove this, all of
+   them substance rather than decoration:
+
+   1. The four anti-doping certificates (Deutsche Sporthochschule
+      Köln lab reports) are white documents rendered on a white
+      section — the strongest trust signal a supplement brand has,
+      and it was literally invisible. Framed as real documents now.
+   2. Below the hero, thirteen consecutive sections were all pure
+      white. No value rhythm, so the page reads as one endless
+      scroll with no sense of chapters.
+   3. Section padding was inherited piecemeal from Divi, so the
+      vertical rhythm drifted section to section.
+
+   Palette unchanged: #f9df1c / #282828 / #000 / #fff / #f4f4f4.
+   ================================================================ */
+
+/* ---- Certificates: give the documents a frame so they exist ----
+   A white page can't display a white document. Each certificate
+   becomes a proper card — real surface, hairline border, lift on
+   hover — sitting on the site's own light-grey tone so the paper
+   edge is visible. These link out to the full PDFs, so the hover
+   state has a job: it signals they're openable. */
+/* The row carries its own dark gym photo — that's the original intent:
+   white lab documents on a dark band. Respect it, don't fight it. The
+   section stays white so the dark band reads as a deliberate inset
+   stripe, and a scrim over the photo keeps contrast controlled instead
+   of leaving the cards on raw, uneven photographic detail. */
+body.home .et_pb_section_7{
+  background-color: #ffffff !important;
+  padding: clamp(3.5rem, 7vw, 5.5rem) 0 !important;
+}
+body.home .et_pb_section_7 .et_pb_row{
+  position: relative;
+  max-width: 1180px;
+  border-radius: 16px;
+  overflow: hidden;
+  padding: clamp(2rem, 4vw, 3rem) clamp(1.5rem, 3vw, 2.5rem) !important;
+}
+body.home .et_pb_section_7 .et_pb_row::before{
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  pointer-events: none;
+}
+body.home .et_pb_section_7 .et_pb_column{
+  position: relative;
+  z-index: 1;
+}
+body.home .et_pb_section_7 .et_pb_image{
+  width: 100% !important;
+  max-width: 100% !important;
+}
+body.home .et_pb_section_7 .et_pb_image a,
+body.home .et_pb_section_7 .et_pb_image .et_pb_image_wrap{
+  display: block;
+  width: 100%;
+}
+body.home .et_pb_section_7 .et_pb_image img{
+  width: 100%;
+  height: auto;
+  background: #ffffff;
+  border: 1px solid #e2e2e2;
+  border-radius: 10px;
+  padding: 0.5rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06), 0 18px 34px -22px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s cubic-bezier(.2,.8,.2,1), box-shadow 0.3s ease, border-color 0.3s ease;
+}
+body.home .et_pb_section_7 .et_pb_image:hover img{
+  transform: translateY(-6px);
+  border-color: #f9df1c;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.07), 0 26px 46px -20px rgba(0, 0, 0, 0.34);
+}
+
+/* Label the block. "Certyfikat antydopingowy" is the site's own
+   wording (used on the cross-sell product cards), so this names the
+   documents in the vocabulary the page already speaks — it isn't
+   invented marketing copy. */
+body.home .et_pb_section_7 .cert-label{
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  margin-bottom: 1.5rem;
+  padding-left: 1.9rem;
+  font-weight: 800;
+  font-size: 0.78rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: #ffffff;
+  background-image: linear-gradient(#f9df1c, #f9df1c);
+  background-repeat: no-repeat;
+  background-size: 22px 2px;
+  background-position: 0 50%;
+}
+
+/* ---- Value rhythm: break the wall of white ----
+   Alternating tone gives the scroll a sense of chapters. Only the
+   already-neutral content sections are tinted; sections carrying
+   their own photographic or dark treatment are left alone. */
+/* Section 11 (blog) already ships tinted, so 12 stays white — two
+   tinted sections back to back would merge into one flat block and
+   defeat the point of alternating in the first place. */
+body.home .et_pb_section_4{
+  background-color: #f4f4f4 !important;
+}
+
+/* ---- Consistent vertical rhythm on the tinted/content sections ---- */
+body.home .et_pb_section_4,
+.et_pb_section_6,
+body.home .et_pb_section_11,
+body.home .et_pb_section_12{
+  padding-top: clamp(3.5rem, 7vw, 5.5rem) !important;
+  padding-bottom: clamp(3.5rem, 7vw, 5.5rem) !important;
+}
+
+/* ---- Partner wall: the 16 logos had ~1589px of section height,
+   most of it dead air. Tighten it to a real wall. ---- */
+body.home .et_pb_section_10{
+  background-color: #ffffff !important;
+  padding: clamp(3.5rem, 7vw, 5.5rem) clamp(1.5rem, 4vw, 3rem) !important;
+  max-width: 1180px;
+  margin: 0 auto;
+  gap: 2rem 1.5rem;
+}
+
+/* ---- Testimonial cards: they sat as bare text on white with no
+   surface of their own. Same card language as the certificates. ---- */
+body.home .et_pb_section_8{
+  background-color: #f4f4f4 !important;
+  padding-top: clamp(3.5rem, 7vw, 5.5rem) !important;
+  padding-bottom: clamp(3.5rem, 7vw, 5.5rem) !important;
+}
+body.home .et_pb_section_8 .dica_divi_carouselitem{
+  background: #ffffff !important;
+  border: 1px solid #e2e2e2;
+  border-radius: 14px !important;
+  padding: 1.75rem !important;
+}
+
+/* ---- Blog cards: give them the same surface treatment ---- */
+body.home .et_pb_section_11 .dg-post-thumb img{
+  border-radius: 10px 10px 0 0;
+}
+
+/* ---- Section headings: one consistent scale + tighter tracking
+   across the page, matching the hero's typographic confidence. ---- */
+#main-content h2 {
+  font-weight: 800;
+  letter-spacing: -0.015em;
+  line-height: 1.12;
+}
+
+/* ================================================================
+   Round eight: responsive. The mirrored Divi output ships its own
+   breakpoints, but every layout this file introduced (the hero grid,
+   the certificate band, the flex logo wall, the stat strip) needed
+   its own tablet/phone behaviour, and several of Divi's own rows
+   stayed locked to desktop widths. Two breakpoints:
+     <= 980px  tablet
+     <= 767px  phone
+   Nothing below changes a colour or a typeface — only how the
+   existing pieces stack, size and breathe on smaller screens.
+   ================================================================ */
+
+/* ---- Global guards: nothing may push the page sideways ---- */
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+img, iframe, video, table {
+  max-width: 100%;
+}
+
+/* ================================ TABLET ================================ */
+@media (max-width: 980px) {
+  /* Divi's fixed 80% container gets too narrow/awkward on tablets */
+  .et_pb_row,
+  .et_pb_section .et_pb_row {
+    width: 90% !important;
+    max-width: 90% !important;
+  }
+
+  /* Hero: stack copy over the stat panel, keep the photo readable */
+  .et_pb_fullwidth_header_0 .header-content,
+.award-hero .header-content {
+    grid-template-columns: 1fr !important;
+    gap: 2.25rem;
+    text-align: center;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+  .hero-copy {
+    align-items: center;
+    text-align: center;
+  }
+  .et_pb_fullwidth_header_0 h1,
+.award-hero h1.entry-title {
+    text-align: center;
+    max-width: 100%;
+    font-size: clamp(2rem, 5.4vw, 3rem);
+  }
+  .hero-eyebrow {
+    align-self: center;
+  }
+  .hero-ctas {
+    justify-content: center;
+  }
+  .hero-stat {
+    justify-self: center;
+    width: min(62%, 250px);
+  }
+
+  /* Stat strip: 5 across is unreadable on a tablet — go 3 up */
+  body.home .et_pb_row_5col{
+    display: flex !important;
+    flex-wrap: wrap;
+  }
+  body.home .et_pb_row_5col .et_pb_column{
+    flex: 0 0 33.333% !important;
+    width: 33.333% !important;
+    max-width: 33.333% !important;
+    margin: 0 !important;
+    padding: 2rem 1rem !important;
+  }
+  body.home .et_pb_row_5col img{
+    height: 84px;
+  }
+
+  /* Certificates: 2 up instead of 4 squeezed */
+  body.home .et_pb_section_7 .et_pb_row_4col{
+    display: flex !important;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+  }
+  body.home .et_pb_section_7 .et_pb_row_4col .et_pb_column{
+    flex: 0 0 calc(50% - 0.625rem) !important;
+    width: calc(50% - 0.625rem) !important;
+    max-width: calc(50% - 0.625rem) !important;
+    margin: 0 !important;
+  }
+
+  /* Two-column content rows (image + copy) become one column */
+  .et_pb_column_2_3,
+  .et_pb_column_1_3,
+  .et_pb_column_1_2 {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-right: 0 !important;
+    margin-bottom: 2rem;
+  }
+
+  /* Section padding tightens so the page doesn't feel like empty air */
+  .et_pb_section {
+    padding-top: clamp(2.5rem, 6vw, 4rem) !important;
+    padding-bottom: clamp(2.5rem, 6vw, 4rem) !important;
+  }
+  body.home .et_pb_section_0{
+    padding: 0 !important;
+  }
+}
+
+/* ================================= PHONE ================================= */
+@media (max-width: 767px) {
+  .et_pb_row,
+  .et_pb_section .et_pb_row {
+    width: 92% !important;
+    max-width: 92% !important;
+  }
+
+  /* Hero */
+  .et_pb_fullwidth_header_0 .header-content,
+.award-hero .header-content {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+    gap: 1.75rem;
+  }
+  .et_pb_fullwidth_header_0 h1,
+.award-hero h1.entry-title {
+    font-size: clamp(1.75rem, 8vw, 2.4rem);
+    line-height: 1.06;
+  }
+  .hero-eyebrow {
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+  }
+  .hero-ctas {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    gap: 0.75rem;
+  }
+  /* Full-width tap targets — a 44px+ row is the whole point on a phone */
+  .et_pb_fullwidth_header_0 .et_pb_button_one,
+  body #page-container .et_pb_section .et_pb_fullwidth_header_0 .et_pb_button_one.et_pb_button,
+  .et_pb_fullwidth_header_0 .et_pb_button_two,
+  body #page-container .et_pb_section .et_pb_fullwidth_header_0 .et_pb_button_two.et_pb_button {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 1rem 1.25rem !important;
+    white-space: normal;
+  }
+  .hero-stat {
+    width: min(72%, 220px);
+  }
+  .hero-stat-num {
+    font-size: clamp(2.4rem, 12vw, 3.2rem);
+  }
+
+  /* Stat strip: 2 up */
+  body.home .et_pb_row_5col .et_pb_column{
+    flex: 0 0 50% !important;
+    width: 50% !important;
+    max-width: 50% !important;
+    padding: 1.5rem 0.75rem !important;
+  }
+  body.home .et_pb_row_5col img{
+    height: 70px;
+  }
+  body.home .et_pb_row_5col h3,
+  body.home .et_pb_row_5col h4{
+    font-size: 0.9rem;
+  }
+
+  /* Certificates: single column, full width */
+  body.home .et_pb_section_7 .et_pb_row_4col .et_pb_column{
+    flex: 0 0 100% !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  body.home .et_pb_section_7 .et_pb_row{
+    padding: 1.5rem 1rem !important;
+  }
+
+  /* Every remaining Divi column stacks */
+  .et_pb_column {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-right: 0 !important;
+    margin-bottom: 1.75rem;
+  }
+  .et_pb_column:last-child {
+    margin-bottom: 0;
+  }
+
+  /* Logo wall: 2 up */
+  body.home .et_pb_section_10 .et_pb_column_1_5{
+    flex: 0 0 calc(50% - 0.75rem) !important;
+    max-width: calc(50% - 0.75rem) !important;
+    margin-bottom: 0 !important;
+  }
+  body.home .et_pb_section_10{
+    gap: 1.75rem 1.5rem;
+    padding-left: 1.25rem !important;
+    padding-right: 1.25rem !important;
+  }
+
+  /* Content buttons: comfortable, wrapping labels instead of overflow */
+  .et_pb_button {
+    display: inline-block;
+    white-space: normal;
+    padding: 0.9rem 1.4rem !important;
+    font-size: 0.9rem !important;
+    line-height: 1.35;
+  }
+
+  /* Typography scale for small screens */
+  #main-content h2 {
+    font-size: clamp(1.5rem, 6.5vw, 2rem);
+  }
+  #main-content h3 {
+    font-size: 1.15rem;
+  }
+  #main-content h4 {
+    font-size: 1.05rem;
+  }
+  .et_pb_text p,
+  .entry-content p {
+    font-size: 0.95rem;
+  }
+
+  /* Contact form: full-width fields, 16px stops iOS zoom-on-focus */
+  .et_pb_contact input,
+  .et_pb_contact textarea,
+  #et_pb_contact_form_0 input,
+  #et_pb_contact_form_0 textarea {
+    width: 100% !important;
+    font-size: 16px !important;
+  }
+  .et_pb_contact_field {
+    width: 100% !important;
+    padding: 0 0 1rem 0 !important;
+  }
+  .et_pb_contact_submit,
+  .et_contact_bottom_container {
+    float: none !important;
+    display: block;
+    text-align: left;
+  }
+
+  /* Footer stacks */
+  #footer-widgets .footer-widget {
+    width: 100% !important;
+    margin: 0 0 2rem 0 !important;
+  }
+  #footer-bottom {
+    text-align: center;
+  }
+  #footer-info {
+    float: none !important;
+    display: block;
+  }
+
+  /* Product / order panel loses its desktop card inset */
+  .et_pb_section_5 .et_pb_row,
+  #sklad .et_pb_row {
+    border-radius: 14px;
+  }
+
+  /* Testimonial carousel breathing room */
+  body.home .et_pb_section_8 .dica_divi_carouselitem{
+    padding: 1.25rem !important;
+  }
+}
+
+/* ---- Very small phones ----
+   These used to force the stat tiles and the partner logos to one per
+   row. On a 360-390px phone that turned the logo wall into sixteen
+   full-width rows and the stat strip into five — an enormous amount of
+   scrolling for content that reads perfectly well two-up at this size.
+   Both stay two across; only the headline steps down. ---- */
+@media (max-width: 400px) {
+  body.home .et_pb_row_5col .et_pb_column{
+    flex: 0 0 50% !important;
+    width: 50% !important;
+    max-width: 50% !important;
+    padding: 1.25rem 0.6rem !important;
+  }
+  body.home .et_pb_section_10 .et_pb_column_1_5{
+    flex: 0 0 calc(50% - 0.75rem) !important;
+    max-width: calc(50% - 0.75rem) !important;
+  }
+  .et_pb_fullwidth_header_0 h1,
+.award-hero h1.entry-title {
+    font-size: 1.65rem;
+  }
+}
+
+/* ---- Touch devices: hover lifts are meaningless and leave sticky
+   states, so retire them where a pointer can't hover ---- */
+@media (hover: none) {
+  .et_pb_button:hover,
+  .dica_button:hover,
+  .et_pb_blog_grid .et_pb_post:hover,
+  article.et_pb_post:hover,
+  .dica_divi_carouselitem:hover,
+  body.home .et_pb_section_7 .et_pb_image:hover img,
+  body.home .et_pb_row_5col .et_pb_column:hover{
+    transform: none !important;
+  }
+  body.home .et_pb_section_10 .et_pb_image img{
+    filter: grayscale(0) opacity(0.85);
+  }
+}
+
+/* ================================================================
+   Round nine.
+   1. "Jakie są najważniejsze korzyści?" rebuilt as a 3 x 2 card grid.
+   2. Testimonials + blog: real, working carousels.
+   3. SKLEP nav pill: stop it going invisible on scroll.
+   Palette and typeface unchanged throughout.
+   ================================================================ */
+
+/* ---------------------------------------------------------------
+   1. BENEFITS -> 3 columns x 2 rows
+
+   Divi hard-split these six benefits into two half-width columns of
+   three, with the icon locked to the left of each block as a table
+   cell. Two consequences: the two columns never align row-to-row
+   (each block is a different height, so nothing shares a baseline),
+   and the narrow icon column squeezes the copy into a thin ribbon.
+
+   Flattening the two column wrappers with display:contents lets all
+   six blurbs sit in one 3-column grid, and stacking the icon above
+   the heading gives every card the same anatomy: icon, title, text.
+   Equal-height cards, one shared baseline, no ragged edges.
+   --------------------------------------------------------------- */
+body.home .et_pb_section_4 .et_pb_row_4{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  align-items: stretch;
+}
+body.home .et_pb_section_4 .et_pb_row_4 > .et_pb_column{
+  display: contents;
+}
+
+body.home .et_pb_section_4 .et_pb_blurb{
+  display: flex;
+  height: 100%;
+  margin: 0 !important;
+  background: #ffffff;
+  border: 1px solid #e2e2e2;
+  border-radius: 14px;
+  padding: 2rem 1.75rem;
+  transition: transform 0.3s cubic-bezier(.2,.8,.2,1), box-shadow 0.3s ease, border-color 0.3s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+body.home .et_pb_section_4 .et_pb_blurb:hover{
+  transform: translateY(-5px);
+  border-color: #f9df1c;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06), 0 22px 40px -24px rgba(0, 0, 0, 0.28);
+}
+
+/* Undo Divi's table-based icon-on-the-left layout */
+body.home .et_pb_section_4 .et_pb_blurb .et_pb_blurb_content{
+  display: flex !important;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  max-width: none;
+  width: 100%;
+  margin: 0;
+}
+body.home .et_pb_section_4 .et_pb_blurb .et_pb_main_blurb_image{
+  display: block !important;
+  width: auto !important;
+  margin: 0 0 1.25rem 0;
+  line-height: 0;
+}
+body.home .et_pb_section_4 .et_pb_blurb .et_pb_blurb_container{
+  display: block !important;
+  padding-left: 0 !important;
+  vertical-align: baseline;
+  width: 100%;
+}
+
+/* One uniform icon box, so the row of cards reads level rather than
+   bouncing with each PNG's own dimensions */
+body.home .et_pb_section_4 .et_pb_blurb .et_pb_image_wrap,
+body.home .et_pb_section_4 .et_pb_blurb .et_pb_main_blurb_image img{
+  display: block;
+  width: auto;
+  max-width: 100%;
+}
+body.home .et_pb_section_4 .et_pb_blurb .et_pb_main_blurb_image img{
+  height: 78px;
+  object-fit: contain;
+  object-position: left center;
+  border-radius: 0;
+  box-shadow: none;
+}
+body.home .et_pb_section_4 .et_pb_blurb:hover .et_pb_main_blurb_image img{
+  transform: none;
+}
+
+body.home .et_pb_section_4 .et_pb_blurb .et_pb_module_header{
+  font-size: 1.08rem;
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.6rem;
+  padding-bottom: 0;
+}
+body.home .et_pb_section_4 .et_pb_blurb .et_pb_blurb_description{
+  font-size: 0.92rem;
+  line-height: 1.65;
+}
+body.home .et_pb_section_4 .et_pb_blurb .et_pb_blurb_description p{
+  font-size: inherit;
+  line-height: inherit;
+}
+
+/* The two CTAs under the grid: sit them side by side, centred */
+body.home .et_pb_section_4 .et_pb_row_5 .et_pb_column{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+body.home .et_pb_section_4 .et_pb_row_5 .et_pb_button{
+  margin: 0 !important;
+}
+
+@media (max-width: 980px) {
+  body.home .et_pb_section_4 .et_pb_row_4{
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 767px) {
+  body.home .et_pb_section_4 .et_pb_row_4{
+    grid-template-columns: 1fr;
+    gap: 1.15rem;
+  }
+  body.home .et_pb_section_4 .et_pb_blurb{
+    padding: 1.5rem 1.35rem;
+  }
+  body.home .et_pb_section_4 .et_pb_blurb .et_pb_main_blurb_image img{
+    height: 62px;
+  }
+  /* the display:contents columns must not inherit the phone stacking
+     margins applied to every other Divi column */
+  body.home .et_pb_section_4 .et_pb_row_4 > .et_pb_column{
+    margin-bottom: 0 !important;
+  }
+}
+
+/* ---------------------------------------------------------------
+   2. CAROUSELS
+
+   Both the testimonial strip and the blog strip are Swiper markup.
+   Swiper's script never initialises in this static mirror, so every
+   slide fell out into one long stacked column — eleven testimonials
+   and eight posts dumped end to end.
+
+   Instead of reviving the library, drive them with CSS scroll-snap:
+   native horizontal scrolling, touch and trackpad friendly, keyboard
+   accessible, zero JS. Everything is scoped to
+   :not(.swiper-initialized):not(.swiper-container-initialized) so if
+   Swiper ever does boot, these rules stand down and let it drive.
+   --------------------------------------------------------------- */
+.dica_divi_carousel .swiper-container:not(.swiper-initialized):not(.swiper-container-initialized),
+.dgbc_blog_carousel .swiper-container:not(.swiper-initialized):not(.swiper-container-initialized) {
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scroll-padding: 0;
+  padding-bottom: 1.25rem;
+  scrollbar-width: thin;
+  scrollbar-color: #f9df1c #e2e2e2;
+}
+.dica_divi_carousel .swiper-container:not(.swiper-initialized):not(.swiper-container-initialized)::-webkit-scrollbar,
+.dgbc_blog_carousel .swiper-container:not(.swiper-initialized):not(.swiper-container-initialized)::-webkit-scrollbar {
+  height: 6px;
+}
+.dica_divi_carousel .swiper-container:not(.swiper-initialized):not(.swiper-container-initialized)::-webkit-scrollbar-track,
+.dgbc_blog_carousel .swiper-container:not(.swiper-initialized):not(.swiper-container-initialized)::-webkit-scrollbar-track {
+  background: #e2e2e2;
+  border-radius: 999px;
+}
+.dica_divi_carousel .swiper-container:not(.swiper-initialized):not(.swiper-container-initialized)::-webkit-scrollbar-thumb,
+.dgbc_blog_carousel .swiper-container:not(.swiper-initialized):not(.swiper-container-initialized)::-webkit-scrollbar-thumb {
+  background: #f9df1c;
+  border-radius: 999px;
+}
+
+.dica_divi_carousel .swiper-container:not(.swiper-initialized):not(.swiper-container-initialized) > .swiper-wrapper,
+.dgbc_blog_carousel .swiper-container:not(.swiper-initialized):not(.swiper-container-initialized) > .swiper-wrapper {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  align-items: stretch;
+  gap: 1.5rem;
+  transform: none !important;
+  width: auto !important;
+  height: auto !important;
+}
+
+/* Testimonials: three across on desktop */
+.dica_divi_carousel .swiper-container:not(.swiper-initialized):not(.swiper-container-initialized) > .swiper-wrapper > * {
+  flex: 0 0 calc((100% - 3rem) / 3);
+  width: calc((100% - 3rem) / 3) !important;
+  max-width: none !important;
+  margin: 0 !important;
+  scroll-snap-align: start;
+  height: auto !important;
+}
+
+/* Blog: three across on desktop */
+.dgbc_blog_carousel .swiper-container:not(.swiper-initialized):not(.swiper-container-initialized) > .swiper-wrapper > * {
+  flex: 0 0 calc((100% - 3rem) / 3);
+  width: calc((100% - 3rem) / 3) !important;
+  max-width: none !important;
+  margin: 0 !important;
+  scroll-snap-align: start;
+  height: auto !important;
+}
+
+/* Testimonial cards: equal height, content pushed to a sane rhythm */
+.dica_divi_carousel .dica_divi_carouselitem {
+  display: flex !important;
+  flex-direction: column;
+  height: 100%;
+  background: #ffffff !important;
+  border: 1px solid #e2e2e2;
+  border-radius: 14px !important;
+  padding: 1.75rem !important;
+  /* margin-right is Swiper's: it writes the gutter between slides as an
+     inline `margin-right: <spaceBetween>px`. A blanket `margin: 0
+     !important` here silently deleted it, which is why the cards sat
+     edge to edge no matter what item_spacing was set to. */
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  margin-left: 0 !important;
+}
+/* the non-initialised fallback has no inline margins; it uses the
+   wrapper's gap instead, so zero it there to avoid a double gutter */
+.dica_divi_carousel .swiper-container:not(.swiper-initialized):not(.swiper-container-initialized) .dica_divi_carouselitem {
+  margin-right: 0 !important;
+}
+.dica_divi_carousel .dica-item {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.dica_divi_carousel .dica-item-image img {
+  width: 72px;
+  height: 72px;
+  object-fit: cover;
+  border-radius: 999px;
+  margin: 0 auto 1rem;
+}
+.dica_divi_carousel .dica-item-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+}
+
+/* Blog cards get the same surface language */
+.dgbc_blog_carousel .dgbc_post_item {
+  display: flex !important;
+  flex-direction: column;
+  height: 100%;
+  background: #ffffff;
+  border: 1px solid #e2e2e2;
+  border-radius: 14px;
+  overflow: hidden;
+  transition: transform 0.3s cubic-bezier(.2,.8,.2,1), box-shadow 0.3s ease, border-color 0.3s ease;
+}
+.dgbc_blog_carousel .dgbc_post_item:hover {
+  transform: translateY(-5px);
+  border-color: #f9df1c;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06), 0 22px 40px -24px rgba(0, 0, 0, 0.28);
+}
+.dgbc_blog_carousel .dgbc_post_inner_wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.dgbc_blog_carousel .dg-post-thumb {
+  margin: 0;
+  overflow: hidden;
+  aspect-ratio: 16 / 10;
+}
+.dgbc_blog_carousel .dg-post-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0;
+  transition: transform 0.5s cubic-bezier(.2,.8,.2,1);
+}
+.dgbc_blog_carousel .dgbc_post_item:hover .dg-post-thumb img {
+  transform: scale(1.05);
+}
+.dgbc_blog_carousel .content-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  padding: 1.35rem 1.35rem 1.6rem;
+}
+.dgbc_blog_carousel .dg_bc_title {
+  font-size: 1rem;
+  font-weight: 800;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.6rem;
+  padding-bottom: 0;
+}
+.dgbc_blog_carousel .dg_bc_title a {
+  color: #282828;
+}
+.dgbc_blog_carousel .dg_bc_title a:hover {
+  color: #282828;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.dgbc_blog_carousel .post-content,
+.dgbc_blog_carousel .post-content p {
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: rgba(40, 40, 40, 0.7);
+}
+
+/* A quiet hint that the strip scrolls, using the site's own yellow */
+.dica_divi_carousel .et_pb_module_inner,
+.dgbc_blog_carousel .et_pb_module_inner {
+  position: relative;
+}
+
+@media (max-width: 980px) {
+  .dica_divi_carousel .swiper-container:not(.swiper-initialized):not(.swiper-container-initialized) > .swiper-wrapper > *,
+  .dgbc_blog_carousel .swiper-container:not(.swiper-initialized):not(.swiper-container-initialized) > .swiper-wrapper > * {
+    flex: 0 0 calc((100% - 1.5rem) / 2);
+    width: calc((100% - 1.5rem) / 2) !important;
+  }
+}
+@media (max-width: 767px) {
+  .dica_divi_carousel .swiper-container:not(.swiper-initialized):not(.swiper-container-initialized) > .swiper-wrapper,
+  .dgbc_blog_carousel .swiper-container:not(.swiper-initialized):not(.swiper-container-initialized) > .swiper-wrapper {
+    gap: 1rem;
+  }
+  .dica_divi_carousel .swiper-container:not(.swiper-initialized):not(.swiper-container-initialized) > .swiper-wrapper > *,
+  .dgbc_blog_carousel .swiper-container:not(.swiper-initialized):not(.swiper-container-initialized) > .swiper-wrapper > * {
+    flex: 0 0 86%;
+    width: 86% !important;
+  }
+  .dica_divi_carousel .dica_divi_carouselitem {
+    padding: 1.35rem !important;
+  }
+}
+
+/* ---------------------------------------------------------------
+   3. SKLEP pill stayed dark-on-dark once the header went sticky.
+
+   The scrolled-state rule that flips nav links to dark ink is
+   #main-header.enh-scrolled #top-menu > li > a — two IDs. The pill's
+   own rule only had one ID, so it lost the cascade and the label
+   took the dark colour on its dark fill, i.e. vanished. Matching the
+   ID count puts the pill back in charge of its own colour.
+   --------------------------------------------------------------- */
+#main-header.enh-scrolled #top-menu .ds-custom-link-menu > a,
+#main-header.enh-scrolled #top-menu li.ds-custom-link-menu > a,
+#main-header.enh-scrolled #top-menu a.shop {
+  background: #282828 !important;
+  border: 1.5px solid #f9df1c !important;
+  color: #f9df1c !important;
+}
+#main-header.enh-scrolled #top-menu .ds-custom-link-menu > a:hover,
+#main-header.enh-scrolled #top-menu a.shop:hover {
+  background: #f9df1c !important;
+  color: #282828 !important;
+}
+/* the underline sweep would cut across the pill */
+#top-menu .ds-custom-link-menu > a::after,
+#top-menu a.shop::after {
+  display: none !important;
+}
+
+/* ---------------------------------------------------------------
+   Nav hover underline: anchor it to the text, not the box.
+
+   Divi gives each nav link ~76px of bottom padding to fill the tall
+   header, so a rule of `bottom: -4px` drew the sweep 76px BELOW the
+   label — floating near the bottom edge of the header instead of
+   underlining anything. Positioning from the top of the content box
+   (which starts flush with the text, since padding-top is 0) puts
+   the rule where an underline belongs.
+   --------------------------------------------------------------- */
+#top-menu a::after {
+  top: calc(1em + 5px);
+  bottom: auto;
+}
+
+/* On the mobile menu each item is a full-width row; a sweeping
+   underline there reads as a stray line, so drop it. */
+@media (max-width: 980px) {
+  .et_mobile_menu a::after,
+  #mobile_menu a::after {
+    display: none !important;
+  }
+}
+
+/* ---------------------------------------------------------------
+   Anchor landing offset. Native hash navigation (and any scroll the
+   browser does before our JS runs) must clear the sticky header,
+   otherwise the section heading lands underneath it.
+   --------------------------------------------------------------- */
+#cregaatine,
+#sklad,
+#wspolpraca,
+#kontakt,
+#blog,
+.et_pb_section[id],
+.et_pb_row[id] {
+  scroll-margin-top: calc(var(--enh-header-h) + 16px);
+}
+
+/* ---------------------------------------------------------------
+   Benefit cards: centre the icons and give them more presence.
+   They were left-aligned at 78px, which left them looking like small
+   bullets clinging to the card edge. Centred and scaled up, each card
+   leads with its illustration the way the stat strip does.
+   --------------------------------------------------------------- */
+body.home .et_pb_section_4 .et_pb_blurb .et_pb_main_blurb_image{
+  width: 100% !important;
+  margin: 0 0 1.5rem 0;
+  text-align: center;
+}
+body.home .et_pb_section_4 .et_pb_blurb .et_pb_image_wrap{
+  display: inline-block;
+  margin: 0 auto;
+}
+body.home .et_pb_section_4 .et_pb_blurb .et_pb_main_blurb_image img{
+  height: 118px;
+  object-position: center center;
+  margin: 0 auto;
+}
+
+@media (max-width: 767px) {
+  body.home .et_pb_section_4 .et_pb_blurb .et_pb_main_blurb_image img{
+    height: 92px;
+  }
+}
+
+/* ---------------------------------------------------------------
+   Button pairs sat at different heights and offsets because each one
+   is wrapped in its own block-level Divi wrapper with its own
+   alignment class, so they stacked and drifted instead of reading as
+   a matched pair. Give every button one shared height and centring,
+   and lay the pair out as a single centred row.
+   --------------------------------------------------------------- */
+.et_pb_button {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  text-align: center;
+}
+
+body.home .et_pb_section_4 .et_pb_row_5 .et_pb_column{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: stretch;
+  gap: 1rem;
+}
+body.home .et_pb_section_4 .et_pb_row_5 .et_pb_button_module_wrapper{
+  display: flex;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+body.home .et_pb_section_4 .et_pb_row_5 .et_pb_button{
+  margin: 0 !important;
+  height: 100%;
+}
+
+/* ---------------------------------------------------------------
+   Certificates: 2 x 2 instead of a single four-across strip. At four
+   wide each document was too small to read as a document; two up
+   gives each certificate real presence on the dark band.
+   --------------------------------------------------------------- */
+body.home .et_pb_section_7 .et_pb_row_4col{
+  display: flex !important;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+body.home .et_pb_section_7 .cert-label{
+  flex: 0 0 100%;
+}
+body.home .et_pb_section_7 .et_pb_row_4col > .et_pb_column{
+  flex: 0 0 calc(50% - 0.75rem) !important;
+  width: calc(50% - 0.75rem) !important;
+  max-width: calc(50% - 0.75rem) !important;
+  margin: 0 !important;
+}
+
+@media (max-width: 767px) {
+  body.home .et_pb_section_7 .et_pb_row_4col > .et_pb_column{
+    flex: 0 0 100% !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
+
+/* ---------------------------------------------------------------
+   Mobile dropdown menu.
+
+   Divi clones #top-menu into #mobile_menu with JavaScript at runtime,
+   class list included — so the unscoped .ds-custom-link-menu pill rule
+   follows the SKLEP item into the dropdown and renders it as a small
+   dark chip floating in a white list. In a stacked menu that reads as
+   a mistake, so give it a proper full-width treatment there instead.
+   --------------------------------------------------------------- */
+.et_mobile_menu {
+  border-top: 3px solid #f9df1c !important;
+  border-radius: 0 0 12px 12px;
+  box-shadow: 0 18px 34px -18px rgba(0, 0, 0, 0.35);
+  padding: 0.5rem 0 !important;
+}
+.et_mobile_menu li a {
+  color: #282828 !important;
+  font-weight: 700;
+  padding: 0.95rem 1.25rem !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+.et_mobile_menu li:last-child a {
+  border-bottom: none;
+}
+.et_mobile_menu li a:hover {
+  background: rgba(249, 223, 28, 0.16);
+  opacity: 1;
+}
+/* the SKLEP item becomes a real full-width action at the end of the list */
+.et_mobile_menu .ds-custom-link-menu > a,
+.et_mobile_menu a.shop {
+  display: block !important;
+  margin: 0.6rem 1rem 0.35rem !important;
+  padding: 0.9rem 1.25rem !important;
+  background: #282828 !important;
+  border: 1.5px solid #f9df1c !important;
+  border-radius: 10px !important;
+  color: #f9df1c !important;
+  text-align: center;
+  border-bottom: 1.5px solid #f9df1c !important;
+}
+
+/* Hamburger stays visible against both header states */
+.mobile_menu_bar:before {
+  color: #282828 !important;
+}
+body.home .et_pb_section_0 ~ * .mobile_menu_bar:before{
+  color: inherit;
+}
+
+/* ---------------------------------------------------------------
+   Hero: undo the original site's hardcoded widths.
+
+   The exported Divi CSS pins the hero module to fixed pixel widths
+   per breakpoint:
+     <=980px  width: 1200px !important
+     <=767px  width:  400px !important
+   So on any tablet the hero was 1200px wide inside a ~768px screen,
+   and on any phone narrower than 400px (iPhone SE/12 mini at 375,
+   most Androids at 360) it hung 25-40px off the right edge. The page
+   only looked contained because of the overflow-x:hidden guard, which
+   was masking the overflow rather than fixing it.
+   --------------------------------------------------------------- */
+@media (max-width: 980px) {
+  .et_pb_fullwidth_header_0,
+  body.home .et_pb_section_0 .et_pb_fullwidth_header{
+    width: 100% !important;
+    max-width: 100% !important;
+    padding-top: 0 !important;
+  }
+}
+@media (max-width: 767px) {
+  .et_pb_fullwidth_header_0,
+  body.home .et_pb_section_0 .et_pb_fullwidth_header{
+    width: 100% !important;
+    max-width: 100% !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  /* Divi also leaves a stray 40px left margin on the content block */
+  .et_pb_fullwidth_header_0 .header-content,
+.award-hero .header-content {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    width: 100% !important;
+  }
+}
+
+/* ---- Touch targets: the social icons were 25px tall, well under the
+   44px minimum for a comfortable tap ---- */
+@media (max-width: 980px) {
+  .et-social-icons a,
+  .et_pb_social_media_follow_link,
+  .et_pb_social_media_follow li a.icon {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+/* ---- Eyebrow labels were rendering at 11.2px; nudge up so they stay
+   legible at arm's length on a phone ---- */
+@media (max-width: 767px) {
+  .hero-eyebrow {
+    font-size: 0.78rem;
+  }
+  body.home .et_pb_section_7 .cert-label{
+    font-size: 0.82rem;
+  }
+}
+
+/* ---------------------------------------------------------------
+   Mobile corrections found during the phone audit.
+   --------------------------------------------------------------- */
+@media (max-width: 767px) {
+  /* Certificates stay 2 x 2 on phones. One-per-row made each lab
+     report ~370px tall for a document nobody can read at 375px wide
+     anyway — they work as trust badges, and tapping opens the full
+     file. Two up keeps the whole set visible in one glance. */
+  body.home .et_pb_section_7 .et_pb_row_4col{
+    gap: 0.75rem;
+  }
+  body.home .et_pb_section_7 .et_pb_row_4col > .et_pb_column{
+    flex: 0 0 calc(50% - 0.375rem) !important;
+    width: calc(50% - 0.375rem) !important;
+    max-width: calc(50% - 0.375rem) !important;
+    margin-bottom: 0 !important;
+  }
+  body.home .et_pb_section_7 .et_pb_image img{
+    padding: 0.3rem;
+    border-radius: 8px;
+  }
+
+  /* Paired CTAs were centred but at their own natural widths, so they
+     read as two mismatched blocks. Equal full-width rows instead. */
+  body.home .et_pb_section_4 .et_pb_row_5 .et_pb_column{
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+  body.home .et_pb_section_4 .et_pb_row_5 .et_pb_button_module_wrapper{
+    width: 100%;
+  }
+  body.home .et_pb_section_4 .et_pb_row_5 .et_pb_button{
+    width: 100%;
+  }
+}
+
+/* ================================================================
+   SINGLE POST — editorial article layout
+   Applies to body.single-post (blog posts / the FIWE award page).
+
+   Direction: this page is an award citation, not a blog entry. It
+   opens like a plaque — dark band, the trophy photograph as the
+   evidence, and the three facts that make the award real (I miejsce,
+   75% głosów, FIWE 2021) set on one engraved line beneath it. Then a
+   single narrow reading column, the video, one action, and related
+   reading as cards.
+
+   Deliberately different from the homepage: the homepage leads with a
+   yellow geometric panel, this leads with photographic proof. Same
+   palette (#f9df1c / #282828 / #000 / #fff / #f4f4f4), same typeface,
+   same 10-14px radius system.
+
+   Copy is untouched — every string already existed on the page.
+   ================================================================ */
+
+/* ---- Page ground ---- */
+body.single-post #main-content {
+  background: #ffffff;
+}
+/* Only the content container goes full-bleed. The first version also
+   matched the footer's .container, which stripped its gutters and left
+   the address block flush against the window edge. */
+body.single-post #main-content > .container {
+  width: 100% !important;
+  max-width: none !important;
+  padding: 0 !important;
+}
+body.single-post #main-content .container::before {
+  display: none;
+}
+body.single-post article.et_pb_post {
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent;
+  box-shadow: none;
+}
+body.single-post article.et_pb_post:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+/* ================================================================
+   1. MASTHEAD — dark band with title + the award photograph
+   ================================================================ */
+body.single-post .et_post_meta_wrapper:has(h1.entry-title) {
+  position: relative;
+  background: #000000;
+  /* Divi caps this wrapper at 1080px, which left the dark band ending
+     mid-screen with white beside it. The band is full-bleed by design;
+     the inner blocks carry their own 1120px measure. */
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: calc(var(--enh-header-h) + 3.5rem) clamp(1.25rem, 5vw, 3rem) 0;
+  text-align: left;
+  overflow: hidden;
+}
+
+/* Eyebrow built from the post's own metadata line */
+body.single-post .et_post_meta_wrapper .published,
+body.single-post .et_post_meta_wrapper .post-meta {
+  display: block;
+  max-width: 1120px;
+  margin: 0 auto 1rem;
+  padding-left: 1.9rem;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: #f9df1c !important;
+  background-image: linear-gradient(#f9df1c, #f9df1c);
+  background-repeat: no-repeat;
+  background-size: 22px 2px;
+  background-position: 0 50%;
+}
+body.single-post .et_post_meta_wrapper .post-meta a {
+  color: #f9df1c !important;
+}
+
+body.single-post h1.entry-title {
+  max-width: 1120px;
+  margin: 0 auto !important;
+  padding: 0 !important;
+  color: #ffffff !important;
+  font-weight: 800;
+  font-size: clamp(1.9rem, 4.4vw, 3.4rem);
+  line-height: 1.06;
+  letter-spacing: -0.02em;
+  text-align: left;
+}
+
+/* The trophy photo: the page's evidence, framed rather than bled */
+body.single-post .et_post_meta_wrapper:has(h1.entry-title) > img,
+body.single-post .et_post_meta_wrapper .et_pb_image_wrap > img {
+  display: block;
+  width: 100%;
+  max-width: 1120px;
+  height: auto;
+  margin: clamp(2rem, 4vw, 3rem) auto 0;
+  border-radius: 16px 16px 0 0;
+  box-shadow: 0 -2px 0 rgba(249, 223, 28, 0.9);
+  transition: none;
+}
+body.single-post .et_post_meta_wrapper:has(h1.entry-title):hover > img {
+  transform: none;
+}
+
+/* ---- Citation strip: the three facts that make the award concrete.
+   Injected from the copy already on the page, set on one engraved
+   line the way the plaque in the photo is engraved. ---- */
+body.postid-488 .et_post_meta_wrapper:has(h1.entry-title)::after {
+  content: "I miejsce  ·  75% głosów internautów  ·  FIWE Awards 2021";
+  display: block;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 1.15rem 1.5rem;
+  background: #f9df1c;
+  color: #282828;
+  font-size: clamp(0.8rem, 1.6vw, 0.95rem);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-align: center;
+  border-radius: 0 0 16px 16px;
+}
+
+/* ================================================================
+   2. ARTICLE BODY — one readable column
+   ================================================================ */
+body.single-post .entry-content {
+  padding: clamp(3rem, 6vw, 5rem) clamp(1.25rem, 5vw, 3rem) 0;
+}
+
+/* The Divi section wrapping the body was forced black by the homepage
+   rules and carried a parallax class it has no image for. Neutralise. */
+body.single-post .entry-content .et_pb_section {
+  background-color: transparent !important;
+  padding: 0 !important;
+}
+body.single-post .entry-content .et_pb_section::before {
+  display: none !important;
+}
+body.single-post .entry-content .et_pb_row {
+  width: 100% !important;
+  max-width: 760px !important;
+  margin: 0 auto !important;
+  padding: 0 !important;
+}
+body.single-post .entry-content .et_pb_column {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  float: none !important;
+}
+
+/* The body text repeated the headline as its first module. One title
+   per page — hide the duplicate rather than delete the module. */
+/* Only these four posts repeat their headline as the first text module;
+   on the rest that module is the article body itself, so hiding it site-
+   wide would have deleted real content. Verified post by post. */
+body.postid-400 .entry-content .et_pb_text_0,
+body.postid-314 .entry-content .et_pb_text_0,
+body.postid-321 .entry-content .et_pb_text_0,
+body.postid-488 .entry-content .et_pb_text_0,
+body.postid-400 .entry-content .et_pb_divider_0,
+body.postid-314 .entry-content .et_pb_divider_0,
+body.postid-321 .entry-content .et_pb_divider_0,
+body.postid-488 .entry-content .et_pb_divider_0 {
+  display: none !important;
+}
+
+body.single-post .entry-content .et_pb_text {
+  color: #282828;
+}
+body.single-post .entry-content p {
+  font-size: 1.06rem;
+  line-height: 1.75;
+  color: rgba(40, 40, 40, 0.88);
+  margin-bottom: 1.35rem;
+}
+/* Lead paragraph carries the news */
+body.single-post .entry-content .et_pb_text:not([class*="et_pb_text_0"]) > .et_pb_text_inner > p:first-child {
+  font-size: 1.22rem;
+  line-height: 1.6;
+  color: #282828;
+  font-weight: 600;
+}
+body.single-post .entry-content a {
+  color: #282828;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: #f9df1c;
+  text-decoration-thickness: 2px;
+}
+body.single-post .entry-content a:hover {
+  background: rgba(249, 223, 28, 0.28);
+}
+
+/* ---- Video ---- */
+body.single-post .entry-content .et_pb_video {
+  margin: clamp(2rem, 4vw, 3rem) 0 !important;
+}
+body.single-post .entry-content .et_pb_video_box,
+body.single-post .entry-content .et_pb_video_box iframe {
+  width: 100% !important;
+  border-radius: 14px;
+  overflow: hidden;
+}
+body.single-post .entry-content .et_pb_video_box {
+  aspect-ratio: 16 / 9;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06), 0 26px 50px -28px rgba(0, 0, 0, 0.4);
+}
+body.single-post .entry-content .et_pb_video_box iframe {
+  height: 100% !important;
+}
+
+/* ---- The single action ---- */
+body.single-post .entry-content .et_pb_button_module_wrapper {
+  margin: clamp(2rem, 4vw, 2.75rem) 0 !important;
+  text-align: center;
+}
+body.single-post .entry-content .et_pb_button {
+  background: #f9df1c !important;
+  border-color: #f9df1c !important;
+  color: #282828 !important;
+  font-size: 1rem !important;
+  padding: 1.05rem 2.4rem !important;
+}
+
+/* ================================================================
+   3. RELATED READING — cards on the mist tone
+   ================================================================ */
+body.single-post .entry-content .et_pb_row_1 {
+  max-width: 1120px !important;
+  margin: clamp(3rem, 6vw, 4.5rem) auto 0 !important;
+}
+body.single-post .entry-content .et_pb_row_1 h2,
+body.single-post .entry-content .et_pb_row_1 h3,
+body.single-post .entry-content .et_pb_row_1 p {
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: #282828;
+  padding-left: 1.9rem;
+  background-image: linear-gradient(#f9df1c, #f9df1c);
+  background-repeat: no-repeat;
+  background-size: 22px 2px;
+  background-position: 0 50%;
+  margin: 0;
+}
+
+body.single-post .entry-content .et_pb_row_2 {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  max-width: 1120px !important;
+  margin: 1.75rem auto clamp(3rem, 6vw, 5rem) !important;
+  align-items: stretch;
+}
+body.single-post .entry-content .et_pb_row_2 > .et_pb_column {
+  display: flex !important;
+  flex-direction: column;
+  height: 100%;
+  background: #ffffff;
+  border: 1px solid #e2e2e2;
+  border-radius: 14px;
+  overflow: hidden;
+  transition: transform 0.3s cubic-bezier(.2,.8,.2,1), box-shadow 0.3s ease, border-color 0.3s ease;
+}
+body.single-post .entry-content .et_pb_row_2 > .et_pb_column:hover {
+  transform: translateY(-5px);
+  border-color: #f9df1c;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06), 0 22px 40px -24px rgba(0, 0, 0, 0.28);
+}
+body.single-post .entry-content .et_pb_row_2 .et_pb_image {
+  margin: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+}
+body.single-post .entry-content .et_pb_row_2 .et_pb_image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0;
+  box-shadow: none;
+  transition: transform 0.5s cubic-bezier(.2,.8,.2,1);
+}
+body.single-post .entry-content .et_pb_row_2 > .et_pb_column:hover .et_pb_image img {
+  transform: scale(1.05);
+}
+body.single-post .entry-content .et_pb_row_2 .et_pb_text {
+  flex: 1 1 auto;
+  padding: 1.2rem 1.25rem 0.5rem !important;
+  margin: 0 !important;
+}
+body.single-post .entry-content .et_pb_row_2 .et_pb_text p,
+body.single-post .entry-content .et_pb_row_2 .et_pb_text h3,
+body.single-post .entry-content .et_pb_row_2 .et_pb_text h4 {
+  font-size: 0.97rem !important;
+  font-weight: 800;
+  line-height: 1.32;
+  letter-spacing: -0.01em;
+  color: #282828;
+  margin: 0;
+}
+body.single-post .entry-content .et_pb_row_2 .et_pb_button_module_wrapper {
+  margin: 0 !important;
+  padding: 0 1.25rem 1.35rem !important;
+  text-align: left;
+}
+body.single-post .entry-content .et_pb_row_2 .et_pb_button {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: #282828 !important;
+  font-size: 0.84rem !important;
+  font-weight: 800 !important;
+  padding: 0 !important;
+  min-height: 0;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-color: #f9df1c;
+  text-decoration-thickness: 2px;
+}
+body.single-post .entry-content .et_pb_row_2 .et_pb_button:hover {
+  transform: none;
+  background: transparent !important;
+}
+body.single-post .entry-content .et_pb_row_2 .et_pb_button::before,
+body.single-post .entry-content .et_pb_row_2 .et_pb_button::after {
+  display: none !important;
+}
+
+/* ================================================================
+   4. COMMENTS — quiet, contained
+   ================================================================ */
+body.single-post #comment-wrap,
+body.single-post .comment-wrap {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: clamp(2.5rem, 5vw, 4rem) clamp(1.25rem, 5vw, 3rem) clamp(3rem, 6vw, 5rem);
+  border-top: 1px solid #e2e2e2;
+}
+body.single-post #respond h3,
+body.single-post #reply-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+body.single-post #commentform input[type="text"],
+body.single-post #commentform input[type="email"],
+body.single-post #commentform input[type="url"],
+body.single-post #commentform textarea {
+  width: 100%;
+  background: #ffffff;
+  border: 1.5px solid #e2e2e2;
+  border-radius: 10px;
+  padding: 0.85rem 1rem;
+  font-family: inherit;
+  font-size: 16px;
+  color: #282828;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+body.single-post #commentform input:focus,
+body.single-post #commentform textarea:focus {
+  border-color: #f9df1c;
+  box-shadow: 0 0 0 3px rgba(249, 223, 28, 0.35);
+  outline: none;
+}
+body.single-post #commentform .form-submit input,
+body.single-post #commentform #submit {
+  background: #282828;
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  padding: 0.95rem 2rem;
+  font-weight: 800;
+  cursor: pointer;
+  min-height: 52px;
+}
+body.single-post #commentform .form-submit input:hover {
+  background: #f9df1c;
+  color: #282828;
+}
+
+/* ================================================================
+   5. RESPONSIVE
+   ================================================================ */
+@media (max-width: 980px) {
+  body.single-post .entry-content .et_pb_row_2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 767px) {
+  body.single-post .et_post_meta_wrapper:has(h1.entry-title) {
+    padding-top: calc(var(--enh-header-h) + 2rem);
+  }
+  body.single-post h1.entry-title {
+    font-size: clamp(1.6rem, 7.5vw, 2.2rem);
+  }
+  body.single-post .et_post_meta_wrapper::after {
+    font-size: 0.72rem;
+    letter-spacing: 0.02em;
+    padding: 0.9rem 1rem;
+  }
+  body.single-post .entry-content .et_pb_row_2 {
+    grid-template-columns: 1fr;
+    gap: 1.15rem;
+  }
+  body.single-post .entry-content .et_pb_row_2 > .et_pb_column {
+    margin-bottom: 0 !important;
+  }
+  body.single-post .entry-content p {
+    font-size: 1rem;
+  }
+  body.single-post .entry-content .et_pb_text_1 p:first-of-type {
+    font-size: 1.1rem;
+  }
+  body.single-post .entry-content .et_pb_button {
+    width: 100%;
+  }
+}
+
+/* ---- Video: the <video> element sat at its intrinsic 150px height
+   inside the 16:9 box, leaving a large empty white area under a
+   squashed player. Make the media fill its frame and let the play
+   overlay cover the whole thing. ---- */
+body.single-post .entry-content .et_pb_video_box {
+  position: relative;
+  background: #000000;
+}
+body.single-post .entry-content .et_pb_video_box > video,
+body.single-post .entry-content .et_pb_video_box > iframe,
+body.single-post .entry-content .et_pb_video_box .mejs-container {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;
+}
+body.single-post .entry-content .et_pb_video .et_pb_video_overlay {
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+  background-size: cover;
+  background-position: center;
+  cursor: pointer;
+}
+body.single-post .entry-content .et_pb_video .et_pb_video_overlay_hover {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.35);
+  transition: background 0.25s ease;
+}
+body.single-post .entry-content .et_pb_video .et_pb_video_overlay_hover:hover {
+  background: rgba(0, 0, 0, 0.15);
+}
+
+/* ---- Comments sat on a black ground inherited from the post wrapper
+   while the theme kept its heading at #333 and its help text grey —
+   dark-on-dark, effectively unreadable. Put the block back on white
+   and set the type to the site's own ink. ---- */
+body.single-post .comment-wrap,
+body.single-post #comment-wrap,
+body.single-post .comment-wrap > *,
+body.single-post #comments,
+body.single-post #respond,
+body.single-post .et_pb_section.et_pb_with_border:has(.comment-wrap) {
+  background-color: #ffffff !important;
+}
+body.single-post .comment-wrap {
+  color: #282828;
+}
+body.single-post #reply-title,
+body.single-post #respond h3,
+body.single-post .comment-wrap h1,
+body.single-post .comment-wrap h2,
+body.single-post .comment-wrap h3 {
+  color: #282828 !important;
+}
+body.single-post .comment-wrap p,
+body.single-post .comment-notes,
+body.single-post .comment-form-cookies-consent label,
+body.single-post .logged-in-as {
+  color: rgba(40, 40, 40, 0.72) !important;
+  font-size: 0.92rem;
+}
+body.single-post .comment-wrap a {
+  color: #282828;
+}
+/* the required-field asterisk stays visible against white */
+body.single-post .required {
+  color: #282828;
+}
+
+/* ---- "Przeczytaj także" label: Divi centres the inner text while the
+   yellow rule is painted at the block's left edge, so the two drifted
+   apart. Keep them together. ---- */
+body.single-post .entry-content .et_pb_row_1 .et_pb_text_inner,
+body.single-post .entry-content .et_pb_row_1 .et_pb_text_inner > * {
+  text-align: left !important;
+  margin: 0 !important;
+}
+
+/* The comments block sits in a second .et_post_meta_wrapper. It must not
+   inherit the masthead's black ground or its header-clearing padding. */
+body.single-post .et_post_meta_wrapper:has(.comment-wrap) {
+  background: #ffffff !important;
+  padding: 0 !important;
+  max-width: none !important;
+}
+
+/* ================================================================
+   Compact header on content pages (and on every page once scrolled).
+
+   Divi sizes the bar from a 152px logo container, then pads the nav
+   down to match — 174px of chrome before a single word of content.
+   On the homepage that height is earned: the tall triangular mark
+   overlaps a full-bleed hero photo and reads as part of the artwork.
+   On a content page it is just a wall between the visitor and the
+   article, and it pushes the whole page down.
+
+   So the tall mark stays on the homepage hero; content pages get a
+   compact bar, and once you scroll past the hero every page uses the
+   compact one. Same split as the header's background treatment, so
+   there is one rule to remember rather than two.
+   ================================================================ */
+body:not(.home) #main-header .logo_container,
+#main-header.enh-scrolled .logo_container {
+  height: 84px !important;
+}
+body:not(.home) #logo,
+#main-header.enh-scrolled #logo {
+  max-height: 76% !important;
+  height: auto !important;
+}
+body:not(.home) #et-top-navigation,
+#main-header.enh-scrolled #et-top-navigation {
+  padding-top: 0 !important;
+  display: flex;
+  align-items: center;
+  min-height: 84px;
+  justify-content: flex-end;
+}
+body:not(.home) #top-menu > li > a,
+#main-header.enh-scrolled #top-menu > li > a {
+  padding-bottom: 0 !important;
+  padding-top: 0 !important;
+}
+body:not(.home) #top-menu,
+#main-header.enh-scrolled #top-menu {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+body:not(.home) #top-menu > li,
+#main-header.enh-scrolled #top-menu > li {
+  display: flex;
+  align-items: center;
+  padding-right: 1.15rem;
+}
+/* the hover rule underlines relative to the text box, which is now the
+   full line height rather than a 76px-padded block */
+body:not(.home) #top-menu a::after,
+#main-header.enh-scrolled #top-menu a::after {
+  top: auto;
+  bottom: -6px;
+}
+/* Centre the mobile toggle in the shorter bar WITHOUT touching its
+   display — setting display:flex here forced the hamburger to appear
+   on desktop, where Divi keeps it display:none. */
+body:not(.home) #et_mobile_nav_menu,
+#main-header.enh-scrolled #et_mobile_nav_menu {
+  align-items: center;
+}
+
+/* The compact-bar rules zeroed the padding on every nav link, which
+   collapsed the SKLEP pill, and the dark-ink colour rule for content
+   pages painted its label #282828 on its own #282828 fill — invisible.
+   The pill keeps its own box and its own colours. */
+body:not(.home) #top-menu .ds-custom-link-menu > a,
+body:not(.home) #top-menu a.shop,
+#main-header.enh-scrolled #top-menu .ds-custom-link-menu > a,
+#main-header.enh-scrolled #top-menu a.shop {
+  padding: 0.5rem 1.05rem !important;
+  color: #f9df1c !important;
+  background: #282828 !important;
+  border: 1.5px solid #f9df1c !important;
+  border-radius: 999px;
+  line-height: 1.2 !important;
+  font-size: 0.8rem;
+}
+body:not(.home) #top-menu .ds-custom-link-menu > a:hover,
+#main-header.enh-scrolled #top-menu .ds-custom-link-menu > a:hover {
+  background: #f9df1c !important;
+  color: #282828 !important;
+}
+body:not(.home) #top-menu > li.ds-custom-link-menu,
+#main-header.enh-scrolled #top-menu > li.ds-custom-link-menu {
+  padding-right: 0 !important;
+}
+
+/* ================================================================
+   Round eleven
+   1. "Dlaczego CreGAAtine jest lepsza od kreatyny?" — re-laid out.
+   2. Testimonial carousel — equal-height slides.
+   3. Blog archive grid — equal-height cards.
+   Palette and copy unchanged.
+   ================================================================ */
+
+/* ---------------------------------------------------------------
+   1. SECTION 2 — the argument section
+
+   It was a 2/5 + 3/5 split where the right column ran: heading,
+   intro, then three claims each interrupted by a full yellow pill
+   button. Those pills broke the reading rhythm three times and
+   competed with the section's real CTA. The left column's product
+   shot, award photo and button floated with no relationship to
+   each other.
+
+   Reworked: the left column becomes one "evidence" card — product,
+   award, caption, action — that stays with you while you read
+   (sticky on desktop). The right column becomes a claims list keyed
+   by a yellow rule, with each claim's link demoted to an inline
+   underlined link so the eye runs down the argument instead of
+   stopping at three buttons.
+
+   Deliberately NOT cards here: section 4 already uses cards for its
+   benefits. Using rules instead keeps the two sections distinct.
+   --------------------------------------------------------------- */
+body.home .et_pb_section_2 .et_pb_row_1 {
+  display: grid !important;
+  grid-template-columns: 0.85fr 1.15fr;
+  gap: clamp(2rem, 4vw, 3.5rem);
+  align-items: start;
+}
+body.home .et_pb_section_2 .et_pb_row_1 > .et_pb_column {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  float: none !important;
+}
+
+/* --- left: the evidence card ---------------------------------------
+   The two pictures do different jobs and were shown as if they did the
+   same one: a transparent product render and a photo from the award
+   ceremony, both full-width, with the FIWE caption wedged between them
+   so it read as a caption for the product shot. Stacked, they also made
+   the sticky card taller than the viewport.
+
+   Now the render gets the top plate (it is the subject) and the award
+   becomes one proof row under it: square crop of the photo, the FIWE
+   line, the link — read left to right. Half the height, and each
+   picture says what it is for.
+   ------------------------------------------------------------------ */
+body.home .et_pb_section_2 .et_pb_column_2_5 {
+  position: sticky;
+  top: calc(var(--enh-header-h) + 1.5rem);
+  background: #ffffff;
+  border: 1px solid #e2e2e2;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04), 0 22px 44px -30px rgba(0, 0, 0, 0.28);
+  display: grid;
+  grid-template-columns: 104px minmax(0, 1fr);
+  grid-template-areas:
+    "product product"
+    "shot    caption"
+    "shot    cta";
+  column-gap: 1.1rem;
+  row-gap: 0.55rem;
+  text-align: left;
+}
+
+/* product render: yellow-tinted plate, no frame, no crop */
+body.home .et_pb_section_2 .et_pb_image_5 {
+  grid-area: product;
+  margin: 0 0 1.4rem !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  padding: 1.1rem 0.75rem 0.9rem;
+  border-radius: 14px;
+  background:
+    radial-gradient(115% 92% at 50% 8%, rgba(249, 223, 28, 0.38), rgba(249, 223, 28, 0) 66%),
+    #fbfbfb;
+}
+body.home .et_pb_section_2 .et_pb_image_5 .et_pb_image_wrap {
+  display: block;
+}
+body.home .et_pb_section_2 .et_pb_image_5 img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 0;
+  /* drop-shadow follows the cut-out silhouette; box-shadow would draw a
+     rectangle around a transparent PNG */
+  filter: drop-shadow(0 16px 22px rgba(0, 0, 0, 0.18));
+}
+body.home .et_pb_section_2 .et_pb_image_5:hover img {
+  transform: none;
+}
+
+/* award photo: square crop at thumbnail scale */
+body.home .et_pb_section_2 .et_pb_image_6 {
+  grid-area: shot;
+  margin: 0 !important;
+  width: 104px !important;
+  max-width: 104px !important;
+  align-self: start;
+}
+body.home .et_pb_section_2 .et_pb_image_6 .et_pb_image_wrap {
+  display: block;
+  aspect-ratio: 1 / 1;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 20px -14px rgba(0, 0, 0, 0.5);
+}
+body.home .et_pb_section_2 .et_pb_image_6 .box-shadow-overlay {
+  display: none !important;
+}
+body.home .et_pb_section_2 .et_pb_image_6 img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0;
+}
+
+/* the FIWE line, now a caption for the photo beside it */
+body.home .et_pb_section_2 .et_pb_column_2_5 .et_pb_text {
+  grid-area: caption;
+  align-self: end;
+  margin: 0 !important;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #282828;
+  line-height: 1.45;
+}
+body.home .et_pb_section_2 .et_pb_column_2_5 .et_pb_text p {
+  text-align: left !important;
+  padding-bottom: 0 !important;
+}
+body.home .et_pb_section_2 .et_pb_column_2_5 .et_pb_text p strong:first-child {
+  color: rgba(40, 40, 40, 0.55);
+}
+
+/* the section's single filled action */
+body.home .et_pb_section_2 .et_pb_column_2_5 .et_pb_button_module_wrapper {
+  grid-area: cta;
+  align-self: start;
+  margin: 0.35rem 0 0 !important;
+  text-align: left !important;
+}
+body.home .et_pb_section_2 .et_pb_column_2_5 .et_pb_button {
+  display: inline-block;
+  background: #282828 !important;
+  border-color: #282828 !important;
+  color: #ffffff !important;
+  font-size: 0.82rem !important;
+  padding: 0.5rem 1.1rem !important;
+}
+body.home .et_pb_section_2 .et_pb_column_2_5 .et_pb_button:hover {
+  background: #f9df1c !important;
+  border-color: #f9df1c !important;
+  color: #282828 !important;
+}
+
+/* --- right: heading + claims list --- */
+body.home .et_pb_section_2 .et_pb_column_3_5 {
+  padding-top: 0;
+}
+body.home .et_pb_section_2 .et_pb_column_3_5 .et_pb_divider {
+  display: none !important;
+}
+body.home .et_pb_section_2 .et_pb_column_3_5 .et_pb_text_6 {
+  margin-bottom: 1rem !important;
+}
+body.home .et_pb_section_2 .et_pb_column_3_5 h2 {
+  text-align: left !important;
+  font-weight: 800;
+  letter-spacing: -0.015em;
+  line-height: 1.12;
+  margin-bottom: 0.75rem;
+}
+body.home .et_pb_section_2 .et_pb_column_3_5 .et_pb_text_7 {
+  margin-bottom: 2.25rem !important;
+}
+body.home .et_pb_section_2 .et_pb_column_3_5 .et_pb_text_7 p {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: rgba(40, 40, 40, 0.85);
+}
+
+/* each claim: yellow rule keyed to the argument, not a card */
+body.home .et_pb_section_2 .et_pb_blurb {
+  position: relative;
+  margin: 0 0 0.35rem !important;
+  padding: 0 0 0 1.6rem;
+  border-left: 2px solid #f9df1c;
+}
+body.home .et_pb_section_2 .et_pb_blurb .et_pb_blurb_content {
+  display: block !important;
+  max-width: none;
+  text-align: left;
+}
+body.home .et_pb_section_2 .et_pb_blurb .et_pb_main_blurb_image {
+  display: none !important;
+}
+body.home .et_pb_section_2 .et_pb_blurb .et_pb_blurb_container {
+  display: block !important;
+  padding-left: 0 !important;
+}
+body.home .et_pb_section_2 .et_pb_blurb .et_pb_module_header {
+  font-size: 1.1rem;
+  font-weight: 800;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.45rem;
+  padding-bottom: 0;
+}
+body.home .et_pb_section_2 .et_pb_blurb .et_pb_blurb_description p {
+  font-size: 0.96rem;
+  line-height: 1.65;
+  color: rgba(40, 40, 40, 0.8);
+}
+
+/* the per-claim links stop being pills and become inline links, so the
+   three of them no longer read as three competing calls to action */
+body.home .et_pb_section_2 .et_pb_column_3_5 .et_pb_button_module_wrapper {
+  margin: 0 0 2rem !important;
+  padding-left: 1.6rem;
+}
+body.home .et_pb_section_2 .et_pb_column_3_5 .et_pb_button,
+body #page-container .et_pb_section.et_pb_section_2 .et_pb_column_3_5 .et_pb_button.et_pb_button {
+  display: inline-flex !important;
+  min-height: 0;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: #282828 !important;
+  font-size: 0.86rem !important;
+  font-weight: 800 !important;
+  padding: 0 !important;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-color: #f9df1c;
+  text-decoration-thickness: 2px;
+}
+body.home .et_pb_section_2 .et_pb_column_3_5 .et_pb_button:hover {
+  transform: none;
+  background: rgba(249, 223, 28, 0.28) !important;
+}
+body.home .et_pb_section_2 .et_pb_column_3_5 .et_pb_button::before,
+body.home .et_pb_section_2 .et_pb_column_3_5 .et_pb_button::after {
+  display: none !important;
+}
+
+@media (max-width: 980px) {
+  body.home .et_pb_section_2 .et_pb_row_1 {
+    grid-template-columns: 1fr;
+  }
+  body.home .et_pb_section_2 .et_pb_column_2_5 {
+    position: static;
+    max-width: 460px;
+    margin: 0 auto 2rem !important;
+  }
+}
+@media (max-width: 767px) {
+  body.home .et_pb_section_2 .et_pb_column_2_5 {
+    padding: 1.35rem;
+  }
+  body.home .et_pb_section_2 .et_pb_blurb {
+    padding-left: 1.15rem;
+  }
+  body.home .et_pb_section_2 .et_pb_column_3_5 .et_pb_button_module_wrapper {
+    padding-left: 1.15rem;
+  }
+}
+@media (max-width: 400px) {
+  /* below this the 104px thumb + caption row is too tight to read */
+  body.home .et_pb_section_2 .et_pb_column_2_5 {
+    grid-template-columns: 1fr;
+    grid-template-areas: "product" "shot" "caption" "cta";
+    justify-items: start;
+  }
+  body.home .et_pb_section_2 .et_pb_image_6 {
+    margin-bottom: 0.6rem !important;
+  }
+}
+
+/* ---------------------------------------------------------------
+   1b. HERO CLAIM STRIP — four claims, not five
+
+   "Innowacyjne opakowanie" was removed from the markup: packaging is
+   not a reason to switch creatine, and at five items the strip broke
+   into a 3+2 orphan row on tablets. Four claims divide cleanly into
+   2x2 on small screens, so the row is gridded here rather than left
+   to Divi's 1/5 float widths.
+   --------------------------------------------------------------- */
+body.home .et_pb_section_1 .et_pb_row_0 {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(1rem, 2.5vw, 2rem);
+  align-items: start;
+}
+body.home .et_pb_section_1 .et_pb_row_0 > .et_pb_column {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  float: none !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+body.home .et_pb_section_1 .et_pb_row_0 .et_pb_image {
+  margin: 0 0 0.75rem !important;
+}
+body.home .et_pb_section_1 .et_pb_row_0 .et_pb_image img {
+  height: 64px;
+  width: auto;
+  border-radius: 0;
+}
+body.home .et_pb_section_1 .et_pb_row_0 .et_pb_text {
+  margin: 0 !important;
+}
+body.home .et_pb_section_1 .et_pb_row_0 h2 {
+  font-size: clamp(0.95rem, 1.4vw, 1.15rem);
+  font-weight: 800;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  padding-bottom: 0 !important;
+  text-wrap: balance;
+}
+@media (max-width: 980px) {
+  body.home .et_pb_section_1 .et_pb_row_0 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: 2rem;
+  }
+}
+@media (max-width: 479px) {
+  body.home .et_pb_section_1 .et_pb_row_0 .et_pb_image img {
+    height: 52px;
+  }
+}
+
+/* ---------------------------------------------------------------
+   2. TESTIMONIAL CAROUSEL — equal-height slides
+
+   Swiper sizes each slide to its own content, so an 11-word quote
+   sat in a 371px card next to a 706px one. Stretching the track and
+   letting the card fill its slide gives one height per row.
+   --------------------------------------------------------------- */
+.dica_divi_carousel .swiper-wrapper {
+  align-items: stretch !important;
+}
+/* The plugin pins each slide with align-self:flex-start, which beats the
+   track's align-items:stretch and is why a short quote kept its own
+   short card. Stretch each slide explicitly. */
+.dica_divi_carousel .swiper-slide,
+.dica_divi_carousel .swiper-wrapper > .dica_divi_carouselitem {
+  height: auto !important;
+  align-self: stretch !important;
+  display: flex !important;
+}
+.dica_divi_carousel .swiper-slide > *,
+.dica_divi_carousel .dica_divi_carouselitem {
+  width: 100%;
+  height: auto !important;
+  display: flex !important;
+  flex-direction: column;
+}
+.dica_divi_carousel .dica-item,
+.dica_divi_carousel .et_pb_module_inner {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  height: 100%;
+}
+.dica_divi_carousel .dica-item-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+}
+/* the quote takes the slack so names line up along the bottom */
+.dica_divi_carousel .dica-item-content .content {
+  flex: 1 1 auto;
+}
+
+/* ---------------------------------------------------------------
+   3. BLOG ARCHIVE — equal-height cards
+
+   Divi lays the archive out with salvattore masonry: three floated
+   columns filled round-robin (1,4,7 / 2,5,8 / 3,6). One post shipped
+   its whole body instead of an excerpt and ran to 2127px, wrecking
+   the grid. Clamping the title and excerpt to a fixed number of
+   lines and fixing the thumbnail ratio makes every card the same
+   height — and because the columns are filled round-robin, equal
+   heights also restore correct left-to-right reading order.
+   --------------------------------------------------------------- */
+.et_pb_blog_grid .et_pb_salvattore_content {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+}
+.et_pb_blog_grid .et_pb_salvattore_content > .column {
+  float: none !important;
+  width: auto !important;
+  flex: 1 1 0;
+  margin: 0 !important;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+.et_pb_blog_grid .et_pb_post {
+  display: flex !important;
+  flex-direction: column;
+  height: 470px;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden;
+  background: #ffffff;
+  border: 1px solid #e2e2e2;
+  border-radius: 14px;
+  transition: transform 0.3s cubic-bezier(.2,.8,.2,1), box-shadow 0.3s ease, border-color 0.3s ease;
+}
+.et_pb_blog_grid .et_pb_post:hover {
+  transform: translateY(-5px);
+  border-color: #f9df1c;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06), 0 22px 40px -24px rgba(0, 0, 0, 0.28);
+}
+.et_pb_blog_grid .et_pb_image_container,
+.et_pb_blog_grid .et_main_video_container {
+  margin: 0 !important;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  flex: 0 0 auto;
+}
+.et_pb_blog_grid .et_pb_image_container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0 !important;
+  transition: transform 0.5s cubic-bezier(.2,.8,.2,1);
+}
+.et_pb_blog_grid .et_pb_post:hover .et_pb_image_container img {
+  transform: scale(1.05);
+}
+.et_pb_blog_grid .et_pb_post .entry-title {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: 1rem !important;
+  font-weight: 800;
+  line-height: 1.32;
+  letter-spacing: -0.01em;
+  margin: 0 !important;
+  padding: 1.15rem 1.2rem 0.5rem !important;
+}
+.et_pb_blog_grid .et_pb_post .entry-title a {
+  color: #282828;
+}
+.et_pb_blog_grid .et_pb_post .post-content,
+.et_pb_blog_grid .et_pb_post .post-content-inner {
+  flex: 1 1 auto;
+  padding: 0 1.2rem 1.2rem !important;
+  margin: 0 !important;
+  overflow: hidden;
+}
+.et_pb_blog_grid .et_pb_post .post-content p,
+.et_pb_blog_grid .et_pb_post .post-content-inner p {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: rgba(40, 40, 40, 0.72);
+  margin: 0;
+}
+/* the archive's post meta line is noise at card size */
+.et_pb_blog_grid .et_pb_post .post-meta {
+  display: none !important;
+}
+
+@media (max-width: 980px) {
+  .et_pb_blog_grid .et_pb_salvattore_content {
+    flex-wrap: wrap;
+  }
+  .et_pb_blog_grid .et_pb_salvattore_content > .column {
+    flex: 1 1 calc(50% - 0.75rem);
+  }
+}
+@media (max-width: 767px) {
+  .et_pb_blog_grid .et_pb_salvattore_content {
+    flex-direction: column;
+  }
+  .et_pb_blog_grid .et_pb_salvattore_content > .column {
+    flex: 1 1 auto;
+    width: 100% !important;
+  }
+  .et_pb_blog_grid .et_pb_post {
+    height: auto;
+    min-height: 0;
+  }
+  .et_pb_blog_grid .et_pb_post .post-content p {
+    -webkit-line-clamp: 3;
+  }
+}
+
+/* ---- Blog card titles: -webkit-line-clamp alone still let a clipped
+   third line bleed under the ellipsis, because the heading keeps its
+   own line-height and padding outside the clamp box. Pin the box to
+   exactly two lines so the cut is clean. ---- */
+.et_pb_blog_grid .et_pb_post .entry-title {
+  line-height: 1.32;
+  max-height: calc(2 * 1.32em);
+  overflow: hidden;
+}
+.et_pb_blog_grid .et_pb_post .post-content p,
+.et_pb_blog_grid .et_pb_post .post-content-inner p {
+  text-indent: 0;
+}
+
+/* ================================================================
+   "Zapraszamy do współracy" — partnership invitation
+
+   Audience: personal trainers, athletes, gym owners, supplement
+   retailers. The section has exactly one job: get them to write to
+   biuro@carno-med.pl.
+
+   The photograph stays as the ground (it's the best image on the
+   page — a lifter chalking up, which is precisely who this section
+   is addressing). What changes is everything around it:
+
+   - The invitation sat in a flat black rectangle with padding:0, so
+     the copy ran into its own edges.
+   - The email — the only action here — was styled as ordinary body
+     text inside the sentence.
+   - The two social buttons rendered in Facebook blue (#3b5998) and
+     Instagram pink (#ea2c59): two colours from outside the brand
+     palette, sitting in the most prominent panel on the page.
+   - A 51px empty row padded the bottom for nothing.
+
+   Direction: the panel becomes a lit card rather than a black box —
+   a yellow rule along its top edge (the same signposting used for
+   the certificate label and the claims list), real padding, and a
+   backdrop blur so the photo's grain reads faintly through it. The
+   scrim ramps darker toward the card, so the panel looks lit by the
+   composition instead of pasted onto it.
+
+   Copy is untouched.
+   ================================================================ */
+
+body.home #wspolpraca {
+  position: relative;
+  background-position: center center;
+  background-size: cover;
+}
+
+/* Directional scrim: keeps the lifter readable on the left, builds
+   contrast under the card on the right. */
+body.home #wspolpraca::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    100deg,
+    rgba(0, 0, 0, 0.15) 0%,
+    rgba(0, 0, 0, 0.35) 45%,
+    rgba(0, 0, 0, 0.72) 100%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+body.home #wspolpraca > .et_pb_row {
+  position: relative;
+  z-index: 1;
+}
+
+/* ---- The invitation card ---- */
+body.home #wspolpraca .et_pb_column_2_5 {
+  position: relative;
+  background: rgba(20, 20, 20, 0.82) !important;
+  backdrop-filter: saturate(140%) blur(10px);
+  -webkit-backdrop-filter: saturate(140%) blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px !important;
+  padding: clamp(1.75rem, 3vw, 2.5rem) !important;
+  overflow: hidden;
+  box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.8);
+}
+/* the yellow rule along the top edge — the site's signposting mark */
+body.home #wspolpraca .et_pb_column_2_5::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: #f9df1c;
+}
+
+body.home #wspolpraca .et_pb_column_2_5 h1,
+body.home #wspolpraca .et_pb_column_2_5 h2,
+body.home #wspolpraca .et_pb_column_2_5 h3 {
+  color: #ffffff !important;
+  font-weight: 800;
+  font-size: clamp(1.5rem, 2.6vw, 2.05rem);
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  text-align: left;
+  margin: 0 0 0.85rem !important;
+  padding: 0 !important;
+}
+
+/* Divi's divider module becomes a short dash rather than a full rule */
+body.home #wspolpraca .et_pb_divider {
+  margin: 0 0 1.15rem !important;
+  max-width: 34px;
+}
+body.home #wspolpraca .et_pb_divider::before {
+  border-top-color: #f9df1c !important;
+  border-top-width: 2px !important;
+}
+
+body.home #wspolpraca .et_pb_column_2_5 .et_pb_text p {
+  color: rgba(255, 255, 255, 0.82) !important;
+  font-size: 1rem;
+  line-height: 1.7;
+  text-align: left;
+  margin: 0;
+}
+
+/* ---- The email is the action. It stays inside the sentence, but it
+   stops looking like running text. ---- */
+body.home #wspolpraca a[href^="mailto"] {
+  display: inline-block;
+  color: #f9df1c !important;
+  font-weight: 800;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-color: #f9df1c;
+  text-decoration-thickness: 2px;
+  padding: 0.1rem 0.3rem;
+  border-radius: 6px;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+body.home #wspolpraca a[href^="mailto"]:hover,
+body.home #wspolpraca a[href^="mailto"]:focus-visible {
+  background: #f9df1c;
+  color: #282828 !important;
+  text-decoration-color: transparent;
+}
+
+/* ---- Social buttons: drop the imported Facebook blue and Instagram
+   pink. Outline chips in the brand's own palette instead. ---- */
+body.home #wspolpraca .et_pb_social_media_follow {
+  margin: 1.5rem 0 0 !important;
+  display: flex;
+  gap: 0.6rem;
+}
+body.home #wspolpraca .et_pb_social_media_follow li {
+  margin: 0 !important;
+  float: none !important;
+}
+body.home #wspolpraca .et_pb_social_media_follow li a.icon {
+  background: transparent !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.45);
+  border-radius: 10px;
+  width: 44px !important;
+  height: 44px !important;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s cubic-bezier(.2,.8,.2,1);
+}
+body.home #wspolpraca .et_pb_social_media_follow li a.icon::before {
+  color: #ffffff !important;
+  transition: color 0.2s ease;
+}
+body.home #wspolpraca .et_pb_social_media_follow li a.icon:hover {
+  background: #f9df1c !important;
+  border-color: #f9df1c;
+  transform: translateY(-2px);
+}
+body.home #wspolpraca .et_pb_social_media_follow li a.icon:hover::before {
+  color: #282828 !important;
+}
+
+/* ---- The trailing row was 51px of nothing ---- */
+body.home #wspolpraca .et_pb_row_14 {
+  display: none !important;
+}
+
+/* ---- Give the section room to breathe around the card ---- */
+body.home #wspolpraca {
+  padding-top: clamp(3.5rem, 7vw, 5.5rem) !important;
+  padding-bottom: clamp(3.5rem, 7vw, 5.5rem) !important;
+}
+
+/* ================================ RESPONSIVE ================================ */
+@media (max-width: 980px) {
+  /* the empty 3/5 column only exists to push the card right; on a
+     stacked layout it would just add dead height */
+  body.home #wspolpraca .et_pb_column_3_5 {
+    display: none !important;
+  }
+  body.home #wspolpraca .et_pb_column_2_5 {
+    width: 100% !important;
+    max-width: 560px !important;
+    margin: 0 auto !important;
+  }
+  body.home #wspolpraca::before {
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.35) 0%,
+      rgba(0, 0, 0, 0.6) 100%
+    );
+  }
+}
+@media (max-width: 767px) {
+  body.home #wspolpraca .et_pb_column_2_5 {
+    padding: 1.5rem 1.25rem !important;
+    margin-bottom: 0 !important;
+  }
+  body.home #wspolpraca .et_pb_column_2_5 .et_pb_text p {
+    font-size: 0.95rem;
+  }
+  body.home #wspolpraca .et_pb_social_media_follow {
+    justify-content: flex-start;
+  }
+}
+
+/* ---- Alignment inside the partnership card.
+
+   The heading carries an inline text-align:center and the paragraph
+   module ships .et_pb_text_align_center, so the earlier left-align
+   lost the cascade: a five-line centred paragraph with left-aligned
+   social buttons under it. One axis for the whole card. ---- */
+body.home #wspolpraca .et_pb_column_2_5,
+body.home #wspolpraca .et_pb_column_2_5 .et_pb_text,
+body.home #wspolpraca .et_pb_column_2_5 .et_pb_text_inner,
+body.home #wspolpraca .et_pb_column_2_5 .et_pb_text_align_center,
+body.home #wspolpraca .et_pb_column_2_5 .et_pb_text_align_center .et_pb_text_inner {
+  text-align: left !important;
+}
+body.home #wspolpraca .et_pb_column_2_5 h1,
+body.home #wspolpraca .et_pb_column_2_5 h2,
+body.home #wspolpraca .et_pb_column_2_5 h3,
+body.home #wspolpraca .et_pb_column_2_5 p {
+  text-align: left !important;
+}
+/* the divider dash sits at the left edge with the rest */
+body.home #wspolpraca .et_pb_divider,
+body.home #wspolpraca .et_pb_divider_internal {
+  margin-left: 0 !important;
+  margin-right: auto !important;
+}
+
+/* ================================================================
+   CERTIFICATES — a rail of small documents, not four big scans
+
+   At four-across each lab report was rendered ~250px wide: too small
+   to read as a document, too big to read as a badge, and the block ate
+   a full screen of height. These are proof, not content — you glance
+   at them, and open the one you want. So they shrink to badge scale
+   and sit on a horizontal snap rail: the whole set is one gesture wide
+   on a phone, and on desktop the four fit without scrolling, which is
+   why the arrows hide themselves when there is nothing to scroll.
+   ================================================================ */
+body.home .et_pb_section_7 .et_pb_row_9 {
+  display: block !important;
+}
+body.home .et_pb_section_7 .cert-rail {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  gap: clamp(0.6rem, 1.4vw, 1rem);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  padding-bottom: 0.5rem;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+body.home .et_pb_section_7 .cert-rail::-webkit-scrollbar {
+  display: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  body.home .et_pb_section_7 .cert-rail {
+    scroll-behavior: auto;
+  }
+}
+body.home .et_pb_section_7 .cert-rail:focus-visible {
+  outline: 2px solid #f9df1c;
+  outline-offset: 6px;
+  border-radius: 12px;
+}
+body.home .et_pb_section_7 .cert-rail > .et_pb_column {
+  flex: 0 0 clamp(124px, 15vw, 164px) !important;
+  width: clamp(124px, 15vw, 164px) !important;
+  max-width: none !important;
+  margin: 0 !important;
+  scroll-snap-align: start;
+}
+body.home .et_pb_section_7 .cert-rail .et_pb_image {
+  margin: 0 !important;
+}
+body.home .et_pb_section_7 .cert-rail .et_pb_image img {
+  padding: 0.3rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.06), 0 12px 22px -16px rgba(0, 0, 0, 0.35);
+}
+body.home .et_pb_section_7 .cert-rail .et_pb_image:hover img {
+  transform: translateY(-4px);
+}
+
+/* arrows: only rendered when the rail actually overflows (enhance.js) */
+body.home .et_pb_section_7 .cert-nav {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  margin-top: 0.9rem;
+}
+body.home .et_pb_section_7 .cert-nav[hidden] {
+  display: none;
+}
+body.home .et_pb_section_7 .cert-nav-btn {
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  font-size: 1.15rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, opacity 0.2s ease;
+}
+body.home .et_pb_section_7 .cert-nav-btn:hover:not(:disabled) {
+  background: #f9df1c;
+  border-color: #f9df1c;
+  color: #282828;
+}
+body.home .et_pb_section_7 .cert-nav-btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+@media (max-width: 767px) {
+  body.home .et_pb_section_7 .cert-rail > .et_pb_column {
+    flex-basis: 116px !important;
+    width: 116px !important;
+  }
+  body.home .et_pb_section_7 .cert-nav {
+    justify-content: center;
+  }
+}
+
+/* ================================================================
+   HERO SCRIM — full-bleed, feathered at both edges
+
+   Divi pins the header module to width:1200px, so the scrim painted on
+   it stopped dead at 1200px and read as a translucent black rectangle
+   laid over the photo, with two visible vertical seams. The scrim now
+   breaks out to the full viewport and ramps in from left and right, so
+   the darkening has no edge to see — it just gets denser where the
+   headline and the yellow panel need contrast.
+   ================================================================ */
+.et_pb_fullwidth_header_0::after {
+  left: 50%;
+  right: auto;
+  width: 100vw;
+  transform: translateX(-50%);
+  background:
+    linear-gradient(to right,
+      rgba(0, 0, 0, 0.72) 0%,
+      rgba(0, 0, 0, 0.34) 26%,
+      rgba(0, 0, 0, 0.26) 50%,
+      rgba(0, 0, 0, 0.34) 74%,
+      rgba(0, 0, 0, 0.72) 100%),
+    linear-gradient(to bottom,
+      rgba(0, 0, 0, 0.10) 0%,
+      rgba(0, 0, 0, 0.30) 100%);
+}
+
+/* ================================================================
+   TESTIMONIALS — one card shape, one baseline
+
+   The portraits came off Instagram at whatever crop they were shot
+   in: 1004x1506 portrait, 2048x1536 landscape, 750x493. Dropped in
+   at full width they gave every card a different header height, so
+   the names, the roles and the quotes all started at a different
+   line — the block read as broken rather than as a set.
+
+   An earlier pass tried to fix this with `.dica-item-image img`, but
+   `dica-item-image` is the class ON the <img>, so that rule matched
+   nothing. Correct selector, and the portrait becomes a fixed round
+   crop: same size, same ring, same baseline in every card.
+   ================================================================ */
+.dica_divi_carousel .dica-image-container {
+  display: flex;
+  justify-content: center;
+  margin: 0 0 1rem;
+}
+.dica_divi_carousel .dica-image-container .image {
+  display: block;
+  width: 88px;
+  height: 88px;
+}
+.dica_divi_carousel img.dica-item-image {
+  display: block;
+  width: 88px;
+  height: 88px;
+  object-fit: cover;
+  /* faces sit in the upper half of a portrait crop */
+  object-position: center 25%;
+  border-radius: 999px;
+  border: 3px solid #f9df1c;
+  box-shadow: 0 10px 20px -14px rgba(0, 0, 0, 0.55);
+}
+
+.dica_divi_carousel .dica-item-content {
+  text-align: center;
+}
+.dica_divi_carousel .dica-item-content .item-title {
+  font-size: 1.02rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+  color: #282828;
+  margin: 0 0 0.25rem;
+  padding-bottom: 0;
+}
+/* the role line runs from two words to a full sentence, so it is
+   given a floor rather than a ceiling — nothing is cut, and short
+   roles still leave the quotes starting on the same line */
+.dica_divi_carousel .dica-item-content .item-subtitle {
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  line-height: 1.4;
+  color: rgba(40, 40, 40, 0.5);
+  max-width: 28ch;
+  min-height: 2.8em;
+  margin: 0 auto 1.1rem;
+  padding-bottom: 0;
+}
+/* a hairline keyed to the brand yellow separates who from what */
+.dica_divi_carousel .dica-item-content .item-subtitle::after {
+  content: "";
+  display: block;
+  width: 28px;
+  height: 2px;
+  margin: 0.8rem auto 0;
+  background: #f9df1c;
+}
+.dica_divi_carousel .dica-item-content .content {
+  flex: 1 1 auto;
+  display: -webkit-box;
+  -webkit-line-clamp: 9;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.dica_divi_carousel .dica-item-content .content p {
+  font-size: 0.94rem;
+  line-height: 1.65;
+  color: rgba(40, 40, 40, 0.82);
+  margin: 0;
+  padding-bottom: 0;
+}
+.dica_divi_carousel .dica-item-content .content p + p {
+  margin-top: 0.6rem;
+}
+
+/* the track now moves on its own, so the controls state where it is */
+.dica_divi_carousel .swiper-pagination {
+  position: static;
+  margin-top: 1.5rem;
+}
+.dica_divi_carousel .swiper-pagination-bullet {
+  width: 8px;
+  height: 8px;
+  background: #282828;
+  opacity: 0.22;
+  transition: width 0.25s ease, background 0.25s ease, opacity 0.25s ease;
+}
+.dica_divi_carousel .swiper-pagination-bullet-active {
+  width: 24px;
+  border-radius: 999px;
+  background: #f9df1c;
+  opacity: 1;
+}
+.dica_divi_carousel .swiper-button-next,
+.dica_divi_carousel .swiper-button-prev {
+  color: #282828;
+}
+.dica_divi_carousel .swiper-button-next:hover,
+.dica_divi_carousel .swiper-button-prev:hover {
+  color: #f9df1c;
+}
+
+/* breathing room between cards while the plugin's own spaceBetween
+   only applies once Swiper boots */
+.dica_divi_carousel .swiper-container:not(.swiper-initialized):not(.swiper-container-initialized) > .swiper-wrapper {
+  gap: 1.875rem;
+}
+
+@media (max-width: 767px) {
+  .dica_divi_carousel .dica-image-container .image,
+  .dica_divi_carousel img.dica-item-image {
+    width: 76px;
+    height: 76px;
+  }
+  .dica_divi_carousel .dica-item-content .content {
+    -webkit-line-clamp: 12;
+  }
+}
+
+/* ================================================================
+   AWARD PAGE (Nagrody) — placement pass
+
+   The editorial layout below stays; what changes is where things sit
+   and how they hold up as the window narrows.
+
+   1. The masthead ran title → photo → plaque, and on a 1366x768 laptop
+      the photo alone was taller than the remaining viewport, so the
+      award itself — the reason the page exists — started below the
+      fold. The photograph is now capped and cropped instead of shown
+      at its full 16:10 height.
+   2. The three facts were a CSS `content:` string: one line that could
+      only break where the words happened to fall, unselectable, and
+      invisible to a screen reader. They are real list items now, and
+      they lay out as three columns, then one stack.
+   3. The post meta was WordPress plumbing — author email, category
+      "Uncategorized", "0 komentarzy" — on a page about winning an
+      award. It is one dateline now.
+   ================================================================ */
+
+/* the plaque strip is markup now, so the old pseudo-element retires */
+body.postid-488 .et_post_meta_wrapper:has(h1.entry-title)::after {
+  content: none;
+}
+
+body.single-post .et_post_meta_wrapper:has(h1.entry-title) > img,
+body.single-post .et_post_meta_wrapper .et_pb_image_wrap > img {
+  max-height: min(52vh, 480px);
+  object-fit: cover;
+  object-position: center 42%;
+}
+
+body.single-post .award-eyebrow {
+  margin-bottom: 1.1rem !important;
+}
+
+body.single-post .award-facts {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+  background: #f9df1c;
+  border-radius: 0 0 16px 16px;
+  overflow: hidden;
+}
+body.single-post .award-facts li {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 1.15rem clamp(1rem, 2.5vw, 1.75rem);
+  /* hairlines in the plaque's own yellow, darkened — an engraved rule,
+     not a border in a foreign colour */
+  border-left: 1px solid rgba(40, 40, 40, 0.18);
+  list-style: none;
+}
+body.single-post .award-facts li:first-child {
+  border-left: 0;
+}
+body.single-post .award-facts-val {
+  font-size: clamp(1.15rem, 2.4vw, 1.5rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: #282828;
+}
+body.single-post .award-facts-key {
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  line-height: 1.35;
+  color: rgba(40, 40, 40, 0.62);
+}
+
+/* Related reading: four fixed columns went from 253px each at 1120px
+   to cramped the moment the window fell under the breakpoint. Track
+   sizing handles the whole range; the media queries below stay as the
+   floor for browsers laying out the narrow end. */
+body.single-post .entry-content .et_pb_row_2 {
+  grid-template-columns: repeat(auto-fit, minmax(216px, 1fr));
+}
+
+/* The comment form posts to /wp-comments-post.php, which does not exist
+   in this build — submitting it lands on a 404. A form that cannot
+   succeed is worse than no form, so the block is out until commenting
+   is wired up. */
+body.single-post #comment-wrap,
+body.single-post .comment-wrap {
+  display: none !important;
+}
+
+@media (max-width: 860px) {
+  body.single-post .award-facts {
+    grid-template-columns: 1fr;
+  }
+  body.single-post .award-facts li {
+    flex-direction: row;
+    align-items: baseline;
+    gap: 0.7rem;
+    border-left: 0;
+    border-top: 1px solid rgba(40, 40, 40, 0.18);
+    padding: 0.85rem clamp(1rem, 4vw, 1.5rem);
+  }
+  body.single-post .award-facts li:first-child {
+    border-top: 0;
+  }
+  body.single-post .award-facts-val {
+    flex: 0 0 auto;
+    min-width: 6.5rem;
+  }
+}
+@media (max-width: 767px) {
+  body.single-post .et_post_meta_wrapper:has(h1.entry-title) > img,
+  body.single-post .et_post_meta_wrapper .et_pb_image_wrap > img {
+    max-height: 46vh;
+    border-radius: 12px 12px 0 0;
+  }
+  body.single-post .award-facts {
+    border-radius: 0 0 12px 12px;
+  }
+}
+
+/* ================================================================
+   CLAIM STRIP — restore the alternation after dropping a tile
+
+   Divi paints the strip from column index: 0/2/4 yellow, 1/3 dark.
+   "Innowacyjne opakowanie" was column 3 — a dark one — so removing it
+   left yellow, dark, yellow, YELLOW: the last two tiles fused into one
+   wide yellow block and the strip stopped reading as a set of four.
+
+   The last tile flips to dark to put the beat back. Its icon is solid
+   black line art drawn for a yellow ground (the dark tile's own icon
+   ships white), so it is inverted rather than swapped for a file that
+   does not exist — on pure black artwork invert() lands on pure white,
+   which is exactly the asset the other dark tile uses.
+   ================================================================ */
+body.home .et_pb_section_1 .et_pb_row_0 .et_pb_column_4 {
+  background-color: #282828 !important;
+}
+body.home .et_pb_section_1 .et_pb_row_0 .et_pb_column_4 h2 {
+  color: #ffffff !important;
+}
+body.home .et_pb_section_1 .et_pb_row_0 .et_pb_column_4 .et_pb_image img {
+  filter: invert(1);
+}
+
+/* Four tiles now divide evenly, so the strip can hold its stripe
+   rhythm at every width: 4 across, then 2 x 2 where each row is one
+   yellow + one dark. */
+body.home .et_pb_section_1 .et_pb_row_0 > .et_pb_column {
+  padding: clamp(1.6rem, 3vw, 2.4rem) clamp(1rem, 2vw, 1.5rem);
+  justify-content: flex-start;
+}
+
+/* The tiles are colour blocks, so they butt up against each other: the
+   earlier gutter left white slots between them and turned a continuous
+   band into four floating cards. Colour does the separating now. */
+body.home .et_pb_section_1 .et_pb_row_0 {
+  gap: 0;
+}
+@media (max-width: 980px) {
+  body.home .et_pb_section_1 .et_pb_row_0 {
+    row-gap: 0;
+  }
+}
+
+/* ================================================================
+   AWARD PROOF BLOCK — "czytaj więcej" made visible
+
+   The button lost a specificity fight it was never going to win:
+   Divi ships `body #page-container .et_pb_section .et_pb_button_0`
+   (one id, two classes, !important) painting it brand yellow, while
+   the intended dark treatment was written as
+   `body.home .et_pb_section_2 .et_pb_column_2_5 .et_pb_button`
+   (four classes). Divi won every time, so the one action on the card
+   rendered as yellow-on-white — the lowest-contrast pair in the whole
+   palette, on the whitest surface on the page.
+
+   Same id-beating selector the right column already uses, plus the
+   layout around it: the caption reads as the photo's caption, and the
+   action sits below the pair as its own row rather than being wedged
+   into the thumbnail's second line.
+   ================================================================ */
+body.home .et_pb_section_2 .et_pb_column_2_5 {
+  grid-template-columns: 92px minmax(0, 1fr);
+  grid-template-areas:
+    "product product"
+    "shot    caption"
+    "cta     cta";
+  row-gap: 0.75rem;
+}
+body.home .et_pb_section_2 .et_pb_image_6 {
+  width: 92px !important;
+  max-width: 92px !important;
+}
+body.home .et_pb_section_2 .et_pb_column_2_5 .et_pb_text {
+  align-self: center;
+}
+body.home .et_pb_section_2 .et_pb_column_2_5 .et_pb_button_module_wrapper {
+  margin: 0.35rem 0 0 !important;
+  width: 100%;
+}
+
+body.home .et_pb_section_2 .et_pb_column_2_5 .et_pb_button,
+body #page-container .et_pb_section.et_pb_section_2 .et_pb_column_2_5 .et_pb_button.et_pb_button {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  min-height: 46px;
+  background: #282828 !important;
+  border: 2px solid #282828 !important;
+  border-radius: 10px !important;
+  color: #ffffff !important;
+  font-size: 0.88rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.01em;
+  padding: 0.7rem 1.2rem !important;
+  text-align: center;
+}
+/* Divi's own arrow glyph is an icon font that only appears on hover and
+   shifts the label when it does. A static arrow states where the link
+   goes without the label jumping. */
+body #page-container .et_pb_section.et_pb_section_2 .et_pb_column_2_5 .et_pb_button.et_pb_button::after,
+body #page-container .et_pb_section.et_pb_section_2 .et_pb_column_2_5 .et_pb_button.et_pb_button::before {
+  content: none !important;
+  display: none !important;
+}
+body #page-container .et_pb_section.et_pb_section_2 .et_pb_column_2_5 .et_pb_button.et_pb_button:hover {
+  background: #f9df1c !important;
+  border-color: #f9df1c !important;
+  color: #282828 !important;
+  padding: 0.7rem 1.2rem !important;
+  transform: translateY(-2px);
+}
+body #page-container .et_pb_section.et_pb_section_2 .et_pb_column_2_5 .et_pb_button.et_pb_button:focus-visible {
+  outline: 2px solid #282828;
+  outline-offset: 3px;
+}
+
+@media (max-width: 400px) {
+  body.home .et_pb_section_2 .et_pb_column_2_5 {
+    grid-template-columns: 1fr;
+    grid-template-areas: "product" "shot" "caption" "cta";
+    justify-items: stretch;
+  }
+  body.home .et_pb_section_2 .et_pb_column_2_5 .et_pb_text {
+    text-align: left;
+  }
+}
+
+/* ================================================================
+   CERTIFICATES — fill the band
+
+   The previous pass shrank the documents to badge scale (124-164px)
+   and left them floating in a dark band sized for something four
+   times bigger: most of the stripe was empty black. Wrong call — the
+   band is the frame, the four documents are the picture, and the
+   picture should fill the frame.
+
+   So: a four-track grid that spends the full row width, each document
+   sized by the row rather than by a fixed pixel value. The rail
+   behaviour survives only where it earns its place — under 600px,
+   where four documents cannot sit side by side at any readable size.
+   ================================================================ */
+body.home .et_pb_section_7 .et_pb_row {
+  max-width: 1280px;
+  padding: clamp(1.5rem, 3vw, 2.25rem) clamp(1.25rem, 2.5vw, 2rem) !important;
+}
+body.home .et_pb_section_7 .cert-label {
+  margin-bottom: clamp(1rem, 2vw, 1.35rem);
+}
+
+body.home .et_pb_section_7 .cert-rail {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(0.75rem, 1.6vw, 1.25rem);
+  overflow: visible;
+  padding-bottom: 0;
+  scroll-snap-type: none;
+}
+body.home .et_pb_section_7 .cert-rail > .et_pb_column {
+  flex: initial !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+}
+body.home .et_pb_section_7 .cert-rail .et_pb_image,
+body.home .et_pb_section_7 .cert-rail .et_pb_image a,
+body.home .et_pb_section_7 .cert-rail .et_pb_image .et_pb_image_wrap {
+  display: block;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+body.home .et_pb_section_7 .cert-rail .et_pb_image img {
+  width: 100%;
+  height: auto;
+  padding: 0.5rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06), 0 18px 34px -22px rgba(0, 0, 0, 0.3);
+}
+
+@media (max-width: 980px) {
+  body.home .et_pb_section_7 .cert-rail {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+}
+
+/* Under 600px two documents side by side land at ~130px wide — below
+   the point where you can tell one lab report from another. Back to a
+   swipeable rail, one and a bit visible, arrows live again. */
+@media (max-width: 599px) {
+  body.home .et_pb_section_7 .cert-rail {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 0.5rem;
+    gap: 0.75rem;
+  }
+  body.home .et_pb_section_7 .cert-rail > .et_pb_column {
+    flex: 0 0 68% !important;
+    width: 68% !important;
+    scroll-snap-align: start;
+  }
+}
+
+/* ================================================================
+   TESTIMONIALS — bigger faces, real air between the cards
+
+   At 88px the portraits read as thumbnails next to a full paragraph
+   of quote; the face is the reason the card is believable, so it gets
+   the weight. The cards also sat almost edge to edge — the plugin's
+   30px spaceBetween is a third of the card's own padding, so the
+   shadows of neighbouring cards ran together into one grey seam.
+   ================================================================ */
+.dica_divi_carousel .dica-image-container .image,
+.dica_divi_carousel img.dica-item-image {
+  width: 116px;
+  height: 116px;
+}
+.dica_divi_carousel .dica-image-container {
+  margin-bottom: 1.15rem;
+}
+.dica_divi_carousel .swiper-container:not(.swiper-initialized):not(.swiper-container-initialized) > .swiper-wrapper {
+  gap: 2.75rem;
+}
+.dica_divi_carousel .swiper-container:not(.swiper-initialized):not(.swiper-container-initialized) > .swiper-wrapper > * {
+  flex-basis: calc((100% - 5.5rem) / 3);
+  width: calc((100% - 5.5rem) / 3) !important;
+}
+@media (max-width: 980px) {
+  .dica_divi_carousel .dica-image-container .image,
+  .dica_divi_carousel img.dica-item-image {
+    width: 104px;
+    height: 104px;
+  }
+}
+@media (max-width: 767px) {
+  .dica_divi_carousel .dica-image-container .image,
+  .dica_divi_carousel img.dica-item-image {
+    width: 96px;
+    height: 96px;
+  }
+}
+
+/* ================================================================
+   AWARD MASTHEAD — the photograph, shown whole
+
+   Three faults, all visible in the browser:
+
+   1. FIWE.jpg is a 900x600 file. The masthead stretched it across a
+      1120px frame — a 1.24x upscale — and then cropped it to 480px
+      with object-fit:cover. The crop cut the bottom line off the
+      trophy, which reads "SUPLEMENT ROKU": the page cropped away the
+      words that are the entire point of the page.
+   2. The dateline never rendered. The site's own custom CSS carries
+      `#left-area .post-meta { display: none }`, which outranks a
+      plain `.post-meta` rule, so the eyebrow was invisible.
+   3. Title, photo and plaque each ran to a different width.
+
+   Fix: one measure for the whole masthead, set to the photograph's
+   own 900px so nothing is upscaled and nothing is cropped. The image
+   is shown at its native ratio; the plaque sits under it at the same
+   width, so the block reads as one object.
+   ================================================================ */
+body.single-post .et_post_meta_wrapper:has(h1.entry-title) {
+  --award-measure: 900px;
+}
+
+body.single-post #left-area .post-meta.award-eyebrow {
+  display: block !important;
+  max-width: var(--award-measure, 900px);
+}
+
+body.single-post h1.entry-title {
+  max-width: var(--award-measure, 900px);
+}
+
+body.single-post .et_post_meta_wrapper:has(h1.entry-title) > img,
+body.single-post .et_post_meta_wrapper .et_pb_image_wrap > img {
+  width: 100%;
+  max-width: var(--award-measure, 900px);
+  height: auto;
+  max-height: none;
+  object-fit: fill;
+  aspect-ratio: auto;
+}
+
+body.single-post .award-facts {
+  max-width: var(--award-measure, 900px);
+}
+
+@media (max-width: 767px) {
+  body.single-post .et_post_meta_wrapper:has(h1.entry-title) > img,
+  body.single-post .et_post_meta_wrapper .et_pb_image_wrap > img {
+    max-height: none;
+  }
+}
+
+/* ================================================================
+   AWARD PAGE — three defects found in the browser
+
+   1. The dateline printed under the headline, touching it. It is an
+      eyebrow: it belongs above the title, where it sets up the
+      headline instead of trailing it.
+   2. `.entry-content` resolved to padding-top: 0 — Divi's builder
+      layout rule zeroes it — so the article's first line sat flush
+      against the yellow plaque with no breathing room at all.
+   3. The video showed Divi's play overlay stacked on top of a native
+      <video controls>: two sets of controls, one of which did
+      nothing, over a black frame. The overlay's own background image
+      (…-scaled.jpg) is not in this build, so it painted nothing but
+      black. The <video> now carries a real poster and the overlay is
+      gone — one player, one play button, one frame.
+   ================================================================ */
+body.single-post .et_post_meta_wrapper:has(h1.entry-title) {
+  display: flex;
+  flex-direction: column;
+}
+body.single-post #left-area .post-meta.award-eyebrow {
+  order: 1;
+  width: 100%;
+  margin: 0 auto 0.9rem !important;
+}
+body.single-post h1.entry-title {
+  order: 2;
+  width: 100%;
+}
+body.single-post .et_post_meta_wrapper:has(h1.entry-title) > img {
+  order: 3;
+}
+body.single-post .award-facts {
+  order: 4;
+  width: 100%;
+}
+
+body.single-post .entry-content {
+  padding-top: clamp(2.75rem, 5vw, 4.5rem) !important;
+}
+
+/* one player, one set of controls */
+body.single-post .entry-content .et_pb_video .et_pb_video_overlay {
+  display: none !important;
+}
+body.single-post .entry-content .et_pb_video_box > video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  /* contain, not cover: the poster is a square photo in a 16:9 frame,
+     and cover cut the plaque's own wording out of it — the same
+     mistake the masthead was making. */
+  object-fit: contain;
+  background: #000000;
+}
+
+/* The poster was the same frame as the masthead photograph, so the
+   page showed the identical picture twice within one scroll. The
+   stand photo from the same two days carries the video instead. */
+
+/* Buttons are links, and `.entry-content a { text-decoration: underline }`
+   was underlining them too — a filled button with an underlined label
+   reads as a broken link, not a call to action. */
+body.single-post .entry-content a.et_pb_button {
+  text-decoration: none;
+}
+body.single-post .entry-content a.et_pb_button:hover {
+  background: #282828 !important;
+  border-color: #282828 !important;
+  color: #ffffff !important;
+}
+
+/* ================================================================
+   AWARD PAGE — defects found in a full audit of the rendered page
+
+   Each block below fixes a rule that was written but never applied,
+   or a rule that applied and hurt.
+   ================================================================ */
+
+/* --- The plaque was indented and bottom-heavy ---------------------
+   `#left-area ul, .entry-content ul { padding: 0 0 23px 1em }` ships
+   with the site (1 id) and beat `.award-facts { padding: 0 }`. The
+   fact columns were pushed 16px right of the photo edge above them
+   and carried a 23px band of dead yellow along the bottom. */
+body.single-post #left-area .award-facts,
+body.single-post .entry-content .award-facts {
+  padding: 0 !important;
+  margin-bottom: 0 !important;
+  list-style: none !important;
+}
+
+/* --- Plaque sub-labels failed contrast ---------------------------
+   rgba(40,40,40,0.62) over #f9df1c composites to 3.86:1 at ~11.8px.
+   The words that explain the three numbers were the hardest text on
+   the page to read, on its brightest surface. */
+body.single-post .award-facts-key {
+  color: rgba(40, 40, 40, 0.82);
+}
+
+/* --- Card titles were never styled -------------------------------
+   The rule listed p / h3 / h4; the markup shipped h2, so Divi's own
+   20px heading won. In a 250px card that wrapped one title to seven
+   lines while another took two, and `align-items: stretch` then blew
+   every card up to the tallest. Titles are h3 now (they are children
+   of the section, not peers of its heading) and are styled as such. */
+body.single-post .entry-content .et_pb_row_2 .et_pb_text h2,
+body.single-post .entry-content .et_pb_row_2 .et_pb_text h3,
+body.single-post .entry-content .et_pb_row_2 .et_pb_text h4,
+body.single-post .entry-content .et_pb_row_2 .et_pb_text p {
+  font-size: 0.97rem !important;
+  font-weight: 800 !important;
+  line-height: 1.32;
+  letter-spacing: -0.01em;
+  color: #282828;
+  margin: 0 !important;
+  padding-bottom: 0 !important;
+}
+/* the inline style="text-align:center" on each title fought the
+   left-aligned link underneath it */
+body.single-post .entry-content .et_pb_row_2 .et_pb_text_inner > * {
+  text-align: left !important;
+}
+
+/* --- Card images were never cropped ------------------------------
+   `object-fit: cover` needs a sized box: the img sits in an
+   inline-block wrap of auto height, so `height: 100%` resolved to
+   auto and the 3:2 photos were clipped from the bottom by overflow
+   instead of centre-cropped. */
+body.single-post .entry-content .et_pb_row_2 .et_pb_image .et_pb_image_wrap {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* --- The whole card is the link ----------------------------------
+   The column had a hover lift, a yellow border and a shadow, but the
+   only clickable thing was a 23px-tall line of text — Divi's
+   `line-height:1.7em` against `padding:0`. The CTA now carries a real
+   tap target and stretches over the card, so the affordance and the
+   hit area finally describe the same object. */
+body.single-post .entry-content .et_pb_row_2 > .et_pb_column {
+  position: relative;
+}
+body.single-post .entry-content .et_pb_row_2 .et_pb_button,
+body #page-container .et_pb_section .et_pb_row_2 .et_pb_button.et_pb_button {
+  display: inline-flex !important;
+  align-items: center;
+  min-height: 44px;
+  font-weight: 800 !important;
+}
+body.single-post .entry-content .et_pb_row_2 .et_pb_button::after {
+  content: "" !important;
+  display: block !important;
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+}
+
+/* --- Focus was invisible on every white surface ------------------
+   A #f9df1c ring on #ffffff is 1.35:1; WCAG asks 3:1 for a focus
+   indicator. Dark ring on light grounds, yellow halo to keep it
+   recognisably this brand's focus state. */
+body.single-post a:focus-visible,
+body.single-post button:focus-visible,
+body.single-post .et_pb_button:focus-visible {
+  outline: 2px solid #282828;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 5px rgba(249, 223, 28, 0.55);
+}
+/* on the black masthead the yellow ring is the readable one */
+body.single-post .et_post_meta_wrapper a:focus-visible {
+  outline-color: #f9df1c;
+  box-shadow: none;
+}
+
+/* --- Responsive floors that never fired --------------------------
+   The two media queries for the card grid share a selector and a
+   specificity with a later unconditional rule, and media queries add
+   no specificity — so `auto-fit` won at every width and the mobile
+   floor did not exist. Restated here, after it, with the cascade
+   pointing the right way. */
+@media (max-width: 980px) {
+  body.single-post .entry-content .et_pb_row_2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 600px) {
+  body.single-post .entry-content .et_pb_row_2 {
+    grid-template-columns: 1fr;
+    gap: 1.15rem;
+  }
+}
+
+/* --- :has() fallback would have hidden the headline --------------
+   The masthead is painted black only inside `:has(h1.entry-title)`,
+   but the H1 was forced white unconditionally. Any engine without
+   :has() rendered white type on white. The colour now lives with the
+   background that justifies it. */
+body.single-post h1.entry-title {
+  color: #282828 !important;
+}
+body.single-post .et_post_meta_wrapper:has(h1.entry-title) h1.entry-title {
+  color: #ffffff !important;
+}
+
+/* ================================================================
+   GRID ROWS — Divi's clearfix pseudo-elements are grid items
+
+   Every .et_pb_row carries a clearfix ::after (content:"") from Divi,
+   and the theme also sets `order: 1` on .et_pb_column. Turn such a row
+   into a grid and the pseudo — which keeps the default order: 0 —
+   sorts BEFORE every real column: it claims track 1, pushes the four
+   claim tiles one slot right, and wraps the last one onto a second
+   row. That is the empty white cell at the start of the strip and the
+   orphaned "Zapewnia większą siłę" tile underneath it.
+
+   The clearfix has no job inside a grid, so it goes.
+   ================================================================ */
+body.home .et_pb_section_1 .et_pb_row_0::before,
+body.home .et_pb_section_1 .et_pb_row_0::after,
+body.home .et_pb_section_2 .et_pb_row_1::before,
+body.home .et_pb_section_2 .et_pb_row_1::after,
+body.single-post .entry-content .et_pb_row_2::before,
+body.single-post .entry-content .et_pb_row_2::after {
+  content: none !important;
+  display: none !important;
+}
+
+/* with the phantom item gone the four tiles share one row again, so
+   stretch them to a common height */
+body.home .et_pb_section_1 .et_pb_row_0 {
+  align-items: stretch;
+}
+body.home .et_pb_section_1 .et_pb_row_0 > .et_pb_column {
+  order: 0;
+  justify-content: center;
+}
+
+/* ================================================================
+   RESPONSIVE PASS — measured, not guessed
+
+   Every page was probed in a 320 / 390 / 768px viewport: home, blog
+   index, the award page, all six articles, the category archive and
+   /aa/. No page scrolls horizontally at any of those widths, so what
+   is left is the small stuff — the things that only bite on a phone,
+   in your hand, with a thumb.
+   ================================================================ */
+
+/* --- Touch targets ------------------------------------------------
+   The three claim links in "Dlaczego CreGAAtine jest lepsza" and the
+   certificate arrows measured 23px and 38px tall. They are fine for a
+   mouse and too small for a thumb, so the hit area grows only where
+   the pointer is coarse — the desktop composition, where these read
+   as quiet inline links rather than buttons, stays exactly as it is. */
+@media (pointer: coarse) {
+  body.home .et_pb_section_2 .et_pb_column_3_5 .et_pb_button,
+  body #page-container .et_pb_section.et_pb_section_2 .et_pb_column_3_5 .et_pb_button.et_pb_button {
+    display: inline-flex !important;
+    align-items: center;
+    min-height: 44px;
+  }
+  body.home .et_pb_section_7 .cert-nav-btn {
+    width: 44px;
+    height: 44px;
+  }
+  /* the two contact links in the footer are the ones people actually
+     tap — mail and website */
+  #main-footer .footer-widget a[href^="mailto"],
+  #main-footer .footer-widget a[href^="http"] {
+    display: inline-block;
+    padding: 0.35rem 0;
+  }
+}
+
+/* --- Minimum legible type on small screens ------------------------
+   The plaque's sub-labels computed to 11.84px — uppercase, tracked
+   out, on the brightest surface of the award page. Body copy sat at
+   15.2px. Both go up on phones; nothing changes on desktop. */
+@media (max-width: 767px) {
+  body.single-post .award-facts-key {
+    font-size: 0.8rem;
+    letter-spacing: 0.03em;
+  }
+  body.single-post .award-facts-val {
+    font-size: 1.2rem;
+  }
+  .et_pb_text p,
+  .entry-content p,
+  body.single-post .entry-content p {
+    font-size: 1rem;
+  }
+  .dica_divi_carousel .dica-item-content .content p {
+    font-size: 0.98rem;
+  }
+}
+
+/* --- Very small phones (≤360px) -----------------------------------
+   iPhone SE and the Android budget tier. Nothing overflows there, but
+   the claim strip's two-up tiles and the certificate rail get tight,
+   so they trade a little padding for a little more content. */
+@media (max-width: 360px) {
+  body.home .et_pb_section_1 .et_pb_row_0 > .et_pb_column {
+    padding: 1.35rem 0.75rem;
+  }
+  body.home .et_pb_section_1 .et_pb_row_0 h2 {
+    font-size: 0.9rem;
+  }
+  body.home .et_pb_section_7 .cert-rail > .et_pb_column {
+    flex-basis: 76% !important;
+    width: 76% !important;
+  }
+  body.home .et_pb_section_2 .et_pb_column_2_5 {
+    padding: 1.15rem;
+  }
+  .dica_divi_carousel .dica_divi_carouselitem {
+    padding: 1.15rem !important;
+  }
+}
+
+/* The coarse-pointer rules above cannot be verified from a desktop
+   probe (a mouse never matches `pointer: coarse`), and phone widths
+   are touch in practice — so the same minimums also apply by width. */
+@media (max-width: 767px) {
+  body.home .et_pb_section_2 .et_pb_column_3_5 .et_pb_button,
+  body #page-container .et_pb_section.et_pb_section_2 .et_pb_column_3_5 .et_pb_button.et_pb_button {
+    display: inline-flex !important;
+    align-items: center;
+    min-height: 44px;
+  }
+  body.home .et_pb_section_7 .cert-nav-btn {
+    width: 44px;
+    height: 44px;
+  }
+  #main-footer .footer-widget a[href^="mailto"],
+  #main-footer .footer-widget a[href^="http"] {
+    display: inline-block;
+    padding: 0.35rem 0;
+  }
+}
+
+/* ================================================================
+   TESTIMONIALS — more room, bigger faces, whole quotes
+
+   With the gutter finally rendering (Swiper writes it as an inline
+   margin-right that an earlier `margin: 0 !important` was deleting),
+   the block can be sized for what it actually holds: eight quotes of
+   wildly different length, from six words to sixty.
+
+   The clamp is gone. Cards stretch to the longest quote in view and
+   every recommendation is readable in full — which is the only reason
+   a testimonial is on the page at all.
+   ================================================================ */
+body.home .et_pb_section_8 .et_pb_row,
+body.home .et_pb_section_8 > .et_pb_row {
+  width: 100% !important;
+  max-width: 1320px !important;
+}
+
+/* faces carry the credibility; give them the size to do it */
+.dica_divi_carousel .dica-image-container .image,
+.dica_divi_carousel img.dica-item-image {
+  width: 140px;
+  height: 140px;
+  border-width: 4px;
+}
+.dica_divi_carousel .dica-image-container {
+  margin-bottom: 1.25rem;
+}
+
+/* no truncation: the whole quote, or it is not a quote */
+.dica_divi_carousel .dica-item-content .content {
+  display: block;
+  overflow: visible;
+  -webkit-line-clamp: none;
+}
+
+.dica_divi_carousel .dica_divi_carouselitem {
+  padding: 2rem 1.85rem !important;
+}
+.dica_divi_carousel .dica-item-content .item-title {
+  font-size: 1.08rem;
+}
+.dica_divi_carousel .dica-item-content .item-subtitle {
+  min-height: 0;
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 1100px) {
+  .dica_divi_carousel .dica-image-container .image,
+  .dica_divi_carousel img.dica-item-image {
+    width: 124px;
+    height: 124px;
+  }
+}
+@media (max-width: 767px) {
+  .dica_divi_carousel .dica-image-container .image,
+  .dica_divi_carousel img.dica-item-image {
+    width: 112px;
+    height: 112px;
+  }
+  .dica_divi_carousel .dica_divi_carouselitem {
+    padding: 1.5rem 1.35rem !important;
+  }
+}
+
+/* The yellow ring kept losing its width to Divi's image reset, so it is
+   declared with the same weight Divi uses. */
+body #page-container .dica_divi_carousel img.dica-item-image,
+.dica_divi_carousel img.dica-item-image {
+  border: 4px solid #f9df1c !important;
+  box-sizing: border-box;
+}
+
+/* The track ran edge to edge, so the first and last card were sliced by
+   the window. Gutters that match the section's own rhythm. */
+body.home .et_pb_section_8 .et_pb_row,
+body.home .et_pb_section_8 > .et_pb_row {
+  padding-left: clamp(1rem, 3vw, 2.25rem) !important;
+  padding-right: clamp(1rem, 3vw, 2.25rem) !important;
+}
+
+/* ================================================================
+   AWARD MASTHEAD — the gym photograph behind it
+
+   The band was flat black. It now carries the same photograph the
+   homepage hero uses, so arriving here from the home page feels like
+   the same room rather than a different site. A heavy scrim keeps the
+   white headline and the yellow eyebrow at full contrast — the photo
+   is atmosphere here, not subject; the subject is the trophy below.
+
+   The plaque also stopped short of the section end, so its yellow
+   edge butted straight into the white article. Black now runs on
+   under it, which is what separates the two.
+   ================================================================ */
+body.single-post .et_post_meta_wrapper:has(h1.entry-title) {
+  background-color: #000000;
+  background-image:
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.58) 0%, rgba(0, 0, 0, 0.70) 48%, rgba(0, 0, 0, 0.86) 100%),
+    url(/wp-content/uploads/2021/03/home-section3-bgok.jpg);
+  background-size: auto, cover;
+  background-position: center top, center center;
+  background-repeat: no-repeat, no-repeat;
+  background-attachment: scroll, scroll;
+  padding-bottom: clamp(2.5rem, 5vw, 4.5rem);
+}
+
+@media (max-width: 767px) {
+  body.single-post .et_post_meta_wrapper:has(h1.entry-title) {
+    padding-bottom: clamp(2rem, 7vw, 3rem);
+  }
+}
+
+/* ================================================================
+   AWARD HERO — the homepage hero, one to one
+
+   The award page now uses the homepage's hero verbatim: the same
+   grid (1.2fr / 0.8fr), the same 650px band, the same photograph
+   behind it, the same eyebrow, the same headline scale, the same
+   clipped yellow panel on the right. Those rules are not copied —
+   the award hero was added to the homepage's own selector lists, so
+   the two heroes cannot drift apart.
+
+   Only the content differs, which is the point: where the homepage
+   puts 8,5×, this puts the three facts of the award, and the
+   photograph of the trophy moves below the band, where it can be
+   shown whole instead of cropped to fit a hero.
+   ================================================================ */
+
+/* the Divi meta wrapper is now just a container — its old masthead
+   painting would double up behind the hero */
+body.single-post .et_post_meta_wrapper.award-masthead {
+  background: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  display: block !important;
+  max-width: none !important;
+  overflow: visible;
+}
+
+.award-hero {
+  position: relative;
+  display: block;
+  width: 100%;
+  min-height: 650px;
+  background-color: #000000;
+  background-image: url(/wp-content/uploads/2021/03/home-section3-bgok.jpg);
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  overflow: hidden;
+}
+/* same scrim the homepage hero uses: dense at the edges, lighter in
+   the middle, so the photograph reads without costing contrast */
+.award-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(to right,
+      rgba(0, 0, 0, 0.72) 0%,
+      rgba(0, 0, 0, 0.34) 26%,
+      rgba(0, 0, 0, 0.26) 50%,
+      rgba(0, 0, 0, 0.34) 74%,
+      rgba(0, 0, 0, 0.72) 100%),
+    linear-gradient(to bottom,
+      rgba(0, 0, 0, 0.10) 0%,
+      rgba(0, 0, 0, 0.30) 100%);
+}
+.award-hero .header-content-container {
+  position: relative;
+  z-index: 1;
+}
+
+/* --- the yellow panel: same shape as the homepage's 8,5×, three
+   facts instead of one number --- */
+.award-hero .award-facts.hero-stat {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.15rem;
+  padding: 2rem 1.75rem;
+  margin: 0 !important;
+  list-style: none;
+  border-radius: 0;
+  background: #f9df1c;
+  overflow: visible;
+}
+.award-hero .award-facts.hero-stat li {
+  display: block;
+  padding: 0;
+  border: 0;
+  text-align: center;
+}
+.award-hero .award-facts-val {
+  display: block;
+  font-size: clamp(1.35rem, 2.6vw, 1.85rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: #282828;
+}
+.award-hero .award-facts-key {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  line-height: 1.35;
+  color: rgba(40, 40, 40, 0.78);
+}
+.award-hero .award-facts.hero-stat li + li {
+  border-top: 1px solid rgba(40, 40, 40, 0.2);
+  padding-top: 1.05rem;
+}
+
+/* --- the photograph, below the band, whole --- */
+.award-photo {
+  margin: 0;
+  padding: clamp(2.5rem, 5vw, 4rem) clamp(1.25rem, 4vw, 3rem) clamp(2.5rem, 5vw, 4rem);
+  background: #000000;
+  text-align: center;
+}
+.award-photo img {
+  display: block;
+  width: 100%;
+  max-width: 900px;
+  height: auto;
+  margin: 0 auto;
+  border-radius: 16px;
+  box-shadow: 0 -2px 0 rgba(249, 223, 28, 0.9), 0 30px 60px -30px rgba(0, 0, 0, 0.9);
+}
+.award-photo figcaption {
+  max-width: 900px;
+  margin: 1rem auto 0;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.62);
+  text-align: left;
+}
+
+@media (max-width: 900px) {
+  .award-hero {
+    min-height: 0;
+  }
+  .award-hero .award-facts.hero-stat {
+    width: min(100%, 420px);
+    aspect-ratio: auto;
+  }
+}
+@media (max-width: 767px) {
+  .award-photo figcaption {
+    text-align: center;
+  }
+}
+
+/* The award page's older flex masthead set `order` on the headline and
+   the eyebrow. Inside the hero's copy column those orders survived and
+   floated the CTA above the headline. Reset them here. */
+.award-hero .hero-copy > * { order: 0; }
+.award-hero .hero-eyebrow { order: 1; }
+.award-hero h1.entry-title { order: 2; }
+.award-hero .hero-ctas { order: 3; }
+
+/* Divi caps the homepage hero module at 1200px and centres it; the
+   award hero has no Divi module around it, so it takes the same cap
+   directly — that is what makes the two content columns land on the
+   same left edge. */
+.award-hero .header-content-container {
+  width: min(100%, 1200px);
+  margin-inline: auto;
+}
+
+/* Same band height as the homepage hero. The two pages do not carry
+   the same header — home keeps the tall triangular mark (174px),
+   content pages get the compact bar (84px) — so an identical
+   `min-height: 650px` still produced a shorter band here. On desktop
+   the award band is pinned to the homepage's rendered height so the
+   two heroes occupy the same footprint; below 981px, where the header
+   is the same on both pages, the shared rule takes over again. */
+@media (min-width: 981px) {
+  .award-hero {
+    min-height: 707px;
+  }
+}
+
+/* Divi caps the homepage hero's content grid at 800px inside the
+   1200px module; the award hero has to take the same cap or the two
+   columns land on different left edges. The panel is pinned to the
+   same 320px square as the homepage's 8,5× panel. */
+.award-hero .header-content {
+  max-width: 800px !important;
+}
+.award-hero .award-facts.hero-stat {
+  width: min(100%, 320px);
+  aspect-ratio: 1 / 1;
+  justify-self: end;
+}
+
+/* ================================================================
+   AWARD HERO — the trophy takes the right column
+
+   The photograph was living below the band, where it read as an
+   afterthought, and the yellow panel held the facts. Swapped: the
+   photograph is the right column now — it is the evidence, so it gets
+   the position the eye goes to second — and the three facts sit
+   directly under it as its caption strip, in the brand yellow the
+   panel used to own.
+
+   The content grid widens from the homepage's 800px to 1120px here.
+   The homepage's right column holds one number; this one holds a
+   photograph, and at 320px the trophy was unreadable — the thing the
+   page exists to show cannot be the smallest thing on it. Band height,
+   full-bleed width, header clearance and type scale stay identical.
+   ================================================================ */
+.award-hero .header-content {
+  max-width: 1200px !important;
+  /* the photograph's column is the wider one: the trophy is the
+     evidence this page rests on, and at parity it was still the
+     smaller half of the row */
+  grid-template-columns: 0.85fr 1.15fr;
+  align-items: center;
+}
+
+.award-hero .award-proof {
+  margin: 0;
+  justify-self: end;
+  /* the band is pinned to the homepage hero's 707px; a 560px photo
+     left a third of it empty, so the trophy grows to fill the height
+     it was given rather than floating in black */
+  width: min(100%, 620px);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 30px 60px -28px rgba(0, 0, 0, 0.95);
+}
+.award-hero .award-proof img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 0;
+  border-top: 3px solid #f9df1c;
+}
+
+/* the caption strip: three facts, one line each, under the photo */
+.award-hero .award-proof .award-facts {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none;
+  background: #f9df1c;
+}
+.award-hero .award-proof .award-facts li {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.95rem 0.9rem;
+  border-left: 1px solid rgba(40, 40, 40, 0.22);
+  border-top: 0;
+  text-align: left;
+  list-style: none;
+}
+.award-hero .award-proof .award-facts li:first-child {
+  border-left: 0;
+}
+.award-hero .award-facts-val {
+  display: block;
+  font-size: clamp(0.95rem, 1.5vw, 1.15rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: #282828;
+}
+.award-hero .award-facts-key {
+  display: block;
+  margin: 0;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  line-height: 1.3;
+  color: rgba(40, 40, 40, 0.72);
+}
+
+/* the headline shares the row with a photograph now, so it holds a
+   tighter measure than the homepage's */
+.award-hero h1.entry-title {
+  font-size: clamp(2rem, 3.6vw, 3rem);
+  max-width: 16ch;
+}
+
+@media (max-width: 980px) {
+  .award-hero .header-content {
+    grid-template-columns: 1fr;
+  }
+  .award-hero .award-proof {
+    justify-self: start;
+    width: min(100%, 560px);
+  }
+  .award-hero h1.entry-title {
+    max-width: 20ch;
+  }
+}
+@media (max-width: 520px) {
+  .award-hero .award-proof .award-facts {
+    grid-template-columns: 1fr;
+  }
+  .award-hero .award-proof .award-facts li {
+    flex-direction: row;
+    align-items: baseline;
+    gap: 0.6rem;
+    border-left: 0;
+    border-top: 1px solid rgba(40, 40, 40, 0.22);
+  }
+  .award-hero .award-proof .award-facts li:first-child {
+    border-top: 0;
+  }
+  .award-hero .award-facts-val {
+    flex: 0 0 auto;
+    min-width: 5.5rem;
+  }
+}
