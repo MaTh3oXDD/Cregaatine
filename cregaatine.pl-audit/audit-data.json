@@ -1,0 +1,333 @@
+{
+  "summary": {
+    "health_score": 41,
+    "business_type": "Supplement brand / DTC informational site (Polish, WordPress+Divi static mirror, sales on separate subdomain)",
+    "top_findings": [
+      "mirror.py stripped the domain from every absolute URL: canonical, og:url and all JSON-LD @id/url values now point to \"/\" — deploy blocker",
+      "No robots.txt and no sitemap.xml in the static mirror; production serves both via Yoast",
+      "141 MB self-hosted MP4 (Nowy-film.mp4) embedded on a 302-word page",
+      "82 images across the site have no alt attribute (45 of 54 on the homepage alone)",
+      "No Product, Organization, FAQPage or Article schema on a supplement e-commerce funnel"
+    ],
+    "quick_wins": [
+      "Run fix_seo_urls.py to restore absolute canonical/og:url/JSON-LD and generate robots.txt + sitemap.xml",
+      "Add og:image 1200x630 to all 16 pages (twitter:card is already declared with no image)",
+      "Shorten the 42-character title suffix to \" | CreGAAtine\" — fixes 6 truncated titles at once",
+      "Delete smush-lazy-load.min.js — unlazy.py already replaced it",
+      "301 /dawka-wiedzy-naukowej/ to /gaa-i-kreatyna-badania-naukowe/ (byte-identical 2166-word duplicate)"
+    ]
+  },
+  "categories": [
+    {
+      "name": "Technical SEO",
+      "score": 30,
+      "what_works": [
+        "HTTPS with correct lang=\"pl-PL\"",
+        "Viewport meta present and correct on all pages",
+        "Clean, keyword-bearing Polish slugs (except /aa/)",
+        "Production robots.txt allows full crawl with no accidental blocks",
+        "Favicon set complete (32px, 192px, apple-touch-icon)"
+      ],
+      "findings": [
+        {
+          "title": "Absolute URLs stripped from canonical, og:url and JSON-LD",
+          "severity": "Critical",
+          "description": "mirror.py:113 strip_domain() replaces 'https://cregaatine.pl' with '' across the entire HTML. Correct for href/src, destructive for fields that must be absolute. site/index.html now has <link rel=\"canonical\" href=\"/\">, <meta property=\"og:url\" content=\"/\">, and JSON-LD nodes with \"@id\":\"/\", \"url\":\"/\", plus a SearchAction urlTemplate of \"/?s={search_term_string}\". The relative @id values break the node graph linking WebPage, WebSite and BreadcrumbList.",
+          "recommendation": "Run fix_seo_urls.py to re-absolutize canonical, og:url and JSON-LD @id/url/urlTemplate/target while leaving navigation href/src relative."
+        },
+        {
+          "title": "robots.txt missing from the mirror",
+          "severity": "Critical",
+          "description": "Production serves 'User-agent: *\\nDisallow:\\n\\nSitemap: https://cregaatine.pl/sitemap_index.xml'. site/ contains no robots.txt, so /robots.txt would 404 after deploy.",
+          "recommendation": "Generate robots.txt pointing at the new static sitemap.xml."
+        },
+        {
+          "title": "No sitemap in the static mirror",
+          "severity": "Critical",
+          "description": "Production generates sitemap_index.xml plus post-, page-, category- and author-sitemaps through Yoast PHP. None exist as files, so all four 404 after deploy while robots.txt still advertises them.",
+          "recommendation": "Generate a static sitemap.xml excluding author archives, /category/uncategorized/ and the /dawka-wiedzy-naukowej/ duplicate, then resubmit in Search Console."
+        },
+        {
+          "title": "141 MB video served from origin",
+          "severity": "Critical",
+          "description": "wp-content/uploads/2021/09/Nowy-film.mp4 is 141 MB and is embedded on /suplement-roku-fiwe/, a 302-word page. It accounts for 92% of the 154 MB site payload.",
+          "recommendation": "Move to YouTube or Vimeo and embed an iframe, or re-encode to roughly 5 MB H.264 720p with preload=\"none\" and a poster image."
+        },
+        {
+          "title": "Byte-identical duplicate page",
+          "severity": "Medium",
+          "description": "/dawka-wiedzy-naukowej/ and /gaa-i-kreatyna-badania-naukowe/ are identical: 2166 words, 12 images, same title and description. The canonical already points to the gaa- version, so the signal is correct, but crawl budget and link equity are still split.",
+          "recommendation": "301 /dawka-wiedzy-naukowej/ to /gaa-i-kreatyna-badania-naukowe/."
+        },
+        {
+          "title": "Index bloat from zero-value archives",
+          "severity": "Medium",
+          "description": "Five of sixteen pages (31%) are archives with no search value: /author/marcincarno-med-pl/ and its page/2, /category/uncategorized/ and its page/2, /category/promo/. The site has one author and a category literally named 'uncategorized'.",
+          "recommendation": "Set noindex,follow on author archives and uncategorized; rename categories to topical Polish slugs such as /kategoria/badania-naukowe/."
+        },
+        {
+          "title": "Non-descriptive slug /aa/",
+          "severity": "Low",
+          "description": "The Ostojic podcast page sits at /aa/ — no keyword value, no meaning for users or crawlers.",
+          "recommendation": "Move to /podcast-sergej-ostojic/ with a 301 from /aa/."
+        }
+      ]
+    },
+    {
+      "name": "Content Quality",
+      "score": 45,
+      "what_works": [
+        "Three substantial pieces: 2166-word research page, two 1250-word articles, 1850-word product page",
+        "Genuine scientific authority available — prof. Sergej Ostojic, peer-reviewed ScienceDirect publication",
+        "Outbound links to real primary sources (ScienceDirect, appliedbioenergetics.org, wetestyoutrust.com)",
+        "Doping-free certification is a strong trust asset already on the site"
+      ],
+      "findings": [
+        {
+          "title": "Author identified by email address",
+          "severity": "High",
+          "description": "The author archive is /author/marcincarno-med-pl/ and its title reads 'marcin@carno-med.pl, Autor w serwisie…'. For a supplement site — YMYL territory, where Google assesses trust most strictly — an email address as an author name is the weakest possible E-E-A-T signal. There is no author bio page, no credentials, no photo.",
+          "recommendation": "Use a real full name, build an author page with credentials and photo, and add Person schema. Separately, attribute the research content to prof. Sergej Ostojic with Person schema, affiliation to Applied Bioenergetics, and links to his publications."
+        },
+        {
+          "title": "Four thin pages in the index",
+          "severity": "Medium",
+          "description": "/aa/ 156 words, /prof-dr-sergej-ostojic-…-czesc-1/ 167 words, /wyklad-pionier-…/ 168 words, /suplement-roku-fiwe/ 302 words. Each is an embedded video with almost no text.",
+          "recommendation": "Publish the Ostojic podcast and lecture transcripts — unique, high-authority, highly citable text that fixes thin content and AI citability in one move. Otherwise noindex."
+        },
+        {
+          "title": "Headline claim carries no visible citation",
+          "severity": "Medium",
+          "description": "'8,5x' appears in the title tag and an H2 but no study reference sits next to it in the visible copy. For a supplement efficacy claim this weakens both trust signals and AI citability.",
+          "recommendation": "Add an inline citation next to every hard number: '(Ostojic et al., Nutrition Research, 2021)' linked to the ScienceDirect DOI."
+        },
+        {
+          "title": "Eight pages with no meta description",
+          "severity": "Medium",
+          "description": "/aa/, /blog/, /suplement-roku-fiwe/, /karnozyna-w-miesniach-sportowca/, /wyklad-…/, /prof-dr-sergej-ostojic-…/ and both archive sets ship no description, so Google composes snippets from arbitrary page text.",
+          "recommendation": "Write 150-160 character Polish descriptions with the target phrase and a call to action."
+        }
+      ]
+    },
+    {
+      "name": "On-Page SEO",
+      "score": 48,
+      "what_works": [
+        "Homepage title and description are well written and keyword-targeted",
+        "Product and research pages have strong, specific Polish titles under 60 characters",
+        "Rich H2 structure on the homepage (27 headings) and research pages",
+        "Duplicate page correctly canonicalised to the preferred URL"
+      ],
+      "findings": [
+        {
+          "title": "Duplicate H1 on six pages, missing H1 on five",
+          "severity": "High",
+          "description": "cregaatine-naukowa-rewolucja-kreatyny, karnozyna-w-miesniach-sportowca, potrojna-suplementacja-…, aa, prof-dr-sergej-…, wyklad-… and suplement-roku-fiwe each render two H1 elements (header logo plus post title). All archive pages — /blog/, /category/*, /author/* — render none.",
+          "recommendation": "One H1 per page containing the target phrase. Demote the header logo to a div or p. Give archives a real H1."
+        },
+        {
+          "title": "Homepage H1 omits the primary phrase",
+          "severity": "Medium",
+          "description": "The H1 is 'Naukowa rewolucja kreatyny' while the title targets 'kreatyna + GAA'. The strongest on-page heading does not reinforce the ranking target.",
+          "recommendation": "Rewrite as 'CreGAAtine — kreatyna z GAA, 8,5x efektywniejsza od monohydratu'."
+        },
+        {
+          "title": "Six titles truncated in SERPs by a 42-character suffix",
+          "severity": "Medium",
+          "description": "Lengths: prof-dr-sergej-ostojic 116, wyklad-pionier 105, author page/2 92, suplement-roku-fiwe 87, aa 80, author 77. The shared suffix ' - CreGAAtine - Naukowa rewolucja kreatyny' consumes 42 characters on every page.",
+          "recommendation": "Shorten the suffix to ' | CreGAAtine' (13 characters), which brings all six titles under the 60-character display limit."
+        },
+        {
+          "title": "No contextual internal linking between articles",
+          "severity": "Medium",
+          "description": "Blog posts link to each other only through the homepage carousel and the /blog/ listing. No in-copy contextual links, so link equity never flows toward the money page.",
+          "recommendation": "Build hub-and-spoke: /cregaatine-naukowa-rewolucja-kreatyny/ as hub; research, carnosine, triple-supplementation, lecture and podcast as spokes, each linking up with a descriptive Polish anchor."
+        },
+        {
+          "title": "Store on a separate subdomain",
+          "severity": "Low",
+          "description": "Transactions run through sklep.cregaatine.pl and sklep.carno-med.pl. Google treats subdomains as separate entities, so authority built on cregaatine.pl transfers only partially.",
+          "recommendation": "Long term, move the store to cregaatine.pl/sklep/. Short term, publish consistent Organization schema with sameAs across both domains and link between them with descriptive anchors."
+        }
+      ]
+    },
+    {
+      "name": "Schema / Structured Data",
+      "score": 25,
+      "what_works": [
+        "Valid JSON-LD @graph present on every page",
+        "BreadcrumbList and WebSite SearchAction already implemented by Yoast"
+      ],
+      "findings": [
+        {
+          "title": "No Product schema on a supplement funnel",
+          "severity": "High",
+          "description": "The entire graph is WebPage + WebSite + BreadcrumbList. There is no Product, Offer, Organization, FAQPage or Article markup anywhere, ruling out rich results and weakening AI Overview citation odds.",
+          "recommendation": "Add Product with brand, image and Offer (priceCurrency PLN, url to sklep.cregaatine.pl) on the product page; Organization with sameAs to Facebook and Instagram sitewide; Article with author, datePublished and dateModified on blog posts. Do not add aggregateRating until real reviews are visible on the page."
+        },
+        {
+          "title": "Relative @id values break the schema graph",
+          "severity": "Critical",
+          "description": "@id values were flattened to '/', '/#website' and '/#breadcrumb' by strip_domain. Node references no longer resolve to unique absolute identifiers, so the WebPage/WebSite/BreadcrumbList links are unreliable.",
+          "recommendation": "Covered by fix_seo_urls.py; verify afterwards in Google Rich Results Test."
+        },
+        {
+          "title": "No FAQPage markup",
+          "severity": "Medium",
+          "description": "The product page answers real questions in prose but exposes no FAQ blocks, forfeiting FAQ rich results and the passage-level structure AI engines quote from.",
+          "recommendation": "Add a FAQ section with FAQPage schema covering dosing, water retention, difference from monohydrate, and saturation time."
+        }
+      ]
+    },
+    {
+      "name": "Performance (CWV)",
+      "score": 28,
+      "what_works": [
+        "LCP candidate (2021/10/retencja.png) already carries fetchpriority and eager loading",
+        "Native loading=\"lazy\" applied correctly to below-fold images by unlazy.py",
+        "One preload hint and a preconnect to fonts.gstatic.com present",
+        "Fonts declare font-display: swap"
+      ],
+      "findings": [
+        {
+          "title": "166 KB of inline CSS blocking render",
+          "severity": "High",
+          "description": "site/index.html has a 175 KB <head>, of which 166 KB is inline CSS — mostly Open Sans @font-face declarations duplicated across three user agents (TTF, WOFF and WOFF2, weights 300-800, italic and normal). The browser downloads one variant; the rest is pure render-blocking ballast.",
+          "recommendation": "Keep WOFF2 only, for the weights actually used (likely 400, 600, 700). Removes roughly 140 KB from the critical rendering path."
+        },
+        {
+          "title": "Eighteen JavaScript files including dead and oversized dependencies",
+          "severity": "High",
+          "description": "Loaded sitewide: jQuery + migrate, moment.js (171 KB, for one countdown), icp.library.js, mediaelement trio (~160 KB, for the 141 MB video), Divi scripts.min.js (268 KB), smoothscroll, fitvids, magnific-popup, common.js, swiper, two carousel bundles, complianz, and smush-lazy-load.min.js — which is dead code since unlazy.py promoted data-src to src.",
+          "recommendation": "Delete smush-lazy-load.min.js. Replace moment.js with Intl.DateTimeFormat or load it only where the countdown renders. Drop the mediaelement trio once the video moves to YouTube. Target six files."
+        },
+        {
+          "title": "Oversized fonts and icon sets",
+          "severity": "Medium",
+          "description": "Divi ships the full FontAwesome set: fa-solid-900.svg 896 KB, fa-brands-400.svg 730 KB, plus EOT and TTF fallbacks, and modules.svg 292 KB — for a handful of icons.",
+          "recommendation": "Replace with inline SVG for the icons actually used and stop loading the icon fonts."
+        }
+      ]
+    },
+    {
+      "name": "Images",
+      "score": 32,
+      "what_works": [
+        "Responsive srcset generated by WordPress and preserved by the mirror",
+        "Native lazy loading correctly applied below the fold",
+        "LCP image excluded from lazy loading and given fetchpriority"
+      ],
+      "findings": [
+        {
+          "title": "82 images with no alt attribute",
+          "severity": "High",
+          "description": "Homepage 45 of 54; gaa-i-kreatyna-badania-naukowe 11 of 12; dawka-wiedzy-naukowej 11 of 12; cregaatine-naukowa-rewolucja-kreatyny 5 of 6; karnozyna 4 of 5; potrojna-suplementacja 4 of 5; suplement-roku-fiwe 4 of 6. This forfeits Google Images traffic on phrases like 'kreatyna GAA wykres' and weakens content comprehension for AI crawlers. The LCP image itself has no alt.",
+          "recommendation": "Write descriptive Polish alt text — describe the image, do not stuff keywords: alt=\"Wykres porownania retencji wody: monohydrat kreatyny vs CreGAAtine\"."
+        },
+        {
+          "title": "113 legacy PNG/JPG files, one WebP",
+          "severity": "Medium",
+          "description": "Worst offenders: 2021/07/post-2.png 1.5 MB, Q10-Komplex-doping-free-certificate.jpg 531 KB, 2021/07/c4.png 345 KB, 2025/04/Cregaatine-2025-png.png 256 KB. Photographs and certificate scans are stored as PNG, which has no advantage without transparency.",
+          "recommendation": "Convert to WebP at quality 80 — a 60-80% reduction with no visible loss — and serve photographs as JPG/WebP rather than PNG."
+        }
+      ]
+    },
+    {
+      "name": "AI Search Readiness",
+      "score": 30,
+      "what_works": [
+        "Peer-reviewed source material and a named researcher — unusually strong raw citability for the niche",
+        "Outbound links to primary scientific sources",
+        "Clean semantic HTML with a deep H2 structure on key pages",
+        "Production robots.txt blocks no AI crawler"
+      ],
+      "findings": [
+        {
+          "title": "No og:image anywhere on the site",
+          "severity": "High",
+          "description": "The homepage declares twitter:card=\"summary_large_image\" but no og:image tag exists on any of the 16 pages. Every share on Facebook, LinkedIn, Slack and every AI-generated preview renders an empty box.",
+          "recommendation": "Add a 1200x630 og:image with og:image:width, og:image:height and twitter:image on all pages, then force-refresh the OG cache in Facebook Sharing Debugger."
+        },
+        {
+          "title": "Answers buried below marketing copy",
+          "severity": "Medium",
+          "description": "Pages open with promotional framing rather than a direct answer to the question they target. AI engines quote the opening of a section, so the quotable passage never appears where they look.",
+          "recommendation": "Open every page with a 2-3 sentence direct answer to its core question, then continue with the sales narrative."
+        },
+        {
+          "title": "No llms.txt",
+          "severity": "Low",
+          "description": "No /llms.txt in the mirror. Google ignores it, but ChatGPT and Perplexity read it.",
+          "recommendation": "Add a short llms.txt listing the canonical product page, the research page and the author/expert page."
+        }
+      ]
+    }
+  ],
+  "action_plan": {
+    "phases": [
+      {
+        "name": "Phase 0: Deploy Blockers",
+        "timeframe": "Before deploying the mirror",
+        "items": [
+          "Run fix_seo_urls.py — restores absolute canonical, og:url and JSON-LD @id/url, generates robots.txt and sitemap.xml",
+          "Verify canonical and JSON-LD on the homepage in Google Rich Results Test",
+          "Move Nowy-film.mp4 (141 MB) to YouTube or re-encode to roughly 5 MB with preload=\"none\""
+        ]
+      },
+      {
+        "name": "Phase 1: High-Impact Ranking Fixes",
+        "timeframe": "Week 1",
+        "items": [
+          "Add alt text to 82 images, starting with the 45 on the homepage and the LCP image",
+          "Add og:image 1200x630 plus width, height and twitter:image to all 16 pages",
+          "Add Product + Offer schema to the product page and Organization with sameAs sitewide",
+          "Replace the email-address author with a real name, bio page and Person schema; attribute research content to prof. Ostojic",
+          "Write meta descriptions for the eight pages missing one",
+          "Collapse duplicate H1s to one per page; add H1 to archive pages",
+          "Rewrite the homepage H1 to include 'kreatyna z GAA'"
+        ]
+      },
+      {
+        "name": "Phase 2: Performance and Core Web Vitals",
+        "timeframe": "Weeks 2-3",
+        "items": [
+          "Strip inline CSS to WOFF2-only @font-face for weights 400, 600 and 700 — about 140 KB off the critical path",
+          "Delete smush-lazy-load.min.js (dead since unlazy.py)",
+          "Replace moment.js with Intl.DateTimeFormat or scope it to the countdown page",
+          "Remove the mediaelement trio once the video is on YouTube",
+          "Convert the 113 PNG/JPG files to WebP at quality 80",
+          "Replace FontAwesome font files with inline SVG for the icons in use",
+          "Re-measure in PageSpeed Insights before and after"
+        ]
+      },
+      {
+        "name": "Phase 3: Structure and Content",
+        "timeframe": "Month 2",
+        "items": [
+          "301 /dawka-wiedzy-naukowej/ to /gaa-i-kreatyna-badania-naukowe/",
+          "Publish Ostojic podcast and lecture transcripts to fix the four thin pages",
+          "Move /aa/ to /podcast-sergej-ostojic/ with a 301",
+          "noindex,follow on author archives and /category/uncategorized/; rename categories to topical slugs",
+          "Shorten the title suffix to ' | CreGAAtine' across all pages",
+          "Build hub-and-spoke internal linking around the product page",
+          "Publish consistent Organization schema across cregaatine.pl and sklep.cregaatine.pl"
+        ]
+      },
+      {
+        "name": "Phase 4: AI Search Visibility",
+        "timeframe": "Ongoing, in parallel",
+        "items": [
+          "Add FAQ blocks with FAQPage schema on dosing, water retention, difference from monohydrate and saturation time",
+          "Open every page with a 2-3 sentence direct answer before the marketing copy",
+          "Add inline study citations next to every hard number, starting with the '8,5x' claim",
+          "Publish llms.txt listing the canonical product, research and expert pages",
+          "Submit sitemap.xml in Search Console and monitor indexation weekly"
+        ]
+      }
+    ]
+  },
+  "artifacts": {
+    "findings_dir": "findings/",
+    "screenshots_dir": "screenshots/"
+  }
+}

@@ -1,0 +1,48 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Dla kogo</title>
+<link rel="stylesheet" href="../_assets/fonts/fonts.css">
+<link rel="stylesheet" href="../_assets/base.css">
+<style>
+.canvas { background: var(--paper); color: var(--ink); }
+.tri { position:absolute; right:92px; top:92px; width:80px; height:42px; }
+.head { top:120px; }
+.head .display { font-size:112px; color:var(--ink); }
+.rows { top:330px; }
+.row b { color:var(--ink); }
+.foot { bottom:92px; }
+.foot .meta { color:rgba(14,14,14,0.45); }
+
+.rows { position:absolute; left:92px; right:92px; }
+.row { padding:22px 0; border-bottom:1.5px solid rgba(14,14,14,0.16); }
+.row.dark { border-bottom-color:rgba(255,255,255,0.14); }
+.row b { font-family:'Saira Condensed',sans-serif; font-weight:800; text-transform:uppercase;
+         font-size:42px; line-height:1; display:block; }
+.row span { display:block; margin-top:8px; font-size:25px; color:rgba(14,14,14,0.66); }
+.row.dark span { color:rgba(255,255,255,0.68); }
+.bullet { display:flex; gap:22px; align-items:flex-start; margin-bottom:30px; }
+.bullet i { flex:none; width:26px; height:14px; margin-top:12px; background:var(--ink);
+            clip-path:polygon(0 0, 100% 0, 50% 100%); }
+.bullet i.y { background:var(--yellow); }
+.bullet p { font-size:29px; line-height:1.4; color:rgba(14,14,14,0.78); }
+.bullet p.on-dark { color:rgba(255,255,255,0.8); }
+</style>
+
+<div class="canvas">
+  <div class="tex tex-rules on-paper"></div>
+  <div class="tex-fade-paper"></div>
+  <div class="frame"></div>
+  <div class="wedge tri"></div>
+  <div class="stack head">
+    <div class="eyebrow on-yellow">Komu to służy</div>
+    <div class="display" style="margin-top:24px">Dla kogo</div>
+  </div>
+  <div class="rows">
+    <div class="row"><b>Siłownia</b><span>Więcej kreatyny w mięśniu to więcej powtórzeń w seriach na sile.</span></div>
+    <div class="row"><b>Sporty walki i wagowe</b><span>Bez retencji wody — waga rano taka, jakiej się spodziewasz.</span></div>
+    <div class="row"><b>Wytrzymałość</b><span>Lepsza bioenergetyka komórki przy powtarzanych wysiłkach.</span></div>
+    <div class="row"><b>Praca umysłowa</b><span>Kreatyna zasila mózg: pamięć, uwaga, decyzje pod zmęczeniem.</span></div>
+    <div class="row"><b>Po czterdziestce</b><span>Deficyt kreatyny rośnie z wiekiem, niezależnie od płci.</span></div>
+  </div>
+  <div class="stack foot"><div class="meta">cregaatine.pl</div></div>
+</div>

@@ -1,0 +1,15 @@
+# 301: duplikat treści -> wersja kanoniczna
+Redirect 301 /dawka-wiedzy-naukowej/ https://cregaatine.pl/gaa-i-kreatyna-badania-naukowe/
+
+# Kompresja i cache dla statycznych assetów
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css application/javascript application/json image/svg+xml
+</IfModule>
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType image/webp "access plus 1 year"
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+</IfModule>

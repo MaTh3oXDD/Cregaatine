@@ -1,0 +1,37 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Post 2 — Porównanie</title>
+<link rel="stylesheet" href="../_assets/fonts/fonts.css">
+<link rel="stylesheet" href="../_assets/base.css">
+<style>
+.canvas { background: var(--yellow); }
+.dark { position:absolute; inset:0; background:var(--ink);
+        clip-path: polygon(0 0, 1080px 0, 1080px 430px, 0 600px); }
+.top { top:96px; }
+.top .display { font-size:104px; color:#fff; }
+.bot { bottom:92px; }
+.bot .display { font-size:104px; color:var(--ink); }
+.bars { margin:44px 0 34px; }
+.brow { display:flex; align-items:center; gap:22px; margin-bottom:16px; }
+.brow small { font-size:19px; letter-spacing:0.12em; text-transform:uppercase;
+              color:rgba(14,14,14,0.78); width:230px; flex:none; }
+.bar { height:12px; background:rgba(14,14,14,0.32); }
+.bar.hi { background:var(--ink); }
+.foot-meta { font-size:22px; color:rgba(14,14,14,0.7); }
+</style>
+
+<div class="canvas">
+  <div class="dark"></div>
+  <div class="stack top">
+    <div class="eyebrow">Kreatyna w mięśniach</div>
+    <div class="display" style="margin-top:24px">Kreatyna<br>jest dobra.</div>
+  </div>
+  <div class="stack bot">
+    <div class="display oblique">CreGAAtine<br>jest lepsza.</div>
+    <div class="bars">
+      <div class="brow"><small>Monohydrat 2,0%</small><div class="bar" style="width:70px"></div></div>
+      <div class="brow"><small>CreGAAtine 16,9%</small><div class="bar hi" style="width:590px"></div></div>
+    </div>
+    <div class="foot-meta">Opatentowana mieszanka kreatyny i jej prekursora GAA.</div>
+  </div>
+</div>

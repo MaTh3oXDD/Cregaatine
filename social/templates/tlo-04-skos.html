@@ -1,0 +1,18 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Tło 04 — Skos</title>
+<link rel="stylesheet" href="../_assets/fonts/fonts.css">
+<link rel="stylesheet" href="../_assets/base.css">
+<style>
+.canvas { background: var(--yellow); }
+.dark { position:absolute; inset:0; background:var(--ink);
+        clip-path: polygon(0 0, 1080px 0, 1080px 300px, 0 760px); }
+.seam { position:absolute; inset:0; border:0;
+        background:linear-gradient(163.6deg, transparent 0 calc(50% - 1px), rgba(249,223,28,0.9) calc(50% - 1px) calc(50% + 1px), transparent calc(50% + 1px)); opacity:0; }
+.mark { position:absolute; left:92px; bottom:92px; width:88px; height:46px; }
+</style>
+
+<div class="canvas">
+  <div class="dark"></div>
+  <div class="wedge ink mark"></div>
+</div>

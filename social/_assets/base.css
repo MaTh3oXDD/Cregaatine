@@ -1,0 +1,152 @@
+/* CreGAAtine — system wizualny social media.
+   Kolory pochodzą z serwisu cregaatine.pl (żółty #F9DF1C, grafit #282828).
+   Sygnatura: odwrócony trójkąt (klin) z logotypu — wraca na każdym formacie
+   jako element konstrukcyjny, nie ozdoba. */
+
+:root {
+  --yellow: #F9DF1C;
+  --yellow-deep: #E2C500;
+  --ink: #0E0E0E;
+  --graphite: #282828;
+  --paper: #F2F1EC;
+  --mist: #8C8C86;
+
+  --pad: 92px;          /* margines bezpieczny — nic ważnego poza nim */
+  --hair: 1.5px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  width: 1080px; height: 1080px;
+  background: #000;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: geometricPrecision;
+}
+
+.canvas {
+  position: relative;
+  width: 1080px; height: 1080px;
+  overflow: hidden;
+  background: var(--ink);
+  color: #fff;
+}
+
+/* ---- Typografia ---------------------------------------------------- */
+/* Display: Saira Condensed — wąski grotesk, ten sam charakter co logotyp.
+   Pochylenie -7° powtarza kursywę wordmarku CreGAATINE. */
+.display {
+  font-family: 'Saira Condensed', 'Bahnschrift', sans-serif;
+  font-weight: 800;
+  text-transform: uppercase;
+  line-height: 0.94;
+  letter-spacing: -0.005em;
+}
+.oblique { transform: skewX(-7deg); transform-origin: left bottom; }
+
+.eyebrow {
+  font-size: 20px; font-weight: 600;
+  letter-spacing: 0.24em; text-transform: uppercase;
+  color: var(--yellow);
+}
+.eyebrow.on-yellow { color: var(--ink); }
+.eyebrow.muted { color: var(--mist); }
+
+.body-copy {
+  font-size: 30px; font-weight: 400; line-height: 1.42;
+  color: rgba(255,255,255,0.80); max-width: 720px;
+}
+.body-copy.on-light { color: rgba(14,14,14,0.74); }
+
+.meta {
+  font-size: 19px; font-weight: 500;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--mist);
+}
+
+/* ---- Klin: sygnatura ------------------------------------------------ */
+/* Proporcja z logo: podstawa 400 / wysokość 210 → kąt zboczy 46,4°. */
+.wedge { position: absolute; background: var(--yellow); clip-path: polygon(0 0, 100% 0, 50% 100%); }
+.wedge.ink { background: var(--ink); }
+
+/* Cienka linia sekcyjna zakończona mikro-klinem */
+.rule { position: relative; height: var(--hair); background: rgba(255,255,255,0.22); }
+.rule.on-light { background: rgba(14,14,14,0.22); }
+.rule::after {
+  content: ''; position: absolute; right: 0; top: -7px;
+  width: 30px; height: 16px; background: var(--yellow);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+}
+
+/* ---- Siatka mikro (tekstura naukowa) -------------------------------- */
+.grid-bg {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.075) var(--hair), transparent var(--hair)),
+    linear-gradient(90deg, rgba(255,255,255,0.075) var(--hair), transparent var(--hair));
+  background-size: 60px 60px;
+}
+.vignette {
+  position: absolute; inset: 0;
+  background: radial-gradient(120% 90% at 50% 30%, transparent 30%, rgba(0,0,0,0.72) 100%);
+}
+
+.frame { position: absolute; inset: 56px; border: var(--hair) solid rgba(14,14,14,0.28); }
+.frame.on-dark { border-color: rgba(255,255,255,0.20); }
+
+.stack { position: absolute; left: var(--pad); right: var(--pad); }
+
+.logo { height: 54px; display: block; }
+.logo.invert { filter: none; }
+
+/* ---- Tekstury tła --------------------------------------------------
+   Żaden post nie stoi na płaskim polu. Cztery struktury, wszystkie
+   wyprowadzone z marki, wszystkie poniżej 8% kontrastu — mają dawać
+   głębię, nie walczyć z typografią.
+
+   .tex-lattice — krata pod kątem 46,4°, czyli kąt zboczy klina z logo
+   .tex-grid    — siatka pomiarowa 60 px (dane, badania)
+   .tex-rings   — koncentryczne pierścienie: kreatyna rozchodząca się do komórki
+   .tex-rules   — poziome linie, jak na kartce z notatkami z laboratorium
+   ------------------------------------------------------------------ */
+.tex { position: absolute; inset: 0; pointer-events: none; }
+
+.tex-lattice {
+  background-image:
+    repeating-linear-gradient(46.4deg,  var(--tex) 0 1.5px, transparent 1.5px 54px),
+    repeating-linear-gradient(-46.4deg, var(--tex) 0 1.5px, transparent 1.5px 54px);
+}
+.tex-grid {
+  background-image:
+    repeating-linear-gradient(0deg,  var(--tex) 0 1.5px, transparent 1.5px 60px),
+    repeating-linear-gradient(90deg, var(--tex) 0 1.5px, transparent 1.5px 60px);
+}
+.tex-rings {
+  background-image:
+    repeating-radial-gradient(circle at var(--tex-x, 50%) var(--tex-y, 118%),
+      transparent 0 76px, var(--tex) 76px 77.5px);
+}
+.tex-rules {
+  background-image:
+    repeating-linear-gradient(0deg, var(--tex) 0 1.5px, transparent 1.5px 54px);
+}
+
+/* Natężenie zależne od podłoża */
+.on-ink   { --tex: rgba(255,255,255,0.075); }
+.on-paper { --tex: rgba(14,14,14,0.07); }
+.on-gold  { --tex: rgba(14,14,14,0.09); }
+
+/* Wygaszenie tekstury przy krawędziach — środek kadru zostaje czysty */
+.tex-fade-ink {
+  position:absolute; inset:0;
+  background: radial-gradient(78% 62% at 50% 46%, rgba(14,14,14,0.72) 0%, rgba(14,14,14,0.34) 58%, transparent 100%);
+}
+.tex-fade-gold {
+  position:absolute; inset:0;
+  background: radial-gradient(80% 64% at 50% 48%, rgba(249,223,28,0.7) 0%, rgba(249,223,28,0.3) 60%, transparent 100%);
+}
+.tex-fade-paper {
+  position:absolute; inset:0;
+  background: radial-gradient(80% 64% at 50% 48%, rgba(242,241,236,0.75) 0%, rgba(242,241,236,0.34) 60%, transparent 100%);
+}

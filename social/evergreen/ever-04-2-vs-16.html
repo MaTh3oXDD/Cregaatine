@@ -1,0 +1,35 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>2% vs 16,9%</title>
+<link rel="stylesheet" href="../_assets/fonts/fonts.css">
+<link rel="stylesheet" href="../_assets/base.css">
+<style>
+.canvas { background: var(--yellow); }
+.dark { position:absolute; inset:0; background:var(--ink);
+        clip-path: polygon(0 0, 1080px 0, 1080px 430px, 0 600px); }
+.top { top:96px; }
+.top .num { font-size:150px; color:#fff; }
+.top .lab { font-size:27px; color:rgba(255,255,255,0.7); margin-top:14px; }
+.bot { bottom:92px; }
+.bot .num { font-size:170px; color:var(--ink); }
+.bot .lab { font-size:29px; color:rgba(14,14,14,0.78); margin-top:16px; max-width:820px; }
+.bot .meta2 { font-size:22px; color:rgba(14,14,14,0.6); margin-top:30px; }
+</style>
+
+<div class="canvas">
+  <div class="tex tex-lattice on-gold"></div>
+  <div class="tex-fade-gold"></div>
+  <div class="dark"></div>
+  <div class="tex tex-grid on-ink" style="clip-path: polygon(0 0, 1080px 0, 1080px 430px, 0 600px)"></div>
+  <div class="stack top">
+    <div class="eyebrow">Monohydrat sam</div>
+    <div class="display num" style="margin-top:16px">2,0%</div>
+    <div class="lab">Tyle kreatyny przybywa w mięśniu. Jedna droga wejścia do komórki.</div>
+  </div>
+  <div class="stack bot">
+    <div class="eyebrow on-yellow">CreGAAtine</div>
+    <div class="display oblique num" style="margin-top:16px">16,9%</div>
+    <div class="lab">Osiem i pół raza więcej z tej samej porcji, bo GAA otwiera komórce cztery dodatkowe drogi dostarczania.</div>
+    <div class="meta2">Nie mamy nic do monohydratu. Po prostu zmierzyliśmy, ile z niego dociera.</div>
+  </div>
+</div>

@@ -1,0 +1,49 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Nie dla każdego</title>
+<link rel="stylesheet" href="../_assets/fonts/fonts.css">
+<link rel="stylesheet" href="../_assets/base.css">
+<style>
+.canvas { background: var(--yellow); color: var(--ink); }
+.notch { top:0; right:0; width:300px; height:158px; }
+.head { top:230px; }
+.head .display { font-size:124px; color:var(--ink); }
+.list { position:absolute; left:92px; right:150px; top:520px; }
+.foot { bottom:92px; }
+.foot .meta { color:rgba(14,14,14,0.55); margin-top:24px; }
+
+.rows { position:absolute; left:92px; right:92px; }
+.row { padding:22px 0; border-bottom:1.5px solid rgba(14,14,14,0.16); }
+.row.dark { border-bottom-color:rgba(255,255,255,0.14); }
+.row b { font-family:'Saira Condensed',sans-serif; font-weight:800; text-transform:uppercase;
+         font-size:42px; line-height:1; display:block; }
+.row span { display:block; margin-top:8px; font-size:25px; color:rgba(14,14,14,0.66); }
+.row.dark span { color:rgba(255,255,255,0.68); }
+.bullet { display:flex; gap:22px; align-items:flex-start; margin-bottom:30px; }
+.bullet i { flex:none; width:26px; height:14px; margin-top:12px; background:var(--ink);
+            clip-path:polygon(0 0, 100% 0, 50% 100%); }
+.bullet i.y { background:var(--yellow); }
+.bullet p { font-size:29px; line-height:1.4; color:rgba(14,14,14,0.78); }
+.bullet p.on-dark { color:rgba(255,255,255,0.8); }
+</style>
+
+<div class="canvas">
+  <div class="tex tex-lattice on-gold"></div>
+  <div class="tex-fade-gold"></div>
+  <div class="wedge ink notch"></div>
+  <div class="frame"></div>
+  <div class="stack head">
+    <div class="eyebrow on-yellow">Uczciwie</div>
+    <div class="display" style="margin-top:24px">Nie dla<br>każdego</div>
+  </div>
+  <div class="list">
+    <div class="bullet"><i></i><p>Kobiety w ciąży i karmiące — najpierw rozmowa z lekarzem.</p></div>
+    <div class="bullet"><i></i><p>Dzieci — produkt nie jest dla nich przeznaczony.</p></div>
+    <div class="bullet"><i></i><p>Uczulenie na którykolwiek ze składników.</p></div>
+    <div class="bullet"><i></i><p>Nikt nie zastąpi suplementem diety i snu. To dodatek, nie fundament.</p></div>
+  </div>
+  <div class="stack foot">
+    <div class="rule on-light"></div>
+    <div class="meta">Pełny skład i ostrzeżenia: cregaatine.pl</div>
+  </div>
+</div>

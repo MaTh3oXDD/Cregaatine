@@ -1,0 +1,39 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Saszetka zamiast wiaderka</title>
+<link rel="stylesheet" href="../_assets/fonts/fonts.css">
+<link rel="stylesheet" href="../_assets/base.css">
+<style>
+.canvas { background: var(--yellow); }
+.dark { position:absolute; inset:0; background:var(--ink);
+        clip-path: polygon(0 0, 1080px 0, 1080px 360px, 0 500px); }
+.top { top:96px; }
+.top .display { font-size:96px; color:#fff; }
+.bot { bottom:92px; }
+.bot .display { font-size:96px; color:var(--ink); }
+.bot .body-copy { margin-top:28px; }
+.specs { display:flex; gap:56px; margin-top:36px; }
+.spec b { display:block; font-family:'Saira Condensed',sans-serif; font-weight:800; font-size:40px;
+          color:var(--ink); line-height:1; }
+.spec span { font-size:18px; letter-spacing:0.12em; text-transform:uppercase; color:rgba(14,14,14,0.62); }
+</style>
+
+<div class="canvas">
+  <div class="tex tex-lattice on-gold"></div>
+  <div class="tex-fade-gold"></div>
+  <div class="dark"></div>
+  <div class="tex tex-grid on-ink" style="clip-path: polygon(0 0, 1080px 0, 1080px 360px, 0 500px)"></div>
+  <div class="stack top">
+    <div class="eyebrow">Opakowanie</div>
+    <div class="display" style="margin-top:24px">Miarka<br>to loteria.</div>
+  </div>
+  <div class="stack bot">
+    <div class="display oblique">Saszetka<br>nie kłamie.</div>
+    <div class="body-copy on-light">Kreatyna luzem traci moc, a każda miarka jest inna. Tu porcja jest odmierzona i zamknięta w trójwarstwowej folii klasy farmaceutycznej.</div>
+    <div class="specs">
+      <div class="spec"><b>60</b><span>saszetek</span></div>
+      <div class="spec"><b>2&times;2000 mg</b><span>porcja dzienna</span></div>
+      <div class="spec"><b>3</b><span>warstwy folii</span></div>
+    </div>
+  </div>
+</div>
