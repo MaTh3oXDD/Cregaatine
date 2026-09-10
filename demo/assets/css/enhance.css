@@ -4766,3 +4766,89 @@ body.single-post .et_post_meta_wrapper.award-masthead {
     min-width: 5.5rem;
   }
 }
+
+/* ================================================================
+   HERO v2 — weightlifting photo, wider stat panel, no overlapping lines
+
+   Background photo: "Man Lifting a Barbell" by Victor Freitas, Pexels
+   https://www.pexels.com/photo/man-lifting-a-barbell-116078/
+   Pexels License (free for commercial use, no attribution required):
+   https://www.pexels.com/license/
+   Local copies: /assets/img/hero-weightlifting.webp (1920w),
+                 /assets/img/hero-weightlifting-960.webp (phones)
+
+   The Divi inline style pointed at home-section3-bgok.jpg, which is not
+   in the mirror, so the hero rendered on flat black.
+   ================================================================ */
+body.home #page-container .et_pb_section.et_pb_section_0 {
+  background-image: url(/Cregaatine/demo/assets/img/hero-weightlifting.webp) !important;
+  background-size: cover !important;
+  background-position: 62% center !important;
+  background-repeat: no-repeat !important;
+}
+@media (max-width: 767px) {
+  body.home #page-container .et_pb_section.et_pb_section_0 {
+    background-image: url(/Cregaatine/demo/assets/img/hero-weightlifting-960.webp) !important;
+    background-position: 58% center !important;
+  }
+}
+
+/* Divi pins the module to 1200px / 400px; let the grid own the width.
+   Divi also caps .header-content at 800px, which squeezed the headline
+   into a 440px column. */
+body.home .et_pb_section_0 .et_pb_fullwidth_header_0.et_pb_fullwidth_header {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+body.home .et_pb_fullwidth_header_0.et_pb_fullwidth_header .header-content {
+  max-width: 1280px !important;
+  width: 100% !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  box-sizing: border-box;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+}
+
+/* Headline: Divi's header line-height (0.7em-0.9em) leaked in and the
+   lines collided. Fixed leading, left-aligned on desktop. */
+body.home .et_pb_fullwidth_header_0 .header-content h1.et_pb_module_header {
+  line-height: 1.1 !important;
+  text-align: left !important;
+  max-width: 16ch;
+  padding-bottom: 0.05em;
+}
+
+/* Stat panel: wider than tall, label on one line. */
+body.home .et_pb_fullwidth_header_0 .hero-stat {
+  width: clamp(280px, 30vw, 400px);
+  aspect-ratio: 5 / 4;
+  padding: 1.75rem 2rem;
+  box-sizing: border-box;
+}
+body.home .et_pb_fullwidth_header_0 .hero-stat-num {
+  font-size: clamp(3.6rem, 7vw, 5.5rem);
+}
+body.home .et_pb_fullwidth_header_0 .hero-stat-label {
+  max-width: none;
+  white-space: nowrap;
+  font-size: 1.05rem;
+}
+
+@media (max-width: 980px) {
+  body.home .et_pb_fullwidth_header_0 .header-content h1.et_pb_module_header {
+    text-align: center !important;
+    max-width: 100%;
+  }
+  body.home .et_pb_fullwidth_header_0 .hero-stat {
+    width: min(86%, 340px);
+  }
+}
+@media (max-width: 767px) {
+  body.home .et_pb_fullwidth_header_0 .header-content h1.et_pb_module_header {
+    line-height: 1.12 !important;
+  }
+  body.home .et_pb_fullwidth_header_0 .hero-stat {
+    width: min(90%, 300px);
+    padding: 1.25rem 1.5rem;
+  }
+}
