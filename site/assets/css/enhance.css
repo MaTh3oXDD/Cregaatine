@@ -4774,22 +4774,35 @@ body.single-post .et_post_meta_wrapper.award-masthead {
    https://www.pexels.com/photo/man-lifting-a-barbell-116078/
    Pexels License (free for commercial use, no attribution required):
    https://www.pexels.com/license/
-   Local copies: /assets/img/hero-weightlifting.webp (1920w),
-                 /assets/img/hero-weightlifting-960.webp (phones)
+   Local copies: /assets/img/hero-weightlifting-flip.webp (1920w),
+                 /assets/img/hero-weightlifting-flip-960.webp (phones)
+   Both are mirrored horizontally so the lifter (40% across in the
+   original) lands at ~60%, in the gap between the headline and the
+   8,5x panel, without zooming in. Unmirrored originals:
+   /assets/img/hero-weightlifting.webp, hero-weightlifting-960.webp
 
    The Divi inline style pointed at home-section3-bgok.jpg, which is not
    in the mirror, so the hero rendered on flat black.
    ================================================================ */
 body.home #page-container .et_pb_section.et_pb_section_0 {
-  background-image: url(/assets/img/hero-weightlifting.webp) !important;
+  background-image: url(/assets/img/hero-weightlifting-flip.webp) !important;
   background-size: cover !important;
-  background-position: 62% center !important;
+  background-position: center center !important;
   background-repeat: no-repeat !important;
+}
+/* From ~1440px up the photo is exactly as wide as the screen, so the
+   lifter drifts under the panel. A 10% overscan pinned right pulls him
+   back into the gap. */
+@media (min-width: 1440px) {
+  body.home #page-container .et_pb_section.et_pb_section_0 {
+    background-size: 110% auto !important;
+    background-position: right center !important;
+  }
 }
 @media (max-width: 767px) {
   body.home #page-container .et_pb_section.et_pb_section_0 {
-    background-image: url(/assets/img/hero-weightlifting-960.webp) !important;
-    background-position: 58% center !important;
+    background-image: url(/assets/img/hero-weightlifting-flip-960.webp) !important;
+    background-position: 60% center !important;
   }
 }
 
