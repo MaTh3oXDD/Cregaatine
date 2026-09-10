@@ -1,0 +1,133 @@
+/* Most między cregaatine.pl a sklepem Carnomed.
+   ---------------------------------------------------------------------------
+   CreGAAtine sprzedaje Carnomed, na innej domenie i w innym motywie: czarno-
+   żółta strona produktu prowadzi do biało-zielonego sklepu. Kliknięcie „kup"
+   wygląda więc jak zejście z marki, a to najgorszy moment na wątpliwość, kto
+   właściwie przyjmuje pieniądze.
+
+   Warstwa robi trzy rzeczy i nic poza tym:
+   1. mówi wprost, kto prowadzi sklep i pod jakim adresem,
+   2. pokazuje znak Carnomed — po kliknięciu ten sam znak stoi w nagłówku
+      sklepu, więc jest do czego przyłożyć oko,
+   3. trzyma kształt, który strona już ma: żółte wcięcie u góry płyty to ta
+      sama forma, co odwrócony trójkąt logotypu w nagłówku.
+
+   Płyta jest czarna także na czarnych sekcjach — celowo. Ma być tym samym
+   przedmiotem co po drugiej stronie, gdzie tło jest białe; rozpoznawalność
+   niesie kształt i żółta krawędź, nie kolor tła pod spodem.
+
+   Bliźniak po stronie sklepu siedzi w Carnomed/sklep/custom.src.css
+   (sekcja „strony CreGAAtine"). Zmieniając tekst tutaj, zmień go i tam. */
+
+:root {
+  --cm-bridge-zolty: #f9df1c;
+  --cm-bridge-czern: #131313;
+}
+
+/* Specyficzność: motyw ustawia kolor akapitów regułą `body.single-post
+   .entry-content p` (0,2,2), a wpisy blogowe to właśnie ten kontekst.
+   Płyta jest znakowana atrybutem `data-cm-bridge`, więc dopisanie go do
+   selektora podnosi wagę do (0,3,x) i wygrywa bez `!important`. */
+.cm-bridge[data-cm-bridge] {
+  display: block;
+  width: min(560px, 100%);
+  margin: 24px auto 0;
+  padding: 26px 26px 24px;
+  background: var(--cm-bridge-czern);
+  border-top: 5px solid var(--cm-bridge-zolty);
+  color: #fff;
+  text-align: left;
+
+  /* Wcięcie u góry, wyśrodkowane: przecina żółtą krawędź, więc trójkąt
+     widać także wtedy, gdy płyta stoi na czarnej sekcji. */
+  clip-path: polygon(
+    0 0,
+    calc(50% - 27px) 0,
+    50% 23px,
+    calc(50% + 27px) 0,
+    100% 0,
+    100% 100%,
+    0 100%
+  );
+}
+
+.cm-bridge[data-cm-bridge] .cm-bridge__mark {
+  display: block;
+  width: 148px;
+  height: auto;
+  margin-bottom: 16px;
+}
+
+.cm-bridge[data-cm-bridge] .cm-bridge__text {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.55;
+  color: #f0f0f0;
+}
+
+/* Adres jest jedynym kolorowym elementem płyty. Żółty niesie tu robotę:
+   to ten sam kolor, który klient ma przed oczami na całej stronie, więc
+   przykleja obcą domenę do znanej marki. */
+.cm-bridge[data-cm-bridge] .cm-bridge__host {
+  display: block;
+  margin-top: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--cm-bridge-zolty);
+}
+
+/* Wariant przy przyciskach w hero: tam płyta byłaby cięższa od samego CTA,
+   więc zostaje jedna linia bez tła. */
+.cm-bridge[data-cm-bridge].cm-bridge--inline {
+  width: min(600px, 100%);
+  margin: 16px auto 0;
+  padding: 0;
+  background: none;
+  border-top: 0;
+  clip-path: none;
+  font-size: 13px;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.72);
+  text-align: center;
+}
+
+.cm-bridge[data-cm-bridge].cm-bridge--inline .cm-bridge__host {
+  display: inline;
+  margin: 0;
+  font-size: 13px;
+}
+
+/* Ta sama linia wraca w sekcjach na bieli — tam musi zejść na ciemny tekst. */
+.et_pb_bg_layout_light .cm-bridge[data-cm-bridge].cm-bridge--inline {
+  color: #4a4a4a;
+}
+
+.et_pb_bg_layout_light .cm-bridge[data-cm-bridge].cm-bridge--inline .cm-bridge__host {
+  color: #111;
+}
+
+@media (max-width: 620px) {
+  .cm-bridge[data-cm-bridge] {
+    padding: 24px 20px 22px;
+  }
+
+  .cm-bridge[data-cm-bridge] .cm-bridge__text,
+  .cm-bridge[data-cm-bridge] .cm-bridge__host {
+    font-size: 14px;
+  }
+}
+
+/* Pozycja „Sklep" w menu prowadzi na inną domenę. Kropka w kolorze marki
+   przed etykietą jest jedyną różnicą wobec pozostałych pozycji — tyle, żeby
+   dało się to zauważyć, i nie tyle, żeby wyglądało na ostrzeżenie. */
+#top-menu a[href*="sklep.carno-med.pl"]::before {
+  content: "";
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  margin-right: 7px;
+  border-radius: 50%;
+  background: var(--cm-bridge-zolty);
+  vertical-align: 2px;
+}

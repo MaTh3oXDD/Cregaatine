@@ -1,15 +1,17 @@
-"""Copy site/ to _site/ and prefix root-relative URLs for GitHub Pages project hosting.
+"""Copy site/ to demo/ and prefix root-relative URLs for GitHub Pages (main branch, root).
 
-Usage: python build_pages.py /Cregaatine
+Run before every push: python build_pages.py
+Published at https://math3oxdd.github.io/Cregaatine/ (root index.html redirects to demo/).
 """
 import re
 import shutil
 import sys
 from pathlib import Path
 
-SRC = Path(__file__).parent / "site"
-OUT = Path(__file__).parent / "_site"
-BASE = (sys.argv[1] if len(sys.argv) > 1 else "/Cregaatine").rstrip("/")
+ROOT = Path(__file__).parent
+SRC = ROOT / "site"
+OUT = ROOT / "demo"
+BASE = (sys.argv[1] if len(sys.argv) > 1 else "/Cregaatine/demo").rstrip("/")
 
 ATTR_RE = re.compile(r"""(\b(?:href|src|action|poster|content|data-[\w-]+)\s*=\s*["'])/(?!/)""", re.I)
 SRCSET_RE = re.compile(r"""(\bsrcset\s*=\s*)(["'])(.*?)\2""", re.I | re.S)
@@ -42,7 +44,13 @@ def main():
         if new != text:
             path.write_text(new, encoding="utf-8", errors="surrogateescape")
             count += 1
-    (OUT / ".nojekyll").touch()
+    (ROOT / ".nojekyll").touch()
+    (ROOT / "index.html").write_text(
+        f'<!doctype html><meta charset="utf-8"><title>CreGAAtine</title>'
+        f'<meta http-equiv="refresh" content="0; url={BASE}/">'
+        f'<a href="{BASE}/">CreGAAtine</a>\n',
+        encoding="utf-8",
+    )
     print(f"Rewrote {count} files with base {BASE}")
 
 
