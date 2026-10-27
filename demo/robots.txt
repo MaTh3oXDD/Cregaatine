@@ -1,4 +1,4 @@
 User-agent: *
 Disallow:
 
-Sitemap: https://cregaatine.pl/sitemap.xml
+Sitemap: https://math3oxdd.github.io/Cregaatine/demo/sitemap.xml

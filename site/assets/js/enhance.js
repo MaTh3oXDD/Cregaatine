@@ -158,6 +158,61 @@
     setTimeout(parkAutoplay, 1200);
   }
 
+  // Every link to carno-med.pl leaves the CreGAAtine site for the
+  // Carnomed shop, a different domain with a different look. Before the
+  // jump, a dialog says where the visitor is going; the plate under the
+  // buttons (bridge.css) says the same thing in passing. Modifier clicks
+  // (new tab, new window) go straight through.
+  var shopDialog = null;
+
+  var buildShopDialog = function () {
+    var d = document.createElement("dialog");
+    d.className = "cm-leave";
+    d.setAttribute("aria-labelledby", "cm-leave-title");
+    d.innerHTML =
+      '<img class="cm-leave__mark" src="' + markSrc + '" alt="Carnomed" width="148" height="17">' +
+      '<h2 class="cm-leave__title" id="cm-leave-title">Przechodzisz do sklepu Carnomed</h2>' +
+      '<p class="cm-leave__text">Za chwilę zostaniesz przeniesiony do naszego zewnętrznego sklepu. ' +
+      'Zamówienie przyjmuje Carnomed sp. z o.o., wyłączny dystrybutor CreGAAtine w Polsce.</p>' +
+      '<p class="cm-leave__host"></p>' +
+      '<div class="cm-leave__actions">' +
+      '<a class="cm-leave__go" href="#">Przejdź do sklepu</a>' +
+      '<button type="button" class="cm-leave__stay">Zostań na stronie</button>' +
+      '</div>';
+    document.body.appendChild(d);
+
+    d.querySelector(".cm-leave__stay").addEventListener("click", function () { d.close(); });
+    // a click on the backdrop lands on the dialog element itself
+    d.addEventListener("click", function (e) { if (e.target === d) d.close(); });
+    return d;
+  };
+
+  // The script's own URL carries the GitHub Pages prefix (/Cregaatine/demo)
+  // when there is one, so the logo path is built from it.
+  var scriptEl = document.getElementById("enhance-js");
+  var markSrc = scriptEl
+    ? scriptEl.src.replace(/\/assets\/js\/enhance\.js.*$/, "/assets/img/carnomed-logo-white.svg")
+    : "/assets/img/carnomed-logo-white.svg";
+
+  document.addEventListener("click", function (e) {
+    if (e.defaultPrevented || e.button !== 0) return;
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    var a = e.target.closest && e.target.closest('a[href*="carno-med.pl"]');
+    if (!a || a.closest(".cm-leave")) return;
+    if (!/(^|\.)carno-med\.pl$/.test(a.hostname)) return;
+    if (typeof HTMLDialogElement === "undefined") return;
+
+    e.preventDefault();
+    shopDialog = shopDialog || buildShopDialog();
+    var go = shopDialog.querySelector(".cm-leave__go");
+    go.href = a.href;
+    if (a.target) go.target = a.target; else go.removeAttribute("target");
+    if (a.rel) go.rel = a.rel; else go.removeAttribute("rel");
+    shopDialog.querySelector(".cm-leave__host").textContent = a.hostname;
+    shopDialog.showModal();
+    go.focus();
+  });
+
   if (prefersReduced) return;
 
   var targets = document.querySelectorAll(

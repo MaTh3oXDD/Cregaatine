@@ -7,17 +7,17 @@
 
 ## Strony kluczowe
 
-- [Produkt CreGAAtine](https://cregaatine.pl/cregaatine-naukowa-rewolucja-kreatyny/): skład, działanie, dawkowanie
-- [Badania naukowe nad GAA i kreatyną](https://cregaatine.pl/gaa-i-kreatyna-badania-naukowe/): wyniki badań prof. Ostojicia
-- [Wykład prof. Sergeja Ostojicia](https://cregaatine.pl/wyklad-pionier-w-badaniu-kreatyny-i-gaa-prof-sergej-ostojic/)
-- [Odpowiedzi prof. Ostojicia na pytania](https://cregaatine.pl/prof-dr-sergej-ostojic-odpowiada-na-pytania-dotyczace-cregaatine-czesc-1/)
-- [Podcast z prof. Ostojiciem](https://cregaatine.pl/podcast-sergej-ostojic/)
+- [Produkt CreGAAtine](https://math3oxdd.github.io/Cregaatine/demo/cregaatine-naukowa-rewolucja-kreatyny/): skład, działanie, dawkowanie
+- [Badania naukowe nad GAA i kreatyną](https://math3oxdd.github.io/Cregaatine/demo/gaa-i-kreatyna-badania-naukowe/): wyniki badań prof. Ostojicia
+- [Wykład prof. Sergeja Ostojicia](https://math3oxdd.github.io/Cregaatine/demo/wyklad-pionier-w-badaniu-kreatyny-i-gaa-prof-sergej-ostojic/)
+- [Odpowiedzi prof. Ostojicia na pytania](https://math3oxdd.github.io/Cregaatine/demo/prof-dr-sergej-ostojic-odpowiada-na-pytania-dotyczace-cregaatine-czesc-1/)
+- [Podcast z prof. Ostojiciem](https://math3oxdd.github.io/Cregaatine/demo/podcast-sergej-ostojic/)
 
 ## Powiązane
 
-- [Karnozyna w mięśniach sportowca](https://cregaatine.pl/karnozyna-w-miesniach-sportowca/)
-- [Potrójna suplementacja: karnozyna, GAA i kreatyna](https://cregaatine.pl/potrojna-suplementacja-karnozyna-gaa-i-kreatyna/)
-- [Blog](https://cregaatine.pl/blog/)
+- [Karnozyna w mięśniach sportowca](https://math3oxdd.github.io/Cregaatine/demo/karnozyna-w-miesniach-sportowca/)
+- [Potrójna suplementacja: karnozyna, GAA i kreatyna](https://math3oxdd.github.io/Cregaatine/demo/potrojna-suplementacja-karnozyna-gaa-i-kreatyna/)
+- [Blog](https://math3oxdd.github.io/Cregaatine/demo/blog/)
 
 ## Sklep
 

@@ -13,6 +13,11 @@ SRC = ROOT / "site"
 OUT = ROOT / "demo"
 BASE = (sys.argv[1] if len(sys.argv) > 1 else "/Cregaatine/demo").rstrip("/")
 
+# Absolute links to the production domain (canonical, og:url, JSON-LD,
+# sitemap, robots) point at their GitHub Pages copies in the demo.
+PROD = "https://cregaatine.pl"
+PAGES = "https://math3oxdd.github.io" + BASE
+
 ATTR_RE = re.compile(r"""(\b(?:href|src|action|poster|content|data-[\w-]+)\s*=\s*["'])/(?!/)""", re.I)
 SRCSET_RE = re.compile(r"""(\bsrcset\s*=\s*)(["'])(.*?)\2""", re.I | re.S)
 CSS_URL_RE = re.compile(r"""(url\(\s*["']?)/(?!/)""", re.I)
@@ -28,6 +33,7 @@ def rewrite(text, is_html):
     if is_html:
         text = ATTR_RE.sub(lambda m: m.group(1) + BASE + "/", text)
         text = SRCSET_RE.sub(fix_srcset, text)
+    text = text.replace(PROD, PAGES).replace(PROD.replace("/", "\\/"), PAGES.replace("/", "\\/"))
     return CSS_URL_RE.sub(lambda m: m.group(1) + BASE + "/", text)
 
 
@@ -37,7 +43,7 @@ def main():
     shutil.copytree(SRC, OUT, ignore=shutil.ignore_patterns(".htaccess", "_redirects"))
     count = 0
     for path in OUT.rglob("*"):
-        if path.suffix.lower() not in (".html", ".css"):
+        if path.suffix.lower() not in (".html", ".css", ".xml", ".txt"):
             continue
         text = path.read_text(encoding="utf-8", errors="surrogateescape")
         new = rewrite(text, path.suffix.lower() == ".html")

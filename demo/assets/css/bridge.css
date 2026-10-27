@@ -131,3 +131,137 @@
   background: var(--cm-bridge-zolty);
   vertical-align: 2px;
 }
+
+/* Okno przed wyjściem do sklepu (enhance.js). Ta sama płyta co pod
+   przyciskami: czerń, żółta krawędź z wcięciem, znak Carnomed, adres na
+   żółto. Do tego dwa przyciski w kształcie przycisków z hero. */
+.cm-leave {
+  width: min(480px, calc(100vw - 32px));
+  max-width: none;
+  margin: auto;
+  padding: 34px 30px 28px;
+  border: 0;
+  border-top: 5px solid var(--cm-bridge-zolty);
+  background: var(--cm-bridge-czern);
+  color: #fff;
+  font-family: 'Nunito Sans', Helvetica, Arial, sans-serif;
+  text-align: left;
+  clip-path: polygon(
+    0 0,
+    calc(50% - 27px) 0,
+    50% 23px,
+    calc(50% + 27px) 0,
+    100% 0,
+    100% 100%,
+    0 100%
+  );
+}
+
+.cm-leave::backdrop {
+  background: rgba(0, 0, 0, 0.72);
+}
+
+.cm-leave[open] {
+  animation: cm-leave-in 0.22s cubic-bezier(.2, .8, .2, 1);
+}
+
+@keyframes cm-leave-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
+}
+
+.cm-leave__mark {
+  display: block;
+  width: 148px;
+  height: auto;
+  margin-bottom: 20px;
+}
+
+.cm-leave .cm-leave__title {
+  margin: 0 0 12px;
+  padding: 0;
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.25;
+  color: #fff;
+}
+
+.cm-leave .cm-leave__text {
+  margin: 0;
+  padding: 0;
+  font-size: 15px;
+  line-height: 1.55;
+  color: #f0f0f0;
+}
+
+.cm-leave .cm-leave__host {
+  margin: 10px 0 0;
+  padding: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--cm-bridge-zolty);
+}
+
+.cm-leave__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 26px;
+}
+
+.cm-leave .cm-leave__go,
+.cm-leave .cm-leave__stay {
+  display: inline-block;
+  padding: 14px 24px;
+  border-radius: 10px;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.22s cubic-bezier(.2, .8, .2, 1), background 0.2s ease, color 0.2s ease;
+}
+
+.cm-leave .cm-leave__go {
+  border: 1.5px solid var(--cm-bridge-zolty);
+  background: var(--cm-bridge-zolty);
+  color: #282828;
+}
+
+.cm-leave .cm-leave__go:hover {
+  transform: translateY(-2px);
+}
+
+.cm-leave .cm-leave__stay {
+  border: 1.5px solid rgba(255, 255, 255, 0.75);
+  background: transparent;
+  color: #fff;
+}
+
+.cm-leave .cm-leave__stay:hover {
+  background: #fff;
+  color: #282828;
+}
+
+.cm-leave .cm-leave__go:focus-visible,
+.cm-leave .cm-leave__stay:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
+@media (max-width: 620px) {
+  .cm-leave {
+    padding: 32px 20px 22px;
+  }
+
+  .cm-leave .cm-leave__title {
+    font-size: 19px;
+  }
+
+  .cm-leave .cm-leave__go,
+  .cm-leave .cm-leave__stay {
+    flex: 1 1 100%;
+    text-align: center;
+  }
+}
