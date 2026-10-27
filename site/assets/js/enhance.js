@@ -159,40 +159,72 @@
   }
 
   // Every link to carno-med.pl leaves the CreGAAtine site for the
-  // Carnomed shop, a different domain with a different look. Before the
-  // jump, a dialog says where the visitor is going; the plate under the
-  // buttons (bridge.css) says the same thing in passing. Modifier clicks
-  // (new tab, new window) go straight through.
+  // Carnomed shop, a different domain with a different look. The dialog
+  // says so in the shop's own visual language (bridge.css), counts down
+  // three seconds and then goes. "Przejdź teraz" skips the wait, "Zostań"
+  // and Esc cancel it. Modifier clicks (new tab, new window) go straight
+  // through.
+  var SHOP_DELAY = 3;
   var shopDialog = null;
+  var shopTimer = null;
+
+  // The script's own URL carries the GitHub Pages prefix (/Cregaatine/demo)
+  // when there is one, so asset paths are built from it.
+  var scriptEl = document.getElementById("enhance-js");
+  var assetBase = scriptEl
+    ? scriptEl.src.replace(/\/assets\/js\/enhance\.js.*$/, "/assets/")
+    : "/assets/";
+
+  var stopShopTimer = function () {
+    clearInterval(shopTimer);
+    shopTimer = null;
+  };
 
   var buildShopDialog = function () {
+    // Montserrat is the Carnomed typeface. Only the dialog needs it, so it
+    // loads with the dialog, not with the page.
+    var font = document.createElement("link");
+    font.rel = "stylesheet";
+    font.href = "https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;800&display=swap";
+    document.head.appendChild(font);
+
     var d = document.createElement("dialog");
     d.className = "cm-leave";
     d.setAttribute("aria-labelledby", "cm-leave-title");
+    d.setAttribute("aria-describedby", "cm-leave-text");
+    d.style.setProperty("--cml-delay", SHOP_DELAY + "s");
     d.innerHTML =
-      '<img class="cm-leave__mark" src="' + markSrc + '" alt="Carnomed" width="148" height="17">' +
+      '<div class="cm-leave__sheet">' +
+      '<img class="cm-leave__mark" src="' + assetBase + 'img/carnomed-logo.svg" alt="Carnomed" width="210" height="43">' +
+      '<span class="cm-leave__rule" aria-hidden="true"></span>' +
       '<h2 class="cm-leave__title" id="cm-leave-title">Przechodzisz do sklepu Carnomed</h2>' +
-      '<p class="cm-leave__text">Za chwilę zostaniesz przeniesiony do naszego zewnętrznego sklepu. ' +
+      '<p class="cm-leave__text" id="cm-leave-text">Zostaniesz przeniesiony do naszego zewnętrznego sklepu. ' +
       'Zamówienie przyjmuje Carnomed sp. z o.o., wyłączny dystrybutor CreGAAtine w Polsce.</p>' +
       '<p class="cm-leave__host"></p>' +
+      '<p class="cm-leave__count" aria-live="polite"></p>' +
       '<div class="cm-leave__actions">' +
-      '<a class="cm-leave__go" href="#">Przejdź do sklepu</a>' +
-      '<button type="button" class="cm-leave__stay">Zostań na stronie</button>' +
-      '</div>';
+      '<a class="cm-leave__go" href="#">Przejdź teraz</a>' +
+      '<button type="button" class="cm-leave__stay">Zostań na stronie CreGAAtine</button>' +
+      '</div>' +
+      '</div>' +
+      '<div class="cm-leave__band" aria-hidden="true"><span></span></div>';
     document.body.appendChild(d);
 
     d.querySelector(".cm-leave__stay").addEventListener("click", function () { d.close(); });
     // a click on the backdrop lands on the dialog element itself
     d.addEventListener("click", function (e) { if (e.target === d) d.close(); });
+    d.addEventListener("close", function () {
+      stopShopTimer();
+      d.classList.remove("is-counting");
+    });
     return d;
   };
 
-  // The script's own URL carries the GitHub Pages prefix (/Cregaatine/demo)
-  // when there is one, so the logo path is built from it.
-  var scriptEl = document.getElementById("enhance-js");
-  var markSrc = scriptEl
-    ? scriptEl.src.replace(/\/assets\/js\/enhance\.js.*$/, "/assets/img/carnomed-logo-white.svg")
-    : "/assets/img/carnomed-logo-white.svg";
+  var renderCount = function (el, left) {
+    el.innerHTML = left > 0
+      ? "Przekierowanie za <b>" + left + "</b> s"
+      : "Przekierowuję…";
+  };
 
   document.addEventListener("click", function (e) {
     if (e.defaultPrevented || e.button !== 0) return;
@@ -204,11 +236,29 @@
 
     e.preventDefault();
     shopDialog = shopDialog || buildShopDialog();
+    var href = a.href;
     var go = shopDialog.querySelector(".cm-leave__go");
-    go.href = a.href;
-    if (a.target) go.target = a.target; else go.removeAttribute("target");
-    if (a.rel) go.rel = a.rel; else go.removeAttribute("rel");
+    var count = shopDialog.querySelector(".cm-leave__count");
+    go.href = href;
     shopDialog.querySelector(".cm-leave__host").textContent = a.hostname;
+
+    // restart the band from full on every opening
+    shopDialog.classList.remove("is-counting");
+    void shopDialog.offsetWidth;
+    shopDialog.classList.add("is-counting");
+
+    var left = SHOP_DELAY;
+    renderCount(count, left);
+    stopShopTimer();
+    shopTimer = setInterval(function () {
+      left -= 1;
+      renderCount(count, left);
+      if (left <= 0) {
+        stopShopTimer();
+        window.location.assign(href);
+      }
+    }, 1000);
+
     shopDialog.showModal();
     go.focus();
   });
