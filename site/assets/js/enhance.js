@@ -229,9 +229,13 @@
   document.addEventListener("click", function (e) {
     if (e.defaultPrevented || e.button !== 0) return;
     if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-    var a = e.target.closest && e.target.closest('a[href*="carno-med.pl"]');
+    // carno-med.pl on the production site; the Carnomed copy on GitHub
+    // Pages (math3oxdd.github.io/carnomed/) in the demo, see build_pages.py
+    var a = e.target.closest && e.target.closest('a[href*="carno-med.pl"], a[href*="/carnomed/"]');
     if (!a || a.closest(".cm-leave")) return;
-    if (!/(^|\.)carno-med\.pl$/.test(a.hostname)) return;
+    var isCarnomed = /(^|\.)carno-med\.pl$/.test(a.hostname) ||
+      (a.hostname === "math3oxdd.github.io" && a.pathname.indexOf("/carnomed/") === 0);
+    if (!isCarnomed) return;
     if (typeof HTMLDialogElement === "undefined") return;
 
     e.preventDefault();
@@ -240,7 +244,8 @@
     var go = shopDialog.querySelector(".cm-leave__go");
     var count = shopDialog.querySelector(".cm-leave__count");
     go.href = href;
-    shopDialog.querySelector(".cm-leave__host").textContent = a.hostname;
+    shopDialog.querySelector(".cm-leave__host").textContent =
+      a.hostname === "math3oxdd.github.io" ? a.hostname + "/carnomed" : a.hostname;
 
     // restart the band from full on every opening
     shopDialog.classList.remove("is-counting");

@@ -121,7 +121,8 @@
 /* Pozycja „Sklep" w menu prowadzi na inną domenę. Kropka w kolorze marki
    przed etykietą jest jedyną różnicą wobec pozostałych pozycji — tyle, żeby
    dało się to zauważyć, i nie tyle, żeby wyglądało na ostrzeżenie. */
-#top-menu a[href*="sklep.carno-med.pl"]::before {
+#top-menu a[href*="sklep.carno-med.pl"]::before,
+#top-menu a[href*="/carnomed/sklep"]::before {
   content: "";
   display: inline-block;
   width: 5px;

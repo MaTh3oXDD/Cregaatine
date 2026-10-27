@@ -18,6 +18,16 @@ BASE = (sys.argv[1] if len(sys.argv) > 1 else "/Cregaatine/demo").rstrip("/")
 PROD = "https://cregaatine.pl"
 PAGES = "https://math3oxdd.github.io" + BASE
 
+# Carnomed links go to the Carnomed copy on GitHub Pages, which keeps the
+# same paths: carno-med.pl/X -> /carnomed/X, sklep.carno-med.pl/X ->
+# /carnomed/sklep/X. The shop subdomain goes first, it contains the other.
+CARNOMED = "https://math3oxdd.github.io/carnomed"
+URL_MAP = [
+    (PROD, PAGES),
+    ("https://sklep.carno-med.pl", CARNOMED + "/sklep"),
+    ("https://carno-med.pl", CARNOMED),
+]
+
 ATTR_RE = re.compile(r"""(\b(?:href|src|action|poster|content|data-[\w-]+)\s*=\s*["'])/(?!/)""", re.I)
 SRCSET_RE = re.compile(r"""(\bsrcset\s*=\s*)(["'])(.*?)\2""", re.I | re.S)
 CSS_URL_RE = re.compile(r"""(url\(\s*["']?)/(?!/)""", re.I)
@@ -33,7 +43,8 @@ def rewrite(text, is_html):
     if is_html:
         text = ATTR_RE.sub(lambda m: m.group(1) + BASE + "/", text)
         text = SRCSET_RE.sub(fix_srcset, text)
-    text = text.replace(PROD, PAGES).replace(PROD.replace("/", "\\/"), PAGES.replace("/", "\\/"))
+    for old, new in URL_MAP:
+        text = text.replace(old, new).replace(old.replace("/", "\\/"), new.replace("/", "\\/"))
     return CSS_URL_RE.sub(lambda m: m.group(1) + BASE + "/", text)
 
 
