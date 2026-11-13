@@ -185,7 +185,7 @@
     // loads with the dialog, not with the page.
     var font = document.createElement("link");
     font.rel = "stylesheet";
-    font.href = "https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;800&display=swap";
+    font.href = "https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap";
     document.head.appendChild(font);
 
     var d = document.createElement("dialog");
@@ -194,10 +194,13 @@
     d.setAttribute("aria-describedby", "cm-leave-text");
     d.style.setProperty("--cml-delay", SHOP_DELAY + "s");
     d.innerHTML =
+      '<span class="cm-leave__crown" aria-hidden="true"></span>' +
       '<div class="cm-leave__sheet">' +
-      '<img class="cm-leave__mark" src="' + assetBase + 'img/carnomed-logo.svg" alt="Carnomed" width="210" height="43">' +
-      '<span class="cm-leave__rule" aria-hidden="true"></span>' +
-      '<h2 class="cm-leave__title" id="cm-leave-title">Przechodzisz do sklepu Carnomed</h2>' +
+      '<img class="cm-leave__mark" src="' + assetBase + 'img/carnomed-logo.svg" alt="Carnomed" width="200" height="41">' +
+      '<h2 class="cm-leave__title" id="cm-leave-title">' +
+      '<span class="cm-leave__title-top">Przechodzisz do</span>' +
+      '<span class="cm-leave__title-gold">sklepu Carnomed</span></h2>' +
+      '<span class="cm-leave__tri" aria-hidden="true"></span>' +
       '<p class="cm-leave__text" id="cm-leave-text">Zostaniesz przeniesiony do naszego zewnętrznego sklepu. ' +
       'Zamówienie przyjmuje Carnomed sp. z o.o., wyłączny dystrybutor CreGAAtine w Polsce.</p>' +
       '<p class="cm-leave__host"></p>' +

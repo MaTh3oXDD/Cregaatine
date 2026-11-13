@@ -135,21 +135,23 @@
 
 /* Okno przed wyjściem do sklepu (enhance.js).
    Płyta pod przyciskami mówi językiem CreGAAtine. Okno mówi już językiem
-   sklepu, do którego klient zaraz trafi: biały papier etykiety, cicha
-   siatka low-poly, Montserrat, złoto Karnozin Extra. Tokeny są wzięte
-   z carnomed-2022.css (strona główna Carnomed), żeby przejście zapowiadało
-   drugą markę, zanim klient ją zobaczy.
+   sklepu, do którego klient zaraz trafi, a wzorem jest etykieta Karnozin
+   Extra: biały papier ze złotą siatką low-poly, ścięte metaliczne pasy
+   u góry i u dołu, dwukolorowy nagłówek (czarny + złoty gradient), mały
+   złoty trójkąt pod nim. Montserrat i złoto #B08D2E pochodzą ze strony
+   głównej Carnomed.
 
-   Licznikiem jest ścięty złoty pas, ten sam, który zamyka nagłówek
-   Carnomed. Przez trzy sekundy pustoszeje; gdy zniknie, przeglądarka
-   przechodzi do sklepu. */
+   Dolny pas jest licznikiem: przez trzy sekundy pustoszeje, a gdy zniknie,
+   przeglądarka przechodzi do sklepu. */
 .cm-leave {
   --cml-paper: #ffffff;
-  --cml-ink: #313131;
+  --cml-ink: #1a1a1a;
   --cml-ink-soft: #6b6969;
-  --cml-gold: #c29a3a;
+  --cml-gold: #b08d2e;
   --cml-gold-ink: #8a6a1c;
-  --cml-hairline: #e2e2e2;
+  --cml-gold-metal: linear-gradient(100deg, #8c6a1f 0%, #c9a24a 22%, #ecd38e 45%, #c49b3f 62%, #9a7524 82%, #c9a24a 100%);
+  --cml-gold-text: linear-gradient(180deg, #d9b860 0%, #b08d2e 48%, #8c6a1f 100%);
+  --cml-hairline: #ece6d8;
   --cml-font: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 
   position: fixed;
@@ -159,13 +161,13 @@
   margin: auto;
   padding: 0;
   overflow: auto;
-  border: 1px solid var(--cml-hairline);
+  border: 0;
   border-radius: 0;
   background: var(--cml-paper);
   color: var(--cml-ink);
   font-family: var(--cml-font);
   text-align: center;
-  box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.45);
+  box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.5);
 }
 
 .cm-leave::backdrop {
@@ -181,12 +183,21 @@
   to { opacity: 1; transform: none; }
 }
 
+/* Górny pas etykiety: metaliczne złoto, prawy koniec ścięty skosem
+   jak na butelce. */
+.cm-leave__crown {
+  display: block;
+  height: 14px;
+  background: var(--cml-gold-metal);
+  clip-path: polygon(0 0, 100% 0, 100% 35%, calc(100% - 64px) 100%, 0 100%);
+}
+
 /* Siatka etykiety, maską jak na stronie Carnomed: kolor niesie złoto,
    krycie zostaje na poziomie papieru, nie wzoru. */
 .cm-leave__sheet {
   position: relative;
   isolation: isolate;
-  padding: 44px 40px 34px;
+  padding: 36px 40px 30px;
 }
 
 .cm-leave__sheet::before {
@@ -196,7 +207,7 @@
   z-index: -1;
   pointer-events: none;
   background-color: var(--cml-gold);
-  opacity: 0.16;
+  opacity: 0.24;
   -webkit-mask-image: url("../img/carnomed-mesh.svg");
           mask-image: url("../img/carnomed-mesh.svg");
   -webkit-mask-size: 1200px 900px;
@@ -207,31 +218,49 @@
 
 .cm-leave__mark {
   display: block;
-  width: 210px;
+  width: 200px;
   height: auto;
-  margin: 0 auto;
+  margin: 0 auto 26px;
 }
 
-/* Krótka złota kreska nad nagłówkiem: tym znakiem Carnomed otwiera
-   każdą sekcję. */
-.cm-leave__rule {
-  display: block;
-  width: 108px;
-  height: 1px;
-  margin: 28px auto 22px;
-  background: var(--cml-gold);
-}
-
+/* Nagłówek jak „KARNOZIN EXTRA": pierwsza linia czarna, druga większa
+   w złotym gradiencie. */
 .cm-leave .cm-leave__title {
-  margin: 0 0 14px;
+  margin: 0;
   padding: 0;
   font-family: var(--cml-font);
-  font-size: 1.5rem;
   font-weight: 800;
-  line-height: 1.15;
-  letter-spacing: -0.005em;
+  line-height: 1.05;
   text-transform: uppercase;
-  color: #1a1a1a;
+  color: var(--cml-ink);
+}
+
+.cm-leave .cm-leave__title-top {
+  display: block;
+  font-size: 1.375rem;
+  letter-spacing: 0.01em;
+}
+
+.cm-leave .cm-leave__title-gold {
+  display: block;
+  margin-top: 4px;
+  font-size: 2.125rem;
+  letter-spacing: 0.02em;
+  color: var(--cml-gold);
+  background: var(--cml-gold-text);
+  -webkit-background-clip: text;
+          background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Mały złoty trójkąt pod nazwą, jak na etykiecie. */
+.cm-leave__tri {
+  display: block;
+  width: 18px;
+  height: 14px;
+  margin: 18px auto;
+  background: var(--cml-gold-text);
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
 }
 
 .cm-leave .cm-leave__text {
@@ -240,8 +269,8 @@
   padding: 0;
   font-family: var(--cml-font);
   font-size: 0.9375rem;
-  font-weight: 300;
-  line-height: 1.75;
+  font-weight: 400;
+  line-height: 1.7;
   color: var(--cml-ink-soft);
 }
 
@@ -250,12 +279,12 @@
   padding: 0;
   font-family: var(--cml-font);
   font-size: 0.9375rem;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--cml-gold-ink);
 }
 
 .cm-leave .cm-leave__count {
-  margin: 26px 0 0;
+  margin: 22px 0 0;
   padding: 0;
   font-family: var(--cml-font);
   font-size: 0.8125rem;
@@ -278,28 +307,30 @@
   margin-top: 18px;
 }
 
-/* Przycisk Carnomed: obrys, wypełnia się dopiero pod kursorem. */
+/* Przycisk jak „NASZ SKLEP" na Carnomed: pełne złoto, biały tekst. */
 .cm-leave .cm-leave__go {
   display: inline-block;
-  padding: 0.95em 2.4em;
-  border: 1px solid var(--cml-gold);
+  padding: 1em 2.6em;
+  border: 0;
   border-radius: 0;
-  background: transparent;
+  background: var(--cml-gold-metal);
+  background-size: 200% 100%;
+  background-position: 0 0;
   font-family: var(--cml-font);
   font-size: 0.8125rem;
-  font-weight: 600;
+  font-weight: 700;
   line-height: 1.2;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   text-decoration: none;
-  color: var(--cml-gold-ink);
-  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+  color: #fff;
+  text-shadow: 0 1px 1px rgba(90, 64, 10, 0.35);
+  transition: background-position 0.5s ease, box-shadow 0.25s ease;
 }
 
 .cm-leave .cm-leave__go:hover {
-  border-color: var(--cml-gold-ink);
-  background: var(--cml-gold-ink);
-  color: var(--cml-paper);
+  background-position: 100% 0;
+  box-shadow: 0 8px 18px -10px rgba(140, 106, 31, 0.8);
 }
 
 .cm-leave .cm-leave__stay {
@@ -327,18 +358,19 @@
   outline-offset: 3px;
 }
 
-/* Pas akcentu jako licznik. Ścięte końce jak pod nagłówkiem Carnomed. */
+/* Dolny pas etykiety jako licznik. Lewy koniec ścięty skosem, lustrzanie
+   do górnego; złoto ubywa od lewej do prawej. */
 .cm-leave__band {
-  height: 6px;
+  height: 14px;
   background: var(--cml-hairline);
-  clip-path: polygon(0 0, 100% 0, calc(100% - 26px) 100%, 26px 100%);
+  clip-path: polygon(64px 0, 100% 0, 100% 100%, 0 100%, 0 65%);
 }
 
 .cm-leave__band span {
   display: block;
   height: 100%;
-  background: var(--cml-gold);
-  transform-origin: left center;
+  background: var(--cml-gold-metal);
+  transform-origin: right center;
 }
 
 .cm-leave.is-counting .cm-leave__band span {
@@ -358,14 +390,18 @@
 
 @media (max-width: 620px) {
   .cm-leave__sheet {
-    padding: 36px 22px 28px;
+    padding: 30px 22px 26px;
   }
 
   .cm-leave__mark {
-    width: 180px;
+    width: 170px;
   }
 
-  .cm-leave .cm-leave__title {
-    font-size: 1.25rem;
+  .cm-leave .cm-leave__title-top {
+    font-size: 1.125rem;
+  }
+
+  .cm-leave .cm-leave__title-gold {
+    font-size: 1.625rem;
   }
 }

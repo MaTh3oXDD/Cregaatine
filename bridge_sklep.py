@@ -40,7 +40,7 @@ ZDANIE = ("Zamówienie przyjmuje Carnomed sp. z o.o., wyłączny dystrybutor "
 PLYTA = (
     '<div class="cm-bridge" data-cm-bridge>'
     '<img class="cm-bridge__mark" src="/assets/img/carnomed-logo-white.svg" '
-    'alt="Carnomed" width="148" height="17" loading="lazy" decoding="async">'
+    'alt="Carnomed" width="148" height="30" loading="lazy" decoding="async">'
     '<p class="cm-bridge__text">' + ZDANIE +
     '<span class="cm-bridge__host">sklep.carno-med.pl</span></p>'
     '</div>'
